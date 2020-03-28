@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Assets</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="noble_metals">Noble metals</string>
+    <string name="crypto">Crypto</string>
+    <string name="stocks">Stocks</string>
+    <string name="gold">Gold</string>
+    <string name="silver">Silver</string>
+    <string name="platinum">Platinum</string>
+    <string name="AddAssetsActivity_title">Chose type of asset:</string>
+    <string name="extended_fab_content_desc">fab button</string>
+    <string name="extended_fab_label">fab button</string>
+    <string name="title_activity_main2">Main2Activity</string>
+</resources>
