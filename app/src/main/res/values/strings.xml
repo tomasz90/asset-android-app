@@ -15,8 +15,10 @@
     <string name="gold">Gold</string>
     <string name="silver">Silver</string>
     <string name="platinum">Platinum</string>
-    <string name="AddAssetsActivity_title">Chose type of asset:</string>
+    <string name="add_assets_activity_title">Chose type of asset:</string>
     <string name="extended_fab_content_desc">fab button</string>
     <string name="extended_fab_label">fab button</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="add_asset">Add asset</string>
+    <string name="main_activity_title">Your portfolio:</string>
 </resources>

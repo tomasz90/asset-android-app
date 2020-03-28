@@ -13,34 +13,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/noble_metals_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="onClickNobleButton"
-            android:text="@string/noble_metals" />
-
-        <Button
-            android:id="@+id/stocks_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="onClickStocksButton"
-            android:text="@string/stocks" />
-
-        <Button
-            android:id="@+id/cryptos_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="onClickCryptoButton"
-            android:text="@string/crypto" />
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

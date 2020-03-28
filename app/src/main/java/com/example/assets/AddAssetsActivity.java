@@ -1,7 +1,6 @@
 package com.example.assets;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,7 @@ public class AddAssetsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_assets);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.AddAssetsActivity_title);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_assets_activity_title);
     }
 
     public void onClickNobleButton(View view) {

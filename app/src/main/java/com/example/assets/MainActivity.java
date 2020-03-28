@@ -3,6 +3,7 @@ package com.example.assets;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.main_activity_title);
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
