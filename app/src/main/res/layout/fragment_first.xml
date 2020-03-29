@@ -4,25 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FirstFragment">
+    tools:context=".fragments.FirstFragment">
 
     <TextView
-        android:id="@+id/textview_first"
+        android:id="@+id/asset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_first_fragment"
-        app:layout_constraintBottom_toTopOf="@id/button_first"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="44dp"
+        android:text="Gold"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_first"
+    <TextView
+        android:id="@+id/value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_first" />
+        android:layout_marginStart="24dp"
+        android:text="5.445 USD"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/unit_price"
+        app:layout_constraintTop_toTopOf="@+id/asset" />
+
+    <TextView
+        android:id="@+id/units"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:text="3oz."
+        app:layout_constraintStart_toEndOf="@+id/asset"
+        app:layout_constraintTop_toTopOf="@+id/asset" />
+
+    <TextView
+        android:id="@+id/unit_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="1450 USD"
+        app:layout_constraintStart_toEndOf="@+id/units"
+        app:layout_constraintTop_toTopOf="@+id/asset" />
+
+    <TextView
+        android:id="@+id/additional_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Additional info"
+        app:layout_constraintStart_toStartOf="@+id/asset"
+        app:layout_constraintTop_toBottomOf="@+id/asset" />
 </androidx.constraintlayout.widget.ConstraintLayout>
