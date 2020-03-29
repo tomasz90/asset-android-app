@@ -1,14 +1,24 @@
 package com.example.assets;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.assets.fragments.Adapter;
+import com.example.assets.fragments.Fragment;
+import com.example.assets.fragments.AssetType;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class AddAssetsActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +38,9 @@ public class AddAssetsActivity extends AppCompatActivity {
 
     public void onClickStocksButton(View view) {
         onClickNobleButton(view);
+    }
+
+    private List<String> getAssetTypes() {
+        return Arrays.asList(AssetType.NOBLE_METAL, AssetType.CRYPTOCCURRENCIES, AssetType.STOCKS);
     }
 }
