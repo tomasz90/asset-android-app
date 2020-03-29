@@ -3,8 +3,10 @@ package com.example.assets;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.assets.fragments.Fragment;
+import com.example.assets.fragments.FragmentList;
+import com.example.assets.fragments.FragmentValues;
 import com.example.assets.fragments.Adapter;
+import com.example.assets.fragments.AssetDetailsTemplate;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
-import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,12 +31,14 @@ public class MainActivity extends AppCompatActivity {
         setToolbar();
         setRecyclerView();
 
-        Fragment fragment = new Fragment(R.layout.asset_details_fragment, R.id.asset, R.id.unit_price, R.id.units, R.id.value);
-        fragment.putRow("Platinum", "1445F", "3F","value");
-        fragment.putRow("Silver", "14F", "150.2F", "value");
+        AssetDetailsTemplate template = new AssetDetailsTemplate(R.layout.asset_details_fragment, R.id.asset, R.id.unit_price, R.id.units, R.id.value);
 
-        final Adapter adapter = new Adapter(fragment);
-        recyclerView.setAdapter(adapter);
+        FragmentValues f1 = new FragmentValues("Platinum", "1445F", "3F","value");
+        FragmentValues f2 = new FragmentValues("Gold", "1467F", "5F","valf");
+        FragmentValues f3 = new FragmentValues("FF", "17F", "5F","valf");
+
+        FragmentList list = new FragmentList(template).addFragments(f1, f2, f3);
+        recyclerView.setAdapter(new Adapter(list));
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

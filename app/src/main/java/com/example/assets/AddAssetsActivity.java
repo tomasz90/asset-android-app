@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.assets.fragments.Adapter;
-import com.example.assets.fragments.Fragment;
 import com.example.assets.fragments.AssetType;
 
 import java.util.Arrays;
