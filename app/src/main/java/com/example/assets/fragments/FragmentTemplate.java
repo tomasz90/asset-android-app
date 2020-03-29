@@ -17,7 +17,7 @@ public class FragmentTemplate {
         this.innerViewIds = Arrays.asList(innerViewIds);
     }
 
-    List<Integer> getInnerViewIds() {
+    public List<Integer> getInnerViewIds() {
         return innerViewIds;
     }
 

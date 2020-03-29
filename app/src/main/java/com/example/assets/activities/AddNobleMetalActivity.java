@@ -1,6 +1,7 @@
 package com.example.assets.activities;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,14 +11,12 @@ import com.example.assets.asset_types.MetalType;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 
-public class AddNobleMetalsActivity extends AppCompatActivity {
+public class AddNobleMetalActivity extends AppCompatActivity implements ActionOnClickItem{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.generic_list);
-
-        FragmentTemplate assetDetailsTemplate = new FragmentTemplate(R.layout.generic_fragment, R.id.asset_type_name);
 
         FragmentValues[] fragmentValues = {
                 new FragmentValues(MetalType.GOLD),
@@ -25,7 +24,13 @@ public class AddNobleMetalsActivity extends AppCompatActivity {
                 new FragmentValues(MetalType.PLATINUM),
                 new FragmentValues(MetalType.PALLADIUM)};
 
-        RecyclerViewManager manager = new RecyclerViewManager();
-        manager.setRecyclerView(this, R.id.list, assetDetailsTemplate, fragmentValues);
+        RecyclerViewManager manager = new RecyclerViewManager(this);
+        FragmentTemplate assetDetailsTemplate = new FragmentTemplate(R.layout.generic_fragment, R.id.generic_asset);
+        manager.setRecyclerView(this, R.id.generic_list, assetDetailsTemplate, fragmentValues);
+    }
+
+    @Override
+    public void perform(TextView tv) {
+        //nothing
     }
 }

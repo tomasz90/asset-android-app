@@ -19,8 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.AddAssetsActivity" />
-        <activity android:name=".activities.AddNobleMetalsActivity" />
+        <activity android:name=".activities.AddAssetActivity" />
+        <activity android:name=".activities.AddNobleMetalActivity" />
+        <activity android:name=".activities.AddCurrencyActivity" />
+        <activity android:name=".activities.AddCryptocurrencyActivity" />
+        <activity android:name=".activities.AddStockActivity" />
+        <activity android:name=".activities.AddETFActivity" />
+        <activity android:name=".activities.AddRealEstateActivity" />
+        <activity android:name=".asset_types.CryptoCurrencyType" />
+
     </application>
 
 </manifest>

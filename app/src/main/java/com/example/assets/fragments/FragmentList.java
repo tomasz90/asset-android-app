@@ -9,11 +9,11 @@ public class FragmentList {
     private List<FragmentValues> values = new ArrayList<>();
     private FragmentTemplate template;
 
-    int size() {
+    public int size() {
         return values.size();
     }
 
-    FragmentTemplate getTemplate() {
+    public FragmentTemplate getTemplate() {
         return template;
     }
 

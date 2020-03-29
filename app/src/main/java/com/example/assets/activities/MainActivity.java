@@ -2,23 +2,23 @@ package com.example.assets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.assets.R;
-import com.example.assets.RecyclerViewManager;
-import com.example.assets.fragments.FragmentValues;
-import com.example.assets.fragments.FragmentTemplate;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import com.example.assets.R;
+import com.example.assets.RecyclerViewManager;
+import com.example.assets.fragments.FragmentTemplate;
+import com.example.assets.fragments.FragmentValues;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActionOnClickItem{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setToolbar();
 
-        FragmentTemplate assetDetailsTemplate =
-                new FragmentTemplate(R.layout.asset_details_fragment, R.id.asset, R.id.unit_price, R.id.units, R.id.value, R.id.additional_info);
         FragmentValues[] fragmentValues = {
                 new FragmentValues("Platinum", "3oz", "1200 USD", "3600 USD", "Additional info"),
                 new FragmentValues("Gold", "2oz", "1540 USD ", "3080 USD", "Additional info"),
@@ -39,16 +37,17 @@ public class MainActivity extends AppCompatActivity {
                 new FragmentValues("PZU", "200", "15 USD", "3000 USD", "Additional info"),
                 new FragmentValues("", "", "", "", "")};
 
-        RecyclerViewManager manager = new RecyclerViewManager();
+        RecyclerViewManager manager = new RecyclerViewManager(this);
+        FragmentTemplate assetDetailsTemplate =
+                new FragmentTemplate(R.layout.asset_details_fragment, R.id.asset, R.id.unit_price, R.id.units, R.id.value, R.id.additional_info);
         manager.setRecyclerView(this, R.id.asset_list, assetDetailsTemplate, fragmentValues);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddAssetsActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
                 startActivity(intent);
-//                adapter.removeItem(0);
             }
         });
     }
@@ -79,5 +78,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void perform(TextView tv) {
+        //nothing
     }
 }

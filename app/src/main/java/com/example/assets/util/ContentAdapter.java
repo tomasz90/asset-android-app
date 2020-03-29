@@ -1,4 +1,4 @@
-package com.example.assets.fragments;
+package com.example.assets.util;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,24 +7,48 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.assets.fragments.FragmentList;
+import com.example.assets.fragments.FragmentValues;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-    private FragmentList fragmentList;
+public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHolder> {
+    FragmentList fragmentList;
+    private OnItemListener listener;
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemListener {
+        void onItemClick(TextView v);
+    }
 
-        private List<TextView> tvs = new ArrayList<>();
+    public void setOnItemClickListener(OnItemListener listener) {
+        this.listener = listener;
+    }
+
+   class ViewHolder extends RecyclerView.ViewHolder {
+
+        List<TextView> tvs = new ArrayList<>();
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
             //initialize views
             fragmentList.getTemplate().getInnerViewIds().forEach(id -> tvs.add(itemView.findViewById(id)));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(tvs.get(0));
+                        }
+                    }
+                }
+            });
         }
     }
 
-    public Adapter(FragmentList fragmentList) {
+    public ContentAdapter(FragmentList fragmentList) {
         this.fragmentList = fragmentList;
     }
 
