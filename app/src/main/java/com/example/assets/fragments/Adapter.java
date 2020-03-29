@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ExampleViewHolder> {
+public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private FragmentList fragmentList;
 
-    class ExampleViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private List<TextView> tvs = new ArrayList<>();
 
-        private ExampleViewHolder(@NonNull View itemView) {
+        private ViewHolder(@NonNull View itemView) {
             super(itemView);
             //initialize views
             fragmentList.getTemplate().getInnerViewIds().forEach(id -> tvs.add(itemView.findViewById(id)));
@@ -30,13 +30,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ExampleViewHolder> {
 
     @NonNull
     @Override
-    public ExampleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(fragmentList.getTemplate().getMainViewId(), parent, false);
-        return new ExampleViewHolder(v);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // fill textViews with data
        FragmentValues fragmentValues = fragmentList.getFragmentValue(position);
        for(int i = 0; i < holder.tvs.size(); i++) {

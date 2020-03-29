@@ -1,18 +1,16 @@
-package com.example.assets;
+package com.example.assets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.assets.fragments.FragmentList;
+import com.example.assets.R;
+import com.example.assets.RecyclerViewManager;
 import com.example.assets.fragments.FragmentValues;
-import com.example.assets.fragments.Adapter;
-import com.example.assets.fragments.AssetDetailsTemplate;
+import com.example.assets.fragments.FragmentTemplate;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.view.Menu;
@@ -21,24 +19,28 @@ import android.view.MenuItem;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setToolbar();
-        setRecyclerView();
 
-        AssetDetailsTemplate template = new AssetDetailsTemplate(R.layout.asset_details_fragment, R.id.asset, R.id.unit_price, R.id.units, R.id.value);
+        FragmentTemplate assetDetailsTemplate =
+                new FragmentTemplate(R.layout.asset_details_fragment, R.id.asset, R.id.unit_price, R.id.units, R.id.value, R.id.additional_info);
+        FragmentValues[] fragmentValues = {
+                new FragmentValues("Platinum", "3oz", "1200 USD", "3600 USD", "Additional info"),
+                new FragmentValues("Gold", "2oz", "1540 USD ", "3080 USD", "Additional info"),
+                new FragmentValues("EUR", "4500", "1.12 USD", "5400 USD", "Additional info"),
+                new FragmentValues("PLN", "53500", "0.24 USD", "12,840 USD", "Additional info"),
+                new FragmentValues("ETH", "20", "151 USD", "3020 USD", "Additional info"),
+                new FragmentValues("BTC", "0.1", "6100 USD", "610 USD", "Additional info"),
+                new FragmentValues("LTC", "11", "24 USD", "264 USD", "Additional info"),
+                new FragmentValues("PZU", "200", "15 USD", "3000 USD", "Additional info"),
+                new FragmentValues("", "", "", "", "")};
 
-        FragmentValues f1 = new FragmentValues("Platinum", "1445F", "3F","value");
-        FragmentValues f2 = new FragmentValues("Gold", "1467F", "5F","valf");
-        FragmentValues f3 = new FragmentValues("FF", "17F", "5F","valf");
-
-        FragmentList list = new FragmentList(template).addFragments(f1, f2, f3);
-        recyclerView.setAdapter(new Adapter(list));
+        RecyclerViewManager manager = new RecyclerViewManager();
+        manager.setRecyclerView(this, R.id.asset_list, assetDetailsTemplate, fragmentValues);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -49,12 +51,6 @@ public class MainActivity extends AppCompatActivity {
 //                adapter.removeItem(0);
             }
         });
-    }
-
-    private void setRecyclerView() {
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView = findViewById(R.id.asset_list);
-        recyclerView.setLayoutManager(layoutManager);
     }
 
     private void setToolbar() {

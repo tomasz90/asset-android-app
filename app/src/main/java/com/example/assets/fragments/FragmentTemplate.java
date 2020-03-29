@@ -3,7 +3,7 @@ package com.example.assets.fragments;
 import java.util.Arrays;
 import java.util.List;
 
-public class AssetDetailsTemplate {
+public class FragmentTemplate {
 
     public Integer getMainViewId() {
         return mainViewId;
@@ -12,7 +12,7 @@ public class AssetDetailsTemplate {
     private Integer mainViewId;
     private List<Integer> innerViewIds;
 
-    public AssetDetailsTemplate(Integer mainViewId, Integer... innerViewIds) {
+    public FragmentTemplate(Integer mainViewId, Integer... innerViewIds) {
         this.mainViewId = mainViewId;
         this.innerViewIds = Arrays.asList(innerViewIds);
     }

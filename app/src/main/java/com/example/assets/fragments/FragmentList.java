@@ -7,17 +7,17 @@ import java.util.List;
 public class FragmentList {
 
     private List<FragmentValues> values = new ArrayList<>();
-    private AssetDetailsTemplate template;
+    private FragmentTemplate template;
 
     int size() {
         return values.size();
     }
 
-    AssetDetailsTemplate getTemplate() {
+    FragmentTemplate getTemplate() {
         return template;
     }
 
-    public FragmentList(AssetDetailsTemplate template) {
+    public FragmentList(FragmentTemplate template) {
         this.template = template;
     }
 
