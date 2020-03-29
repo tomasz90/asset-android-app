@@ -12,9 +12,10 @@ import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ExampleViewHolder> {
     private FragmentList fragmentList;
-    private List<TextView> tvs = new ArrayList<>();
 
     class ExampleViewHolder extends RecyclerView.ViewHolder {
+
+        private List<TextView> tvs = new ArrayList<>();
 
         private ExampleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -37,11 +38,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ExampleViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ExampleViewHolder holder, int position) {
         // fill textViews with data
-        for (int i = 0; i < fragmentList.size(); i++) {
-            for (int j = 0; j < tvs.size(); j++) {
-                tvs.get(j).setText(fragmentList.getFragmentValue(i).get(j));
-            }
-        }
+       FragmentValues fragmentValues = fragmentList.getFragmentValue(position);
+       for(int i = 0; i < holder.tvs.size(); i++) {
+           holder.tvs.get(i).setText(fragmentValues.get(i));
+       }
     }
 
     @Override
