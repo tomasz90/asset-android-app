@@ -13,30 +13,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assets.R;
 
-import java.util.Objects;
-
 public class AddAssetActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
 
-        setAssetSymbol(getIntent().getStringExtra("asset"));
+        String assetSymbol = getIntent().getStringExtra("asset");
+        setAssetSymbol(assetSymbol);
+
+        TextView valueLabel = findViewById(R.id.calculated_value);
 
         Button save = findViewById(R.id.fab);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
-                startActivity(intent);
-            }
-        });
 
         EditText editText = findViewById(R.id.amount_input);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -47,16 +40,24 @@ public class AddAssetActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
-                TextView calculatedValueLabel = findViewById(R.id.calculated_value);
+                String textLabel;
+                float value = 0f;
                 if (s.toString().isEmpty()) {
                     save.setBackgroundColor(getColor(R.color.greyed_magenta));
                     save.setEnabled(false);
-                    calculatedValueLabel.setText("value = " + 0+"$");
                 } else {
-                    Integer calculatedValue = Integer.valueOf(s.toString());
-                    calculatedValueLabel.setText("value = " + String.format("%.2f",calculatedValue*2.11)+ "$");
+                    value = Float.parseFloat(s.toString()) * getRate(assetSymbol);
                 }
+                textLabel = getString(R.string.calculated_value, value);
+                valueLabel.setText(textLabel);
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -64,5 +65,9 @@ public class AddAssetActivity extends AppCompatActivity {
     private void setAssetSymbol(String assetSymbol) {
         TextView tv = findViewById(R.id.asset_id);
         tv.setText(assetSymbol);
+    }
+
+    private float getRate(String assetSymbol) {
+        return 1.3f;
     }
 }
