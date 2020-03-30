@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.MainListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,12 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.AddAssetActivity" />
-        <activity android:name=".activities.AddNobleMetalActivity" />
-        <activity android:name=".activities.AddCurrencyActivity" />
-        <activity android:name=".activities.AddCryptocurrencyActivity" />
-        <activity android:name=".activities.AddStockActivity" />
-        <activity android:name=".activities.AddETFActivity" />
+        <activity android:name=".activities.AddAssetListActivity" />
+        <activity android:name=".activities.AddNobleMetalListActivity" />
+        <activity android:name=".activities.AddCurrencyListActivity" />
+        <activity android:name=".activities.AddCryptocurrencyListActivity" />
+        <activity android:name=".activities.AddStockListActivity" />
+        <activity android:name=".activities.AddETFListActivity" />
         <activity android:name=".activities.AddRealEstateActivity" />
         <activity android:name=".asset_types.CryptoCurrencyType" />
 

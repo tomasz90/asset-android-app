@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.assets.R;
@@ -18,7 +17,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements ActionOnClickItem{
+public class MainListActivity extends AbstractListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements ActionOnClickItem
         setContentView(R.layout.activity_main);
         setToolbar();
 
-        FragmentValues[] fragmentValues = {
+        FragmentValues[] values = {
                 new FragmentValues("Platinum", "3oz", "1200 USD", "3600 USD", "Additional info"),
                 new FragmentValues("Gold", "2oz", "1540 USD ", "3080 USD", "Additional info"),
                 new FragmentValues("EUR", "4500", "1.12 USD", "5400 USD", "Additional info"),
@@ -37,16 +36,21 @@ public class MainActivity extends AppCompatActivity implements ActionOnClickItem
                 new FragmentValues("PZU", "200", "15 USD", "3000 USD", "Additional info"),
                 new FragmentValues("", "", "", "", "")};
 
-        RecyclerViewManager manager = new RecyclerViewManager(this);
-        FragmentTemplate assetDetailsTemplate =
-                new FragmentTemplate(R.layout.asset_details_fragment, R.id.asset, R.id.unit_price, R.id.units, R.id.value, R.id.additional_info);
-        manager.setRecyclerView(this, R.id.asset_list, assetDetailsTemplate, fragmentValues);
+        FragmentTemplate template = new FragmentTemplate(
+                R.layout.asset_details_fragment,
+                R.id.asset,
+                R.id.unit_price,
+                R.id.units,
+                R.id.value,
+                R.id.additional_info);
+
+        setUpList(template, values);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
+                Intent intent = new Intent(MainListActivity.this, AddAssetListActivity.class);
                 startActivity(intent);
             }
         });

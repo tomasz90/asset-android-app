@@ -9,11 +9,11 @@ public class ActivityMap {
 
     static {
         map = new HashMap<>();
-        map.put(AssetType.CURRENCIES, AddCurrencyActivity.class);
-        map.put(AssetType.CRYPTOCCURRENCIES, AddCryptocurrencyActivity.class);
-        map.put(AssetType.STOCKS, AddStockActivity.class);
-        map.put(AssetType.NOBLE_METALS, AddNobleMetalActivity.class);
-        map.put(AssetType.ETFS, AddETFActivity.class);
+        map.put(AssetType.CURRENCIES, AddCurrencyListActivity.class);
+        map.put(AssetType.CRYPTOCCURRENCIES, AddCryptocurrencyListActivity.class);
+        map.put(AssetType.STOCKS, AddStockListActivity.class);
+        map.put(AssetType.NOBLE_METALS, AddNobleMetalListActivity.class);
+        map.put(AssetType.ETFS, AddETFListActivity.class);
         map.put(AssetType.REAL_ESTATES, AddRealEstateActivity.class);
     }
 

@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.assets.R;
 import com.example.assets.RecyclerViewManager;
 import com.example.assets.asset_types.AssetType;
@@ -14,7 +12,7 @@ import com.example.assets.fragments.FragmentValues;
 
 import java.util.Objects;
 
-public class AddAssetActivity extends AppCompatActivity implements ActionOnClickItem {
+public class AddAssetListActivity extends AbstractListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +20,7 @@ public class AddAssetActivity extends AppCompatActivity implements ActionOnClick
         setContentView(R.layout.generic_list);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_assets_activity_title);
 
-        FragmentValues[] fragmentValues = {
+        FragmentValues[] values = {
                 new FragmentValues(AssetType.NOBLE_METALS),
                 new FragmentValues(AssetType.CURRENCIES),
                 new FragmentValues(AssetType.CRYPTOCCURRENCIES),
@@ -30,10 +28,8 @@ public class AddAssetActivity extends AppCompatActivity implements ActionOnClick
                 new FragmentValues(AssetType.REAL_ESTATES),
                 new FragmentValues(AssetType.ETFS)};
 
-        RecyclerViewManager manager = new RecyclerViewManager(this);
-        FragmentTemplate assetDetailsTemplate =
-                new FragmentTemplate(R.layout.generic_fragment, R.id.generic_asset);
-        manager.setRecyclerView(this, R.id.generic_list, assetDetailsTemplate, fragmentValues);
+        FragmentTemplate template = new FragmentTemplate(R.layout.generic_fragment, R.id.generic_asset);
+        setUpList(template, values);
     }
 
     @Override
