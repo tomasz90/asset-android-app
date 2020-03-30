@@ -32,8 +32,8 @@ public class AddAssetActivity extends AppCompatActivity {
             }
         });
 
-        EditText input = findViewById(R.id.amount_input);
-        input.addTextChangedListener(new TextWatcher() {
+        EditText editText = findViewById(R.id.amount_input);
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -47,9 +47,15 @@ public class AddAssetActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                TextView calculatedValueLabel = findViewById(R.id.calculated_value);
                 if (s.toString().isEmpty()) {
                     save.setBackgroundColor(getColor(R.color.greyed_magenta));
                     save.setEnabled(false);
+                    calculatedValueLabel.setText("value = " + 0+"$");
+                } else {
+                    Integer calculatedValue = Integer.valueOf(s.toString());
+                    calculatedValueLabel.setText("value = " + String.format("%.2f",calculatedValue*2.11)+ "$");
                 }
             }
         });
