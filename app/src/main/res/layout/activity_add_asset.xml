@@ -18,6 +18,7 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="18sp"
+        android:enabled="false"
         app:icon="@drawable/ic_check_white_24dp"
         app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

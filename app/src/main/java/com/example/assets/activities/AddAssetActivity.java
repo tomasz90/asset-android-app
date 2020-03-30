@@ -20,7 +20,6 @@ public class AddAssetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_assets_activity_title);
 
         setAssetSymbol(getIntent().getStringExtra("asset"));
 
@@ -43,14 +42,14 @@ public class AddAssetActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 save.setBackgroundColor(getColor(R.color.magenta));
-                save.setClickable(true);
+                save.setEnabled(true);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty()) {
                     save.setBackgroundColor(getColor(R.color.greyed_magenta));
-                    save.setClickable(false);
+                    save.setEnabled(false);
                 }
             }
         });

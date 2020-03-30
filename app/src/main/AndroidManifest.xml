@@ -23,7 +23,7 @@
         <activity android:name=".activities.AddAssetListActivity" />
         <activity android:name=".activities.AddCurrencyListActivity" />
         <activity android:name=".activities.AddAssetActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activities.DoneActivity" />
 
     </application>
