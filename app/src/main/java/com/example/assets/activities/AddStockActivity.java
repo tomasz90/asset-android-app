@@ -37,7 +37,7 @@ public class AddStockActivity extends AppCompatActivity implements ActionOnClick
     }
 
     @Override
-    public void perform(TextView tv) {
+    public void clickItem(TextView tv) {
         //do nothing
     }
 }

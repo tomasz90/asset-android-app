@@ -22,8 +22,6 @@ public class AddAssetActivity extends AppCompatActivity implements ActionOnClick
         setContentView(R.layout.generic_list);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_assets_activity_title);
 
-        FragmentTemplate assetDetailsTemplate =
-                new FragmentTemplate(R.layout.generic_fragment, R.id.generic_asset);
         FragmentValues[] fragmentValues = {
                 new FragmentValues(AssetType.NOBLE_METALS),
                 new FragmentValues(AssetType.CURRENCIES),
@@ -33,11 +31,13 @@ public class AddAssetActivity extends AppCompatActivity implements ActionOnClick
                 new FragmentValues(AssetType.ETFS)};
 
         RecyclerViewManager manager = new RecyclerViewManager(this);
+        FragmentTemplate assetDetailsTemplate =
+                new FragmentTemplate(R.layout.generic_fragment, R.id.generic_asset);
         manager.setRecyclerView(this, R.id.generic_list, assetDetailsTemplate, fragmentValues);
     }
 
     @Override
-    public void perform(TextView tv) {
+    public void clickItem(TextView tv) {
         String asset = tv.getText().toString();
         Intent intent = new Intent(this, ActivityMap.getActivity(asset));
         this.startActivity(intent);

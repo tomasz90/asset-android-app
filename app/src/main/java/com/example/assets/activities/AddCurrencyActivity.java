@@ -35,7 +35,7 @@ public class AddCurrencyActivity extends AppCompatActivity implements ActionOnCl
     }
 
     @Override
-    public void perform(TextView tv) {
+    public void clickItem(TextView tv) {
         //do nothing
     }
 }

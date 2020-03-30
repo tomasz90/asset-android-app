@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ActionOnClickItem
     }
 
     @Override
-    public void perform(TextView tv) {
+    public void clickItem(TextView tv) {
         //nothing
     }
 }

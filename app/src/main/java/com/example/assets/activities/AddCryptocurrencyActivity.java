@@ -32,7 +32,7 @@ public class AddCryptocurrencyActivity extends AppCompatActivity implements Acti
     }
 
     @Override
-    public void perform(TextView tv) {
+    public void clickItem(TextView tv) {
         //do nothing
     }
 }

@@ -4,5 +4,5 @@ import android.widget.TextView;
 
 public interface ActionOnClickItem {
 
-    void perform(TextView tv);
+    void clickItem(TextView tv);
 }

@@ -30,7 +30,7 @@ public class AddNobleMetalActivity extends AppCompatActivity implements ActionOn
     }
 
     @Override
-    public void perform(TextView tv) {
+    public void clickItem(TextView tv) {
         //nothing
     }
 }

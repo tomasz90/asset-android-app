@@ -14,10 +14,10 @@ import com.example.assets.fragments.FragmentValues;
 
 public class RecyclerViewManager {
 
-    ActionOnClickItem doInterface;
+    ActionOnClickItem actionOnClickItem;
 
-    public RecyclerViewManager(ActionOnClickItem doInterface) {
-        this.doInterface = doInterface;
+    public RecyclerViewManager(ActionOnClickItem actionOnClickItem) {
+        this.actionOnClickItem = actionOnClickItem;
     }
 
     public void setRecyclerView(AppCompatActivity activity, int recycleViewId, FragmentTemplate template, FragmentValues... fragmentValues) {
@@ -30,7 +30,7 @@ public class RecyclerViewManager {
         contentAdapter.setOnItemClickListener(new ContentAdapter.OnItemListener() {
             @Override
             public void onItemClick(TextView tv) {
-               doInterface.perform(tv);
+               actionOnClickItem.clickItem(tv);
             }
         });
     }

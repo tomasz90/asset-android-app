@@ -37,7 +37,7 @@ public class AddETFActivity extends AppCompatActivity implements ActionOnClickIt
     }
 
     @Override
-    public void perform(TextView tv) {
+    public void clickItem(TextView tv) {
         //do nothing
     }
 }
