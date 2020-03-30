@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#2F2A37</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="magenta">#FF4081</color>
+    <color name="greyed_magenta">#FFB7CF</color>
     <color name="white">#FFFFFF</color>
 
 

@@ -10,9 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainListActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,13 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.AddAssetListActivity" />
-        <activity android:name=".activities.AddNobleMetalListActivity" />
         <activity android:name=".activities.AddCurrencyListActivity" />
-        <activity android:name=".activities.AddCryptocurrencyListActivity" />
-        <activity android:name=".activities.AddStockListActivity" />
-        <activity android:name=".activities.AddETFListActivity" />
-        <activity android:name=".activities.AddRealEstateActivity" />
-        <activity android:name=".asset_types.CryptoCurrencyType" />
+        <activity android:name=".activities.AddAssetActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activities.DoneActivity" />
 
     </application>
 

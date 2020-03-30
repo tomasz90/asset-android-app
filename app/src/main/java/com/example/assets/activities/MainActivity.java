@@ -1,7 +1,6 @@
 package com.example.assets.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,14 +10,13 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.assets.R;
-import com.example.assets.RecyclerViewManager;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.Objects;
 
-public class MainListActivity extends AbstractListActivity {
+public class MainActivity extends AbstractListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +36,7 @@ public class MainListActivity extends AbstractListActivity {
                 new FragmentValues("", "", "", "", "")};
 
         FragmentTemplate template = new FragmentTemplate(
-                R.layout.asset_details_fragment,
+                R.layout.fragment_asset_details,
                 R.id.asset,
                 R.id.unit_price,
                 R.id.units,
@@ -51,7 +49,7 @@ public class MainListActivity extends AbstractListActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainListActivity.this, AddAssetListActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddAssetListActivity.class);
                 startActivity(intent);
             }
         });

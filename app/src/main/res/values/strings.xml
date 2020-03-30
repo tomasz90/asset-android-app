@@ -23,4 +23,10 @@
     <string name="main_activity_title">Your portfolio:</string>
     <string name="details">Details: </string>
     <string name="total_value">Total value: </string>
+    <string name="asset">Asset</string>
+    <string name="unit_price">Unit price</string>
+    <string name="units">Units</string>
+    <string name="value">Value</string>
+    <string name="amount">amount</string>
+    <string name="save_asset">save asset</string>
 </resources>
