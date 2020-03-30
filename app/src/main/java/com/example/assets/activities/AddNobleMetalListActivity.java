@@ -23,7 +23,7 @@ public class AddNobleMetalListActivity extends AbstractListActivity {
                 new FragmentValues(MetalType.PALLADIUM)};
 
         FragmentTemplate template = new FragmentTemplate(R.layout.generic_fragment, R.id.generic_asset);
-        setUpList(template, values);
+        setUpList(R.id.generic_list, template, values);
     }
 
     @Override

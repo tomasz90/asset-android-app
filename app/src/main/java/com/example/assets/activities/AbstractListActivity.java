@@ -9,8 +9,8 @@ import com.example.assets.fragments.FragmentValues;
 
 public abstract class AbstractListActivity extends AppCompatActivity implements ActionOnClickItem {
 
-   public void setUpList(FragmentTemplate fragmentTemplate, FragmentValues[] fragmentValues) {
+   public void setUpList(int listId, FragmentTemplate fragmentTemplate, FragmentValues[] fragmentValues) {
        RecyclerViewManager manager = new RecyclerViewManager(this);
-       manager.setRecyclerView(R.id.generic_list, fragmentTemplate, fragmentValues);
+       manager.setRecyclerView(listId, fragmentTemplate, fragmentValues);
    }
 }

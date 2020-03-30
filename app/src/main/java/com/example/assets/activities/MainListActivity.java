@@ -44,7 +44,7 @@ public class MainListActivity extends AbstractListActivity {
                 R.id.value,
                 R.id.additional_info);
 
-        setUpList(template, values);
+        setUpList(R.id.asset_list, template, values);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -28,7 +28,7 @@ public class AddETFListActivity extends AbstractListActivity {
                 new FragmentValues(ETFType.ETF)};
 
         FragmentTemplate template = new FragmentTemplate(R.layout.generic_fragment, R.id.generic_asset);
-        setUpList(template, values);
+        setUpList(R.id.generic_list, template, values);
     }
 
     @Override
