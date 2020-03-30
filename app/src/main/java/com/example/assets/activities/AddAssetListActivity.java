@@ -2,6 +2,7 @@ package com.example.assets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.assets.R;
@@ -33,7 +34,7 @@ public class AddAssetListActivity extends AbstractListActivity {
     }
 
     @Override
-    public void clickItem(TextView tv) {
+    public void clickItem(View v, TextView tv) {
         String asset = tv.getText().toString();
         Intent intent = new Intent(this, ActivityMap.getActivity(asset));
         this.startActivity(intent);

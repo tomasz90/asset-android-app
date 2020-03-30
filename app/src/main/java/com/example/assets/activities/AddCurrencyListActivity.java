@@ -1,6 +1,7 @@
 package com.example.assets.activities;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.assets.R;
@@ -32,7 +33,7 @@ public class AddCurrencyListActivity extends AbstractListActivity {
     }
 
     @Override
-    public void clickItem(TextView tv) {
+    public void clickItem(View v, TextView tv) {
         //do nothing
     }
 }

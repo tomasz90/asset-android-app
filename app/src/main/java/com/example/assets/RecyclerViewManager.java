@@ -1,5 +1,6 @@
 package com.example.assets;
 
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,8 +29,8 @@ public class RecyclerViewManager {
         recyclerView.setAdapter(contentAdapter);
         contentAdapter.setOnItemClickListener(new ContentAdapter.OnItemListener() {
             @Override
-            public void onItemClick(TextView tv) {
-               abstractListActivity.clickItem(tv);
+            public void onItemClick(View v, TextView tv) {
+               abstractListActivity.clickItem(v, tv);
             }
         });
     }

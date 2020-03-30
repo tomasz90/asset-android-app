@@ -19,7 +19,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     private OnItemListener listener;
 
     public interface OnItemListener {
-        void onItemClick(TextView v);
+        void onItemClick(View v, TextView tv);
     }
 
     public void setOnItemClickListener(OnItemListener listener) {
@@ -40,7 +40,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(tvs.get(0));
+                            listener.onItemClick(v, tvs.get(0));
                         }
                     }
                 }
@@ -72,13 +72,6 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     public int getItemCount() {
         return fragmentList.size();
     }
-
-//
-//    public void removeItem(int position){
-//        assets.remove(position);
-//        notifyItemRemoved(position);
-//        notifyItemRangeChanged(position, assets.size());
-//    }
 }
 
 

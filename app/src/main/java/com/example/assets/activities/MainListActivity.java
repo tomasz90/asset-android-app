@@ -1,6 +1,7 @@
 package com.example.assets.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -85,7 +86,7 @@ public class MainListActivity extends AbstractListActivity {
     }
 
     @Override
-    public void clickItem(TextView tv) {
-        //nothing
+    public void clickItem(View v, TextView tv) {
+
     }
 }
