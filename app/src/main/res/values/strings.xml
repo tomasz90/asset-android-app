@@ -23,7 +23,7 @@
     <string name="main_activity_title">Your portfolio:</string>
     <string name="details">Details: </string>
     <string name="total_value">Total value: </string>
-    <string name="total_value_text_view">%1$s$</string>
+    <string name="total_value_text_view">%1$s $</string>
     <string name="asset">Asset</string>
     <string name="unit_price">Unit price</string>
     <string name="units">Units</string>
