@@ -7,6 +7,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +35,8 @@ public class AddAssetActivity extends AppCompatActivity {
         TextView valueLabel = findViewById(R.id.calculated_value);
         valueLabel.setText(assetSymbol + "/USD = " + String.format("%.2f", getRate()));
         Button save = findViewById(R.id.fab);
+
+        ImageView xButton = findViewById(R.id.xbutton);
 
         EditText editText = findViewById(R.id.amount_input);
         editText.addTextChangedListener(new TextWatcher() {
@@ -65,6 +69,14 @@ public class AddAssetActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        xButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddAssetActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
