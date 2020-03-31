@@ -11,6 +11,7 @@ import com.example.assets.asset_types.CurrencyType;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 
+import lombok.SneakyThrows;
 
 public class AddCurrencyListActivity extends AbstractListActivity {
 
@@ -47,19 +48,15 @@ public class AddCurrencyListActivity extends AbstractListActivity {
 
     private class GetJSONTask extends AsyncTask<String, Void, String> {
 
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
         @Override
+        @SneakyThrows
         protected String doInBackground(String... strings) {
-            try {
-                return CurrencyService.getRates();
-            } catch (Exception e) {
-                return null;
-            }
+            return CurrencyService.getRates();
         }
 
         @Override

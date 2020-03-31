@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHolder> {
+
     FragmentList fragmentList;
     private OnItemListener listener;
 

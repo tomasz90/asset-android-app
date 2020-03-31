@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assets.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AddAssetActivity extends AppCompatActivity {
@@ -37,7 +36,6 @@ public class AddAssetActivity extends AppCompatActivity {
         TextView calculatedValueTextView = findViewById(R.id.calculated_value);
         calculatedValueText = getString(R.string.rate, assetSymbol, getRate());
         calculatedValueTextView.setText(calculatedValueText);
-
 
         Button save = findViewById(R.id.fab);
         save.setOnClickListener(view -> {
@@ -81,17 +79,9 @@ public class AddAssetActivity extends AppCompatActivity {
         });
     }
 
-
-
+    @lombok.SneakyThrows
     private float getRate() {
-        JSONObject object = null;
-        String rate = "";
-        try {
-            object = new JSONObject(rates);
-             rate = object.getString(assetSymbol);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String rate = new JSONObject(rates).getString(assetSymbol);
         return 1/Float.parseFloat(rate);
     }
 }
