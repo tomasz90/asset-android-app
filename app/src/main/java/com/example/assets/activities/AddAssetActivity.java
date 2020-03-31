@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assets.R;
 import com.example.assets.constants.IntentExtra;
+import com.example.assets.util.StorageManager;
+
 
 public class AddAssetActivity extends AppCompatActivity {
 
@@ -38,6 +40,11 @@ public class AddAssetActivity extends AppCompatActivity {
 
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
+
+            StorageManager manager = new StorageManager(this);
+            manager.addEntry(assetSymbol, editText.getText().toString());
+            //manager.deleteFile();
+
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
         });

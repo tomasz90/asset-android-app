@@ -25,6 +25,7 @@
         <activity android:name=".activities.AddAssetActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activities.DoneActivity" />
+        <activity android:name=".activities.SettingsActivity" />
 
     </application>
 
