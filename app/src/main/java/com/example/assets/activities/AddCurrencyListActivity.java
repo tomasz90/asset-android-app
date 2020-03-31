@@ -13,13 +13,9 @@ import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 import com.example.assets.util.GetJSONTask;
 
-import org.json.JSONObject;
-
 import lombok.SneakyThrows;
 
 public class AddCurrencyListActivity extends AbstractListActivity {
-
-    JSONObject ratesObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

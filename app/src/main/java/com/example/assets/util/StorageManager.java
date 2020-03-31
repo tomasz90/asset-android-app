@@ -22,7 +22,8 @@ public class StorageManager {
     }
 
 
-    private JSONObject readFile() throws JSONException, IOException {
+    @SneakyThrows
+    public JSONObject readFile() {
         String read = FileUtils.readFileToString(file, "UTF_8");
         return new JSONObject(read);
     }
