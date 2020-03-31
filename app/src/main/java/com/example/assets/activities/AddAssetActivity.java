@@ -7,7 +7,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,21 +21,29 @@ public class AddAssetActivity extends AppCompatActivity {
 
     String assetSymbol;
     String rates;
+    String calculatedValueText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
 
-        assetSymbol = getIntent().getStringExtra("asset");
         rates = getIntent().getStringExtra("rates");
-        setAssetSymbol(assetSymbol);
+        assetSymbol = getIntent().getStringExtra("asset");
 
-        TextView valueLabel = findViewById(R.id.calculated_value);
-        valueLabel.setText(assetSymbol + "/USD = " + String.format("%.2f", getRate()));
+        TextView symbolTextView = findViewById(R.id.asset_id);
+        symbolTextView.setText(assetSymbol);
+
+        TextView calculatedValueTextView = findViewById(R.id.calculated_value);
+        calculatedValueText = getString(R.string.rate, assetSymbol, getRate());
+        calculatedValueTextView.setText(calculatedValueText);
+
+
         Button save = findViewById(R.id.fab);
-
-        ImageView xButton = findViewById(R.id.xbutton);
+        save.setOnClickListener(view -> {
+            Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
+            startActivity(intent);
+        });
 
         EditText editText = findViewById(R.id.amount_input);
         editText.addTextChangedListener(new TextWatcher() {
@@ -52,7 +59,6 @@ public class AddAssetActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String textLabel;
                 float value = 0f;
                 if (s.toString().isEmpty()) {
                     save.setBackgroundColor(getColor(R.color.greyed_magenta));
@@ -60,19 +66,12 @@ public class AddAssetActivity extends AppCompatActivity {
                 } else {
                     value = Float.parseFloat(s.toString()) * getRate();
                 }
-                textLabel = getString(R.string.calculated_value, value);
-                valueLabel.setText(textLabel);
+                calculatedValueText = getString(R.string.calculated_value, value);
+                calculatedValueTextView.setText(calculatedValueText);
             }
         });
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        ImageView xButton = findViewById(R.id.xbutton);
         xButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,10 +81,7 @@ public class AddAssetActivity extends AppCompatActivity {
         });
     }
 
-    private void setAssetSymbol(String assetSymbol) {
-        TextView tv = findViewById(R.id.asset_id);
-        tv.setText(assetSymbol);
-    }
+
 
     private float getRate() {
         JSONObject object = null;
