@@ -29,5 +29,5 @@
     <string name="value">Value</string>
     <string name="amount">amount</string>
     <string name="save_asset">save asset</string>
-    <string name="calculated_value">value = %1$.02f</string>
+    <string name="calculated_value">value = %1$.02f USD</string>
 </resources>

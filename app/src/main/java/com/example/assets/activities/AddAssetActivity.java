@@ -17,13 +17,14 @@ import com.example.assets.R;
 public class AddAssetActivity extends AppCompatActivity {
 
     TextView valueLabel;
+    String assetSymbol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
 
-        String assetSymbol = getIntent().getStringExtra("asset");
+        assetSymbol = getIntent().getStringExtra("asset");
         setAssetSymbol(assetSymbol);
 
         valueLabel = findViewById(R.id.calculated_value);
@@ -56,7 +57,7 @@ public class AddAssetActivity extends AppCompatActivity {
                 valueLabel.setText(textLabel);
             }
         });
-        new GetJSONTask().execute();
+        new GetJSONTask().execute(assetSymbol);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,9 +86,9 @@ public class AddAssetActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... urls) {
+        protected String doInBackground(String... assetSymbol) {
             try {
-                return CurrencyService.getRate();
+                return CurrencyService.getRate(assetSymbol[0]);
             } catch (Exception e) {
                 return "Unable to retrieve data. URL may be invalid.";
             }
@@ -95,8 +96,8 @@ public class AddAssetActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            float rate = Float.parseFloat(result);
-            valueLabel.setText(String.format("%.2f", rate));
+            float rate = 1/Float.parseFloat(result);
+            valueLabel.setText(assetSymbol + "/USD = " + String.format("%.2f", rate));
         }
     }
 }

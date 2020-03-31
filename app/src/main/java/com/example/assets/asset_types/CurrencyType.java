@@ -9,5 +9,5 @@ public class CurrencyType {
     public static final String PLN = "PLN";
     public static final String NOK = "NOK";
     public static final String SEK = "SEK";
-    public static final String DDK = "DDK";
+    public static final String DDK = "DKK";
 }
