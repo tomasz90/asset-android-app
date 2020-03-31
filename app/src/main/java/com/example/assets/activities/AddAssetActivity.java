@@ -38,22 +38,22 @@ public class AddAssetActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                save.setBackgroundColor(getColor(R.color.magenta));
-//                save.setEnabled(true);
+                save.setBackgroundColor(getColor(R.color.magenta));
+                save.setEnabled(true);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-//                String textLabel;
-//                float value = 0f;
-//                if (s.toString().isEmpty()) {
-//                    save.setBackgroundColor(getColor(R.color.greyed_magenta));
-//                    save.setEnabled(false);
-//                } else {
-//                    value = Float.parseFloat(s.toString()) * getRate(assetSymbol);
-//                }
-//                textLabel = getString(R.string.calculated_value, value);
-//                valueLabel.setText(textLabel);
+                String textLabel;
+                float value = 0f;
+                if (s.toString().isEmpty()) {
+                    save.setBackgroundColor(getColor(R.color.greyed_magenta));
+                    save.setEnabled(false);
+                } else {
+                    value = Float.parseFloat(s.toString()) * getRate(assetSymbol);
+                }
+                textLabel = getString(R.string.calculated_value, value);
+                valueLabel.setText(textLabel);
             }
         });
         new GetJSONTask().execute();
