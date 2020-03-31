@@ -40,8 +40,8 @@ public class MainActivity extends AbstractListActivity {
         FragmentTemplate template = new FragmentTemplate(
                 R.layout.fragment_asset_details,
                 R.id.asset,
-                R.id.unit_price,
                 R.id.units,
+                R.id.unit_price,
                 R.id.value,
                 R.id.additional_info);
 
