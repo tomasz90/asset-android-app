@@ -68,6 +68,6 @@ public class AddAssetActivity extends AppCompatActivity {
     }
 
     private float getRate(String assetSymbol) {
-        return 1.3f;
+        return 1f;
     }
 }
