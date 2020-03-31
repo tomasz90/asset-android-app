@@ -16,13 +16,10 @@ public class DoneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_done);
 
         int TIME_OUT = 2000;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(DoneActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            Intent i = new Intent(DoneActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
         }, TIME_OUT);
     }
 }

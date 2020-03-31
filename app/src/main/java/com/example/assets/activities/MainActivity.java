@@ -46,12 +46,9 @@ public class MainActivity extends AbstractListActivity {
         setUpList(R.id.asset_list, template, values);
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddAssetListActivity.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AddAssetListActivity.class);
+            startActivity(intent);
         });
     }
 

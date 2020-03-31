@@ -6,16 +6,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.assets.IntentExtra;
 import com.example.assets.R;
 import com.example.assets.asset_types.CurrencyType;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 
+import org.json.JSONObject;
+
 import lombok.SneakyThrows;
 
 public class AddCurrencyListActivity extends AbstractListActivity {
 
-    String s;
+    JSONObject ratesObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,29 +42,33 @@ public class AddCurrencyListActivity extends AbstractListActivity {
         setUpList(R.id.generic_list, template, values);
     }
 
+    @SneakyThrows
     @Override
     public void clickItem(View v, TextView tv) {
+        String symbolAsset = tv.getText().toString();
+        String rate = ratesObject.getString(symbolAsset);
+
         Intent intent = new Intent(this, AddAssetActivity.class);
-        intent.putExtra("asset", tv.getText()).putExtra("rates", s);
+        intent.putExtra(IntentExtra.ASSET, tv.getText()).putExtra(IntentExtra.RATE, rate);
         startActivity(intent);
     }
 
-    private class GetJSONTask extends AsyncTask<String, Void, String> {
+    private class GetJSONTask extends AsyncTask<String, Void, JSONObject> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
-        @Override
         @SneakyThrows
-        protected String doInBackground(String... strings) {
+        @Override
+        protected JSONObject doInBackground(String... strings) {
             return CurrencyService.getRates();
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            s = result;
+        protected void onPostExecute(JSONObject result) {
+            ratesObject = result;
         }
     }
 }
