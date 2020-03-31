@@ -95,7 +95,8 @@ public class AddAssetActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            valueLabel.setText(result);
+            float rate = Float.parseFloat(result);
+            valueLabel.setText(String.format("%.2f", rate));
         }
     }
 }
