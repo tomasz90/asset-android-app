@@ -11,14 +11,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.assets.constants.IntentExtra;
 import com.example.assets.R;
+import com.example.assets.constants.IntentExtra;
 
 public class AddAssetActivity extends AppCompatActivity {
 
     String rate;
     String assetSymbol;
     String calculatedValueText;
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class AddAssetActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        EditText editText = findViewById(R.id.amount_input);
+        editText = findViewById(R.id.amount_input);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -75,6 +76,6 @@ public class AddAssetActivity extends AppCompatActivity {
     }
 
     private float getFloatRate() {
-        return 1/Float.parseFloat(rate);
+        return 1 / Float.parseFloat(rate);
     }
 }
