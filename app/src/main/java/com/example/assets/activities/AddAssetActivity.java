@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.assets.IntentExtra;
+import com.example.assets.constants.IntentExtra;
 import com.example.assets.R;
 
 public class AddAssetActivity extends AppCompatActivity {

@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.assets.IntentExtra;
+import com.example.assets.constants.IntentExtra;
 import com.example.assets.R;
+import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.asset_types.CurrencyType;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;

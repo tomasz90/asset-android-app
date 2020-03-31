@@ -1,4 +1,4 @@
-package com.example.assets;
+package com.example.assets.constants;
 
 public class IntentExtra {
 

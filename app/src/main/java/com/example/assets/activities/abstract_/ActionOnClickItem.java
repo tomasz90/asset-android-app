@@ -1,4 +1,4 @@
-package com.example.assets.activities;
+package com.example.assets.activities.abstract_;
 
 import android.view.View;
 import android.widget.TextView;

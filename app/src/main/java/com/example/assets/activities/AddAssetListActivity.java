@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.assets.R;
+import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.asset_types.ActivityMap;
 import com.example.assets.asset_types.AssetType;
 import com.example.assets.fragments.FragmentTemplate;

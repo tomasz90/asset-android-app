@@ -1,8 +1,7 @@
-package com.example.assets.activities;
+package com.example.assets.activities.abstract_;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.assets.RecyclerViewManager;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 

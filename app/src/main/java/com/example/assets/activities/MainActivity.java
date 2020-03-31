@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.assets.R;
+import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
