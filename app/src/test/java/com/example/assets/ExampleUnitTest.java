@@ -1,12 +1,7 @@
 package com.example.assets;
 
 import com.example.assets.activities.CurrencyService;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -24,6 +19,6 @@ public class ExampleUnitTest {
 
     @Test
     public void getRate() throws Exception {
-        CurrencyService.getRate();
+        CurrencyService.getRates();
     }
 }

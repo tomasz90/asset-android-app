@@ -1,6 +1,7 @@
 package com.example.assets.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -10,12 +11,17 @@ import com.example.assets.asset_types.CurrencyType;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 
+
 public class AddCurrencyListActivity extends AbstractListActivity {
+
+    String s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
+
+        new GetJSONTask().execute();
 
         FragmentValues[] values = {
                 new FragmentValues(CurrencyType.EUR),
@@ -35,7 +41,30 @@ public class AddCurrencyListActivity extends AbstractListActivity {
     @Override
     public void clickItem(View v, TextView tv) {
         Intent intent = new Intent(this, AddAssetActivity.class);
-        intent.putExtra("asset", tv.getText());
+        intent.putExtra("asset", tv.getText()).putExtra("rates", s);
         startActivity(intent);
+    }
+
+    private class GetJSONTask extends AsyncTask<String, Void, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                return CurrencyService.getRates();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            s = result;
+        }
     }
 }

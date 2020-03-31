@@ -1,7 +1,6 @@
 package com.example.assets.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,10 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assets.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AddAssetActivity extends AppCompatActivity {
 
-    TextView valueLabel;
     String assetSymbol;
+    String rates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +27,11 @@ public class AddAssetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_asset);
 
         assetSymbol = getIntent().getStringExtra("asset");
+        rates = getIntent().getStringExtra("rates");
         setAssetSymbol(assetSymbol);
 
-        valueLabel = findViewById(R.id.calculated_value);
-
+        TextView valueLabel = findViewById(R.id.calculated_value);
+        valueLabel.setText(assetSymbol + "/USD = " + String.format("%.2f", getRate()));
         Button save = findViewById(R.id.fab);
 
         EditText editText = findViewById(R.id.amount_input);
@@ -51,13 +54,12 @@ public class AddAssetActivity extends AppCompatActivity {
                     save.setBackgroundColor(getColor(R.color.greyed_magenta));
                     save.setEnabled(false);
                 } else {
-                    value = Float.parseFloat(s.toString()) * getRate(assetSymbol);
+                    value = Float.parseFloat(s.toString()) * getRate();
                 }
                 textLabel = getString(R.string.calculated_value, value);
                 valueLabel.setText(textLabel);
             }
         });
-        new GetJSONTask().execute(assetSymbol);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,31 +75,15 @@ public class AddAssetActivity extends AppCompatActivity {
         tv.setText(assetSymbol);
     }
 
-    private float getRate(String assetSymbol) {
-        return 1f;
-    }
-
-    private class GetJSONTask extends AsyncTask<String, Void, String> {
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+    private float getRate() {
+        JSONObject object = null;
+        String rate = "";
+        try {
+            object = new JSONObject(rates);
+             rate = object.getString(assetSymbol);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-        @Override
-        protected String doInBackground(String... assetSymbol) {
-            try {
-                return CurrencyService.getRate(assetSymbol[0]);
-            } catch (Exception e) {
-                return "Unable to retrieve data. URL may be invalid.";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            float rate = 1/Float.parseFloat(result);
-            valueLabel.setText(assetSymbol + "/USD = " + String.format("%.2f", rate));
-        }
+        return 1/Float.parseFloat(rate);
     }
 }
