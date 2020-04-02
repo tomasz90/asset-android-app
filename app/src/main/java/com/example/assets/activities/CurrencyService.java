@@ -8,6 +8,7 @@ public class CurrencyService {
 
     public static JSONObject getRates() throws Exception {
         String resp = Unirest.get("https://api.exchangeratesapi.io/latest?base=USD").asString().getBody();
+        System.out.println("getRates() INVOKED ##################");
         return new JSONObject(resp).getJSONObject("rates");
     }
 }

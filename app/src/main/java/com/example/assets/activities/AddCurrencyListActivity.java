@@ -8,10 +8,8 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.asset_types.CurrencyType;
-import com.example.assets.constants.IntentExtra;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
-import com.example.assets.util.GetJSONTask;
 
 import lombok.SneakyThrows;
 
@@ -21,8 +19,6 @@ public class AddCurrencyListActivity extends AbstractListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
-
-        new GetJSONTask().execute();
 
         FragmentValues[] values = {
                 new FragmentValues(CurrencyType.EUR),
@@ -42,11 +38,9 @@ public class AddCurrencyListActivity extends AbstractListActivity {
     @SneakyThrows
     @Override
     public void clickItem(View v, TextView tv) {
+        // TODO: 4/3/2020 implelemnt put extra intent
         String symbolAsset = tv.getText().toString();
-        String rate = GetJSONTask.object.getString(symbolAsset);
-
         Intent intent = new Intent(this, AddAssetActivity.class);
-        intent.putExtra(IntentExtra.ASSET, tv.getText()).putExtra(IntentExtra.RATE, rate);
         startActivity(intent);
     }
 }

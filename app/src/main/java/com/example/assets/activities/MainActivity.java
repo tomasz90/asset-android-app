@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -14,14 +13,19 @@ import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
-import com.example.assets.util.GetJSONTask;
+import com.example.assets.util.DataProvider;
+import com.example.assets.util.DataUpdater;
 import com.example.assets.util.StorageManager;
 import com.example.assets.util.ValueCalculator;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import org.json.JSONObject;
+
 import java.util.Objects;
 
-public class MainActivity extends AbstractListActivity {
+public class MainActivity extends AbstractListActivity implements DataUpdater {
+
+    private TextView totalValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +33,9 @@ public class MainActivity extends AbstractListActivity {
         setContentView(R.layout.activity_main);
         setToolbar();
 
-        TextView totalValue = findViewById(R.id.total_value);
+        totalValue = findViewById(R.id.total_value);
 
 
-        new GetJSONTask().execute();
         FragmentValues[] values = {
                 new FragmentValues("Platinum", "3oz", "1200 USD", "3600 USD", "Additional info"),
                 new FragmentValues("Gold", "2oz", "1540 USD ", "3080 USD", "Additional info"),
@@ -61,7 +64,7 @@ public class MainActivity extends AbstractListActivity {
         });
 
         totalValue.setOnClickListener(v -> {
-            updateTotalValue(totalValue);
+            new DataProvider(this).execute();
         });
     }
 
@@ -98,9 +101,14 @@ public class MainActivity extends AbstractListActivity {
     public void clickItem(View v, TextView tv) {
     }
 
-    private void updateTotalValue(TextView totalValue) {
+    private void updateTotalValue(JSONObject object) {
         StorageManager manager = new StorageManager(this);
-        String s = ValueCalculator.calculateTotal(manager.readFile(), GetJSONTask.object);
+        String s = ValueCalculator.calculateTotal(manager.readFile(), object);
         totalValue.setText(getString(R.string.total_value_text_view, s));
+    }
+
+    @Override
+    public void updateUI(JSONObject object) {
+        updateTotalValue(object);
     }
 }
