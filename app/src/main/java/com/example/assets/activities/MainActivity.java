@@ -64,7 +64,7 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
         });
 
         totalValue.setOnClickListener(v -> {
-            System.out.println("from button %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            System.out.println("from button ...............................................................................................");
             new DataProvider(this).execute(true);
         });
     }
@@ -72,7 +72,7 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("onResume main %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        System.out.println("onResume main ...............................................................................................");
         new DataProvider(this).execute(false);
     }
 
