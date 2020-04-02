@@ -64,8 +64,16 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
         });
 
         totalValue.setOnClickListener(v -> {
-            new DataProvider(this).execute();
+            System.out.println("from button %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            new DataProvider(this).execute(true);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("onResume main %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        new DataProvider(this).execute(false);
     }
 
     private void setToolbar() {
@@ -99,6 +107,7 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
 
     @Override
     public void clickItem(View v, TextView tv) {
+        //this is for clicking item on the list
     }
 
     private void updateTotalValue(JSONObject object) {

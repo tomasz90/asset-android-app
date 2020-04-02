@@ -16,9 +16,9 @@ import lombok.SneakyThrows;
 public class DataProvider extends AsyncTask<String, Void, JSONObject> {
 
     private DataUpdater updater;
-    private String key = "currencies";
+    private String currencies = "currencies";
 
-    static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
+    private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
         public JSONObject load(String key) throws Exception {
             JSONObject object = new JSONObject().put(key, CurrencyService.getRates());
@@ -26,8 +26,8 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
         }
     };
 
-    static LoadingCache<String, JSONObject> cache = CacheBuilder.newBuilder()
-            .expireAfterWrite(10, TimeUnit.SECONDS)
+    private static LoadingCache<String, JSONObject> cache = CacheBuilder.newBuilder()
+            .expireAfterWrite(15, TimeUnit.SECONDS)
             .build(loader);
 
     public DataProvider(DataUpdater updater) {
@@ -42,12 +42,19 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
     @SneakyThrows
     @Override
     protected JSONObject doInBackground(String... strings) {
-        return cache.getUnchecked(key);
+        return cache.getUnchecked(currencies);
     }
 
     @SneakyThrows
     @Override
     protected void onPostExecute(JSONObject result) {
         updater.updateUI(result);
+    }
+
+    public void execute(boolean withCleanCache) {
+        if(withCleanCache) {
+            cache.invalidateAll();
+        }
+        execute();
     }
 }
