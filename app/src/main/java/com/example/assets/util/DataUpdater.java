@@ -4,5 +4,5 @@ import org.json.JSONObject;
 
 public interface DataUpdater {
 
-    void updateUI(JSONObject object);
+    void updateUI(JSONObject object, String action);
 }

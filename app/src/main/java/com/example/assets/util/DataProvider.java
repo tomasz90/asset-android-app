@@ -17,6 +17,7 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
 
     private DataUpdater updater;
     private String currencies = "currencies";
+    private String action;
 
     private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
@@ -29,6 +30,11 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
     private static LoadingCache<String, JSONObject> cache = CacheBuilder.newBuilder()
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build(loader);
+
+    public DataProvider(DataUpdater updater, String action) {
+        this.updater = updater;
+        this.action = action;
+    }
 
     public DataProvider(DataUpdater updater) {
         this.updater = updater;
@@ -48,7 +54,7 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
     @SneakyThrows
     @Override
     protected void onPostExecute(JSONObject result) {
-        updater.updateUI(result);
+        updater.updateUI(result, action);
     }
 
     public void execute(boolean withCleanCache) {

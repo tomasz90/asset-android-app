@@ -1,5 +1,6 @@
 package com.example.assets.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,37 +14,42 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assets.R;
 import com.example.assets.constants.IntentExtra;
+import com.example.assets.util.DataProvider;
+import com.example.assets.util.DataUpdater;
 import com.example.assets.util.StorageManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class AddAssetActivity extends AppCompatActivity {
+import lombok.SneakyThrows;
 
-    String rate;
+
+public class AddAssetActivity extends AppCompatActivity implements DataUpdater {
+
     String assetSymbol;
-    String calculatedValueText;
     EditText editText;
+    TextView calculatedValueTextView;
+    float value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
 
-        rate = getIntent().getStringExtra(IntentExtra.RATE);
         assetSymbol = getIntent().getStringExtra(IntentExtra.ASSET);
 
         TextView symbolTextView = findViewById(R.id.asset_symbol);
         symbolTextView.setText(assetSymbol);
 
-        TextView calculatedValueTextView = findViewById(R.id.calculated_value);
-        calculatedValueText = getString(R.string.rate, assetSymbol, getFloatRate());
-        calculatedValueTextView.setText(calculatedValueText);
+        calculatedValueTextView = findViewById(R.id.calculated_value);
+
+        new DataProvider(this, "main").execute(false);
 
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
 
             StorageManager manager = new StorageManager(this);
             manager.addEntry(assetSymbol, editText.getText().toString());
-            //manager.deleteFile();
 
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
@@ -69,20 +75,32 @@ public class AddAssetActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                float value = 0f;
+                value = 0f;
                 if (s.toString().isEmpty()) {
                     saveButton.setBackgroundColor(getColor(R.color.greyed_magenta));
                     saveButton.setEnabled(false);
                 } else {
-                    value = Float.parseFloat(s.toString()) * getFloatRate();
+                    value = Float.parseFloat(s.toString());
                 }
-                calculatedValueText = getString(R.string.calculated_value, value);
-                calculatedValueTextView.setText(calculatedValueText);
+                new DataProvider(AddAssetActivity.this, "afterTextChanged").execute(false);
             }
         });
     }
 
-    private float getFloatRate() {
-        return 1 / Float.parseFloat(rate);
+
+    @SneakyThrows
+    @Override
+    public void updateUI(JSONObject object, String action) {
+        float rate = 1/Float.parseFloat(object.getString(assetSymbol));
+        String textToDisplay = "";
+        switch (action) {
+            case "main":
+                textToDisplay = getString(R.string.rate, assetSymbol, rate);
+                break;
+            case "afterTextChanged":
+                textToDisplay = getString(R.string.calculated_value, value * rate);
+                break;
+        }
+        calculatedValueTextView.setText(textToDisplay);
     }
 }

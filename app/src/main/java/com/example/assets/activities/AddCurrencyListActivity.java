@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.asset_types.CurrencyType;
+import com.example.assets.constants.IntentExtra;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 
@@ -41,6 +42,7 @@ public class AddCurrencyListActivity extends AbstractListActivity {
         // TODO: 4/3/2020 implelemnt put extra intent
         String symbolAsset = tv.getText().toString();
         Intent intent = new Intent(this, AddAssetActivity.class);
+        intent.putExtra(IntentExtra.ASSET, symbolAsset);
         startActivity(intent);
     }
 }

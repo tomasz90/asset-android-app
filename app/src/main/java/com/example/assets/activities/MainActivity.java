@@ -118,7 +118,7 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
     }
 
     @Override
-    public void updateUI(JSONObject object) {
+    public void updateUI(JSONObject object, String action) {
         updateTotalValue(object);
     }
 }
