@@ -27,7 +27,7 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
     };
 
     private static LoadingCache<String, JSONObject> cache = CacheBuilder.newBuilder()
-            .expireAfterWrite(15, TimeUnit.SECONDS)
+            .expireAfterWrite(5, TimeUnit.MINUTES)
             .build(loader);
 
     public DataProvider(DataUpdater updater) {

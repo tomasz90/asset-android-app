@@ -111,6 +111,7 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
     }
 
     private void updateTotalValue(JSONObject object) {
+        System.out.println("VALUE UPDATED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
         StorageManager manager = new StorageManager(this);
         String s = ValueCalculator.calculateTotal(manager.readFile(), object);
         totalValue.setText(getString(R.string.total_value_text_view, s));
