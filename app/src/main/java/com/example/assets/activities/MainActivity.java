@@ -1,6 +1,9 @@
 package com.example.assets.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +16,7 @@ import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
-import com.example.assets.util.DataProvider;
+import com.example.assets.util.ApiDataProvider;
 import com.example.assets.util.StorageManager;
 import com.example.assets.util.ValueCalculator;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -64,7 +67,7 @@ public class MainActivity extends AbstractListActivity {
 
         totalValue.setOnClickListener(v -> {
             System.out.println("from button ...............................................................................................");
-            DataProvider.execute(true, this::updateTotalValue);
+            new ApiDataProvider(this).populateTextViews(true, this::updateTotalValue);
         });
     }
 
@@ -72,7 +75,7 @@ public class MainActivity extends AbstractListActivity {
     public void onResume() {
         super.onResume();
         System.out.println("onResume main ...............................................................................................");
-        DataProvider.execute(false, this::updateTotalValue);
+        new ApiDataProvider(this).populateTextViews(false, this::updateTotalValue);
     }
 
     private void setToolbar() {
