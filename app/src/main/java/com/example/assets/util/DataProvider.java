@@ -1,6 +1,7 @@
 package com.example.assets.util;
 
 import android.os.AsyncTask;
+import android.text.PrecomputedText;
 
 import com.example.assets.activities.CurrencyService;
 import com.google.common.cache.CacheBuilder;
@@ -17,7 +18,6 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
 
     private DataUpdater updater;
     private String currencies = "currencies";
-    private String action;
 
     private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
@@ -30,15 +30,6 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
     private static LoadingCache<String, JSONObject> cache = CacheBuilder.newBuilder()
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build(loader);
-
-    public DataProvider(DataUpdater updater, String action) {
-        this.updater = updater;
-        this.action = action;
-    }
-
-    public DataProvider(DataUpdater updater) {
-        this.updater = updater;
-    }
 
     @Override
     protected void onPreExecute() {
@@ -54,10 +45,11 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
     @SneakyThrows
     @Override
     protected void onPostExecute(JSONObject result) {
-        updater.updateUI(result, action);
+        updater.updateUI(result);
     }
 
-    public void execute(boolean withCleanCache) {
+    public void execute(boolean withCleanCache, DataUpdater updater) {
+        this.updater = updater;
         if(withCleanCache) {
             cache.invalidateAll();
         }

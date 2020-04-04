@@ -14,7 +14,6 @@ import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 import com.example.assets.util.DataProvider;
-import com.example.assets.util.DataUpdater;
 import com.example.assets.util.StorageManager;
 import com.example.assets.util.ValueCalculator;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -23,7 +22,7 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-public class MainActivity extends AbstractListActivity implements DataUpdater {
+public class MainActivity extends AbstractListActivity {
 
     private TextView totalValue;
 
@@ -65,7 +64,7 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
 
         totalValue.setOnClickListener(v -> {
             System.out.println("from button ...............................................................................................");
-            new DataProvider(this).execute(true);
+            new DataProvider().execute(true, this::updateTotalValue);
         });
     }
 
@@ -73,7 +72,7 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
     public void onResume() {
         super.onResume();
         System.out.println("onResume main ...............................................................................................");
-        new DataProvider(this).execute(false);
+        new DataProvider().execute(false, this::updateTotalValue);
     }
 
     private void setToolbar() {
@@ -111,14 +110,9 @@ public class MainActivity extends AbstractListActivity implements DataUpdater {
     }
 
     private void updateTotalValue(JSONObject object) {
-        System.out.println("VALUE UPDATED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
+        System.out.println("VALUE UPDATED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         StorageManager manager = new StorageManager(this);
         String s = ValueCalculator.calculateTotal(manager.readFile(), object);
         totalValue.setText(getString(R.string.total_value_text_view, s));
-    }
-
-    @Override
-    public void updateUI(JSONObject object, String action) {
-        updateTotalValue(object);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.assets.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,16 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.assets.R;
 import com.example.assets.constants.IntentExtra;
 import com.example.assets.util.DataProvider;
-import com.example.assets.util.DataUpdater;
 import com.example.assets.util.StorageManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import lombok.SneakyThrows;
-
-
-public class AddAssetActivity extends AppCompatActivity implements DataUpdater {
+public class AddAssetActivity extends AppCompatActivity {
 
     String assetSymbol;
     EditText editText;
@@ -43,7 +36,11 @@ public class AddAssetActivity extends AppCompatActivity implements DataUpdater {
 
         calculatedValueTextView = findViewById(R.id.calculated_value);
 
-        new DataProvider(this, "main").execute(false);
+        new DataProvider().execute(false, dataFromApi -> {
+            float rate = 1 / Float.parseFloat(dataFromApi.getString(assetSymbol));
+            String textToDisplay = getString(R.string.rate, assetSymbol, rate);
+            calculatedValueTextView.setText(textToDisplay);
+        });
 
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
@@ -58,7 +55,7 @@ public class AddAssetActivity extends AppCompatActivity implements DataUpdater {
         ImageView closeButton = findViewById(R.id.xbutton);
         closeButton.setOnClickListener(view -> {
             Intent intent = new Intent(AddAssetActivity.this, MainActivity.class);
-            startActivity(intent);
+            AddAssetActivity.this.startActivity(intent);
         });
 
         editText = findViewById(R.id.amount_input);
@@ -82,25 +79,12 @@ public class AddAssetActivity extends AppCompatActivity implements DataUpdater {
                 } else {
                     value = Float.parseFloat(s.toString());
                 }
-                new DataProvider(AddAssetActivity.this, "afterTextChanged").execute(false);
+                new DataProvider().execute(false, data -> {
+                    float rate = 1 / Float.parseFloat(data.getString(assetSymbol));
+                    String textToDisplay = getString(R.string.calculated_value, value * rate);
+                    calculatedValueTextView.setText(textToDisplay);
+                });
             }
         });
-    }
-
-
-    @SneakyThrows
-    @Override
-    public void updateUI(JSONObject object, String action) {
-        float rate = 1/Float.parseFloat(object.getString(assetSymbol));
-        String textToDisplay = "";
-        switch (action) {
-            case "main":
-                textToDisplay = getString(R.string.rate, assetSymbol, rate);
-                break;
-            case "afterTextChanged":
-                textToDisplay = getString(R.string.calculated_value, value * rate);
-                break;
-        }
-        calculatedValueTextView.setText(textToDisplay);
     }
 }
