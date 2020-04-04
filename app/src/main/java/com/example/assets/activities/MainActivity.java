@@ -64,7 +64,7 @@ public class MainActivity extends AbstractListActivity {
 
         totalValue.setOnClickListener(v -> {
             System.out.println("from button ...............................................................................................");
-            new DataProvider().execute(true, this::updateTotalValue);
+            DataProvider.execute(true, this::updateTotalValue);
         });
     }
 
@@ -72,7 +72,7 @@ public class MainActivity extends AbstractListActivity {
     public void onResume() {
         super.onResume();
         System.out.println("onResume main ...............................................................................................");
-        new DataProvider().execute(false, this::updateTotalValue);
+        DataProvider.execute(false, this::updateTotalValue);
     }
 
     private void setToolbar() {

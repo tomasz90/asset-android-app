@@ -36,7 +36,7 @@ public class AddAssetActivity extends AppCompatActivity {
 
         calculatedValueTextView = findViewById(R.id.calculated_value);
 
-        new DataProvider().execute(false, dataFromApi -> {
+        DataProvider.execute(false, dataFromApi -> {
             float rate = 1 / Float.parseFloat(dataFromApi.getString(assetSymbol));
             String textToDisplay = getString(R.string.rate, assetSymbol, rate);
             calculatedValueTextView.setText(textToDisplay);
@@ -79,7 +79,7 @@ public class AddAssetActivity extends AppCompatActivity {
                 } else {
                     value = Float.parseFloat(s.toString());
                 }
-                new DataProvider().execute(false, data -> {
+                DataProvider.execute(false, data -> {
                     float rate = 1 / Float.parseFloat(data.getString(assetSymbol));
                     String textToDisplay = getString(R.string.calculated_value, value * rate);
                     calculatedValueTextView.setText(textToDisplay);

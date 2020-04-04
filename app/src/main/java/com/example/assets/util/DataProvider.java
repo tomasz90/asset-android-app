@@ -1,7 +1,6 @@
 package com.example.assets.util;
 
 import android.os.AsyncTask;
-import android.text.PrecomputedText;
 
 import com.example.assets.activities.CurrencyService;
 import com.google.common.cache.CacheBuilder;
@@ -14,10 +13,9 @@ import java.util.concurrent.TimeUnit;
 
 import lombok.SneakyThrows;
 
-public class DataProvider extends AsyncTask<String, Void, JSONObject> {
+public class DataProvider {
 
-    private DataUpdater updater;
-    private String currencies = "currencies";
+    private static String currencies = "currencies";
 
     private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
@@ -31,28 +29,26 @@ public class DataProvider extends AsyncTask<String, Void, JSONObject> {
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build(loader);
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
-    @SneakyThrows
-    @Override
-    protected JSONObject doInBackground(String... strings) {
-        return cache.getUnchecked(currencies);
-    }
-
-    @SneakyThrows
-    @Override
-    protected void onPostExecute(JSONObject result) {
-        updater.updateUI(result);
-    }
-
-    public void execute(boolean withCleanCache, DataUpdater updater) {
-        this.updater = updater;
+    public static void execute(boolean withCleanCache, DataUpdater updater) {
         if(withCleanCache) {
             cache.invalidateAll();
         }
-        execute();
+
+        new AsyncTask<String, Void, JSONObject>(){
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+            @Override
+            protected JSONObject doInBackground(String... strings) {
+                return cache.getUnchecked(currencies);
+            }
+            @SneakyThrows
+            @Override
+            protected void onPostExecute(JSONObject result) {
+                updater.updateUI(result);
+
+        }}.execute();
     }
 }
