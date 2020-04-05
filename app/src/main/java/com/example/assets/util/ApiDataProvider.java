@@ -1,8 +1,6 @@
 package com.example.assets.util;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -10,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.assets.R;
 import com.example.assets.activities.CurrencyService;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -18,9 +15,6 @@ import com.google.common.cache.LoadingCache;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import lombok.SneakyThrows;
@@ -28,13 +22,19 @@ import lombok.SneakyThrows;
 public class ApiDataProvider {
 
     private static String currencies = "currencies";
-    private AppCompatActivity activity;
+    private static AppCompatActivity activity;
 
     private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
         public JSONObject load(String key) throws Exception {
-            JSONObject object = new JSONObject().put(key, CurrencyService.getRates());
-            return object.getJSONObject(key);
+            JSONObject currencyRates;
+            try {
+                currencyRates = CurrencyService.getRates();
+            } catch (Exception e) {
+                return new JSONObject();
+            }
+            JSONObject allRates = new JSONObject().put(key, currencyRates);
+            return allRates.getJSONObject(key);
         }
     };
 
@@ -43,7 +43,7 @@ public class ApiDataProvider {
             .build(loader);
 
     public ApiDataProvider(AppCompatActivity activity) {
-        this.activity = activity;
+        ApiDataProvider.activity = activity;
     }
 
     public void populateTextViews(boolean withCleanCache, DataUpdater updater) {
@@ -51,12 +51,14 @@ public class ApiDataProvider {
             if (isConnected()) {
                 cache.invalidate(currencies);
             } else {
-               Toast toast =  Toast.makeText(activity, "Network not available :(", Toast.LENGTH_SHORT);
-               toast.show();
+                displayToast();
             }
         }
+        getAsync(updater).execute();
+    }
 
-        new AsyncTask<String, Void, JSONObject>() {
+    private static AsyncTask<String, Void, JSONObject> getAsync(DataUpdater updater) {
+        return new AsyncTask<String, Void, JSONObject>() {
 
             @Override
             protected void onPreExecute() {
@@ -71,16 +73,24 @@ public class ApiDataProvider {
             @SneakyThrows
             @Override
             protected void onPostExecute(JSONObject result) {
-                updater.updateUI(result);
+                if (!result.keys().hasNext()) {
+                    displayToast();
+                } else {
+                    updater.updateUI(result);
+                }
             }
-        }.execute();
+        };
     }
 
     private boolean isConnected() {
         ConnectivityManager cm =
                 (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    private static void displayToast() {
+        Toast toast = Toast.makeText(activity, "Network not available :(", Toast.LENGTH_SHORT);
+        toast.show();
     }
 }
