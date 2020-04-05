@@ -27,12 +27,7 @@ public class ApiDataProvider {
     private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
         public JSONObject load(String key) throws Exception {
-            JSONObject currencyRates;
-            try {
-                currencyRates = CurrencyService.getRates();
-            } catch (Exception e) {
-                return new JSONObject();
-            }
+            JSONObject currencyRates = CurrencyService.getRates();
             JSONObject allRates = new JSONObject().put(key, currencyRates);
             return allRates.getJSONObject(key);
         }
@@ -47,11 +42,18 @@ public class ApiDataProvider {
     }
 
     public void populateTextViews(boolean withCleanCache, DataUpdater updater) {
+        boolean isConnected = isConnected();
         if (withCleanCache) {
-            if (isConnected()) {
+            if (isConnected) {
                 cache.invalidate(currencies);
             } else {
                 displayToast();
+                return;
+            }
+        } else {
+            if (!isConnected && (cache.getIfPresent(currencies) == null))  {
+                displayToast();
+                return;
             }
         }
         getAsync(updater).execute();
