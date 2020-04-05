@@ -12,6 +12,9 @@ import com.example.assets.asset_types.AssetType;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class AddAssetListActivity extends AbstractListActivity {
@@ -22,13 +25,13 @@ public class AddAssetListActivity extends AbstractListActivity {
         setContentView(R.layout.recycler_view_generic);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_assets_activity_title);
 
-        FragmentValues[] values = {
+        List<FragmentValues> values = Arrays.asList(
                 new FragmentValues(AssetType.CURRENCIES),
                 new FragmentValues(AssetType.NOBLE_METALS),
                 new FragmentValues(AssetType.CRYPTOCCURRENCIES),
                 new FragmentValues(AssetType.STOCKS),
                 new FragmentValues(AssetType.REAL_ESTATES),
-                new FragmentValues(AssetType.ETFS)};
+                new FragmentValues(AssetType.ETFS));
 
         FragmentTemplate template = new FragmentTemplate(R.layout.fragment_generic, R.id.generic_asset);
         setUpList(R.id.generic_list, template, values);

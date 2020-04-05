@@ -1,5 +1,6 @@
 package com.example.assets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +11,9 @@ import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 import com.example.assets.util.StorageManager;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class SettingsActivity extends AbstractListActivity {
 
     @Override
@@ -17,8 +21,7 @@ public class SettingsActivity extends AbstractListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
 
-        FragmentValues[] values = {
-                new FragmentValues("Remove all assets")};
+        List<FragmentValues> values  = Arrays.asList(new FragmentValues("Remove all assets"));
 
         FragmentTemplate template = new FragmentTemplate(R.layout.fragment_generic, R.id.generic_asset);
         setUpList(R.id.generic_list, template, values);
@@ -28,5 +31,7 @@ public class SettingsActivity extends AbstractListActivity {
     public void clickItem(View v, TextView tv) {
         StorageManager manager = new StorageManager(this);
         manager.deleteFile();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -12,6 +12,9 @@ import com.example.assets.constants.IntentExtra;
 import com.example.assets.fragments.FragmentTemplate;
 import com.example.assets.fragments.FragmentValues;
 
+import java.util.Arrays;
+import java.util.List;
+
 import lombok.SneakyThrows;
 
 public class AddCurrencyListActivity extends AbstractListActivity {
@@ -21,7 +24,7 @@ public class AddCurrencyListActivity extends AbstractListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
 
-        FragmentValues[] values = {
+        List<FragmentValues> values = Arrays.asList(
                 new FragmentValues(CurrencyType.EUR),
                 new FragmentValues(CurrencyType.USD),
                 new FragmentValues(CurrencyType.CHF),
@@ -30,7 +33,7 @@ public class AddCurrencyListActivity extends AbstractListActivity {
                 new FragmentValues(CurrencyType.PLN),
                 new FragmentValues(CurrencyType.NOK),
                 new FragmentValues(CurrencyType.DDK),
-                new FragmentValues(CurrencyType.SEK)};
+                new FragmentValues(CurrencyType.SEK));
 
         FragmentTemplate template = new FragmentTemplate(R.layout.fragment_generic, R.id.generic_asset);
         setUpList(R.id.generic_list, template, values);

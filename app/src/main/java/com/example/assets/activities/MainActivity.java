@@ -1,9 +1,6 @@
 package com.example.assets.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,14 +18,21 @@ import com.example.assets.util.StorageManager;
 import com.example.assets.util.ValueCalculator;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+
+import lombok.SneakyThrows;
 
 public class MainActivity extends AbstractListActivity {
 
     private TextView totalValue;
 
+    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,27 +42,6 @@ public class MainActivity extends AbstractListActivity {
         totalValue = findViewById(R.id.total_value);
 
 
-        FragmentValues[] values = {
-                new FragmentValues("Platinum", "3oz", "1200 USD", "3600 USD", "Additional info"),
-                new FragmentValues("Gold", "2oz", "1540 USD ", "3080 USD", "Additional info"),
-                new FragmentValues("EUR", "4500", "1.12 USD", "5400 USD", "Additional info"),
-                new FragmentValues("PLN", "53500", "0.24 USD", "12,840 USD", "Additional info"),
-                new FragmentValues("ETH", "20", "151 USD", "3020 USD", "Additional info"),
-                new FragmentValues("BTC", "0.1", "6100 USD", "610 USD", "Additional info"),
-                new FragmentValues("LTC", "11", "24 USD", "264 USD", "Additional info"),
-                new FragmentValues("PZU", "200", "15 USD", "3000 USD", "Additional info"),
-                new FragmentValues("", "", "", "", "")};
-
-        FragmentTemplate template = new FragmentTemplate(
-                R.layout.fragment_asset_details,
-                R.id.asset,
-                R.id.units,
-                R.id.unit_price,
-                R.id.value,
-                R.id.additional_info);
-
-        setUpList(R.id.asset_list, template, values);
-
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddAssetListActivity.class);
@@ -67,7 +50,7 @@ public class MainActivity extends AbstractListActivity {
 
         totalValue.setOnClickListener(v -> {
             System.out.println("from button ...............................................................................................");
-            new ApiDataProvider(this).populateTextViews(true, this::updateTotalValue);
+            new ApiDataProvider(this).populateTextViews(true, this::updateTextViews);
         });
     }
 
@@ -75,7 +58,7 @@ public class MainActivity extends AbstractListActivity {
     public void onResume() {
         super.onResume();
         System.out.println("onResume main ...............................................................................................");
-        new ApiDataProvider(this).populateTextViews(false, this::updateTotalValue);
+        new ApiDataProvider(this).populateTextViews(false, this::updateTextViews);
     }
 
     private void setToolbar() {
@@ -112,10 +95,44 @@ public class MainActivity extends AbstractListActivity {
         //this is for clicking item on the list
     }
 
-    private void updateTotalValue(JSONObject object) {
+    private void updateTextViews(JSONObject rates) throws JSONException {
         System.out.println("VALUE UPDATED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         StorageManager manager = new StorageManager(this);
-        String s = ValueCalculator.calculateTotal(manager.readFile(), object);
+        String s = ValueCalculator.calculateTotal(manager.readFile(), rates);
         totalValue.setText(getString(R.string.total_value_text_view, s));
+        updateList(rates);
     }
+
+
+    private void updateList(JSONObject rates) throws JSONException {
+        StorageManager storage = new StorageManager(this);
+        JSONObject assets = storage.readFile();
+        List<FragmentValues> values = new ArrayList<>();
+        Iterator<String> keys = assets.keys();
+
+        while (keys.hasNext()) {
+            String asset = keys.next();
+
+            float unitsF = Float.parseFloat(assets.getString(asset));
+            float unitPriceF = 1/Float.parseFloat(rates.getString(asset));
+            float valueF = unitsF * unitPriceF;
+
+            String units = getString(R.string.float_no_decimal, unitsF);
+            String unitPrice = getString(R.string.float_two_decimal, unitPriceF);
+            String value = getString(R.string.value_value, valueF);
+
+            values.add(new FragmentValues(asset, units, unitPrice, value, "Additional info"));
+        }
+
+        FragmentTemplate template = new FragmentTemplate(
+                R.layout.fragment_asset_details,
+                R.id.asset,
+                R.id.units,
+                R.id.unit_price,
+                R.id.value,
+                R.id.additional_info);
+
+        setUpList(R.id.asset_list, template, values);
+    }
+
 }
