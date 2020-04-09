@@ -8,6 +8,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -45,8 +48,10 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void addition_isCorrect() throws IOException {
+//        long start = System.currentTimeMillis();
+//        sendPingRequest("google.com");
+//        System.out.println("Response time = " + (System.currentTimeMillis() - start));
     }
 
     @Test
@@ -86,4 +91,6 @@ public class ExampleUnitTest {
             return second.getJSONObject(type);
         }
     }
+
+
 }
