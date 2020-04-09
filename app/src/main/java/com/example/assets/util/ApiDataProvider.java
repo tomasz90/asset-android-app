@@ -9,6 +9,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
@@ -76,4 +77,7 @@ public class ApiDataProvider {
         };
     }
 
+    public interface DataUpdater {
+        void updateUI(JSONObject dataFromApi) throws JSONException;
+    }
 }

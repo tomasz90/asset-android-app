@@ -1,5 +1,6 @@
 package com.example.assets;
 
+import com.example.assets.activities.AssetServices;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -48,10 +49,8 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void addition_isCorrect() throws IOException {
-//        long start = System.currentTimeMillis();
-//        sendPingRequest("google.com");
-//        System.out.println("Response time = " + (System.currentTimeMillis() - start));
+    public void addition_isCorrect() throws Exception {
+        AssetServices.getCryptoRates();
     }
 
     @Test
