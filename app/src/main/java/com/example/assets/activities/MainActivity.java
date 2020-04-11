@@ -8,21 +8,18 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
-import com.example.assets.fragments.FragmentTemplate;
-import com.example.assets.fragments.FragmentValues;
-import com.example.assets.util.ApiDataProvider;
-import com.example.assets.util.StorageManager;
-import com.example.assets.util.ValueCalculator;
+import com.example.assets.storage.room.Asset;
+import com.example.assets.storage.viewmodel.AssetViewModel;
+import com.example.assets.util.AssetDetailsAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +28,7 @@ import lombok.SneakyThrows;
 public class MainActivity extends AbstractListActivity {
 
     private TextView totalValue;
+    private AssetViewModel assetViewModel;
 
     @SneakyThrows
     @Override
@@ -39,7 +37,19 @@ public class MainActivity extends AbstractListActivity {
         setContentView(R.layout.activity_main);
         setToolbar();
 
-        totalValue = findViewById(R.id.total_value);
+        RecyclerView recyclerView = findViewById(R.id.asset_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        final AssetDetailsAdapter adapter = new AssetDetailsAdapter();
+        recyclerView.setAdapter(adapter);
+
+
+        assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
+        assetViewModel.getAll().observe(this, new Observer<List<Asset>>() {
+            @Override
+            public void onChanged(List<Asset> assets) {
+                adapter.setAssets(assets);
+            }
+        });
 
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
@@ -48,9 +58,9 @@ public class MainActivity extends AbstractListActivity {
             startActivity(intent);
         });
 
+        totalValue = findViewById(R.id.total_value);
         totalValue.setOnClickListener(v -> {
             System.out.println("from button ...............................................................................................");
-            new ApiDataProvider(this).populateTextViews(true, this::updateTextViews);
         });
     }
 
@@ -58,7 +68,6 @@ public class MainActivity extends AbstractListActivity {
     public void onResume() {
         super.onResume();
         System.out.println("onResume main ...............................................................................................");
-        new ApiDataProvider(this).populateTextViews(false, this::updateTextViews);
     }
 
     private void setToolbar() {
@@ -94,45 +103,4 @@ public class MainActivity extends AbstractListActivity {
     public void clickItem(View v, TextView tv) {
         //this is for clicking item on the list
     }
-
-    private void updateTextViews(JSONObject rates) throws JSONException {
-        System.out.println("VALUE UPDATED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        StorageManager manager = new StorageManager(this);
-        String s = ValueCalculator.calculateTotal(manager.readFile(), rates);
-        totalValue.setText(getString(R.string.total_value_text_view, s));
-        updateList(rates);
-    }
-
-
-    private void updateList(JSONObject rates) throws JSONException {
-        StorageManager storage = new StorageManager(this);
-        JSONObject assets = storage.readFile();
-        List<FragmentValues> values = new ArrayList<>();
-        Iterator<String> keys = assets.keys();
-
-        while (keys.hasNext()) {
-            String asset = keys.next();
-
-            float unitsF = Float.parseFloat(assets.getString(asset));
-            float unitPriceF = 1/Float.parseFloat(rates.getString(asset));
-            float valueF = unitsF * unitPriceF;
-
-            String units = getString(R.string.float_no_decimal, unitsF);
-            String unitPrice = getString(R.string.float_two_decimal, unitPriceF);
-            String value = getString(R.string.value_value, valueF);
-
-            values.add(new FragmentValues(asset, units, unitPrice, value, "Additional info"));
-        }
-
-        FragmentTemplate template = new FragmentTemplate(
-                R.layout.fragment_asset_details,
-                R.id.asset,
-                R.id.units,
-                R.id.unit_price,
-                R.id.value,
-                R.id.additional_info);
-
-        setUpList(R.id.asset_list, template, values);
-    }
-
 }
