@@ -9,7 +9,7 @@ public class ActivityMap {
 
     static {
         map = new HashMap<>();
-        map.put(AssetType.CURRENCIES, AddCurrencyListActivity.class);
+        map.put(AssetConstants.AssetType.CURRENCIES, AddCurrencyListActivity.class);
     }
 
     public static Class<?> getActivity(String assetType) {

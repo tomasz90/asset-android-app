@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
-import com.example.assets.asset_types.CurrencyType;
+import com.example.assets.asset_types.AssetConstants;
 import com.example.assets.constants.IntentExtra;
 
 import java.util.Arrays;
@@ -23,15 +23,15 @@ public class AddCurrencyListActivity extends AbstractListActivity {
         setContentView(R.layout.recycler_view_generic);
 
         List<String> items = Arrays.asList(
-                CurrencyType.EUR,
-                CurrencyType.USD,
-                CurrencyType.CHF,
-                CurrencyType.GBP,
-                CurrencyType.JPY,
-                CurrencyType.PLN,
-                CurrencyType.NOK,
-                CurrencyType.DDK,
-                CurrencyType.SEK);
+                AssetConstants.CurrencyType.EUR,
+                AssetConstants.CurrencyType.USD,
+                AssetConstants.CurrencyType.CHF,
+                AssetConstants.CurrencyType.GBP,
+                AssetConstants.CurrencyType.JPY,
+                AssetConstants.CurrencyType.PLN,
+                AssetConstants.CurrencyType.NOK,
+                AssetConstants.CurrencyType.DDK,
+                AssetConstants.CurrencyType.SEK);
 
         setUpSimpleList(items);
     }

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.asset_types.ActivityMap;
-import com.example.assets.asset_types.AssetType;
+import com.example.assets.asset_types.AssetConstants;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,12 +23,12 @@ public class AddAssetListActivity extends AbstractListActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_assets_activity_title);
 
         List<String> items = Arrays.asList(
-                AssetType.CURRENCIES,
-                AssetType.NOBLE_METALS,
-                AssetType.CRYPTOCCURRENCIES,
-                AssetType.STOCKS,
-                AssetType.REAL_ESTATES,
-                AssetType.ETFS);
+                AssetConstants.AssetType.CURRENCIES,
+                AssetConstants.AssetType.NOBLE_METALS,
+                AssetConstants.AssetType.CRYPTOCCURRENCIES,
+                AssetConstants.AssetType.STOCKS,
+                AssetConstants.AssetType.REAL_ESTATES,
+                AssetConstants.AssetType.ETFS);
 
         setUpSimpleList(items);
     }
@@ -37,7 +37,7 @@ public class AddAssetListActivity extends AbstractListActivity {
     public void clickItem(View v, TextView tv) {
         String asset = tv.getText().toString();
         // TODO: 3/30/2020 Remove this condition when other cards will be implemented:
-        if (asset.equals(AssetType.CURRENCIES)) {
+        if (asset.equals(AssetConstants.AssetType.CURRENCIES)) {
             Intent intent = new Intent(this, ActivityMap.getActivity(asset));
             this.startActivity(intent);
         }
