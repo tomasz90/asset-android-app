@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.assets.activities.AssetServices;
+import com.example.assets.activities.activities.AssetServices;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

@@ -1,23 +1,23 @@
 package com.example.assets.activities.abstract_;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.assets.fragments.FragmentTemplate;
-import com.example.assets.fragments.FragmentValues;
+import com.example.assets.R;
+import com.example.assets.activities.list_adapters.SimpleItemAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractListActivity extends AppCompatActivity implements ActionOnClickItem {
 
-   public void setUpList(int listId, FragmentTemplate fragmentTemplate, List<FragmentValues> listFragmentValues) {
+   public void setUpSimpleList(List<String> items) {
 
-       FragmentValues[] fragmentValues = new FragmentValues[listFragmentValues.size()];
-       // ArrayList to Array Conversion
-       for (int i =0; i < listFragmentValues.size(); i++)
-           fragmentValues[i] = listFragmentValues.get(i);
-
-       RecyclerViewManager manager = new RecyclerViewManager(this);
-       manager.setRecyclerView(listId, fragmentTemplate, fragmentValues);
+       RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+       RecyclerView recyclerView = this.findViewById(R.id.generic_list);
+       recyclerView.setLayoutManager(layoutManager);
+       SimpleItemAdapter simpleItemAdapter = new SimpleItemAdapter(items);
+       recyclerView.setAdapter(simpleItemAdapter);
+       simpleItemAdapter.setOnItemClickListener(this::clickItem);
    }
 }

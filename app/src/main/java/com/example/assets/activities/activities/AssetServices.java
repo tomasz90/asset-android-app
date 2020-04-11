@@ -1,4 +1,4 @@
-package com.example.assets.activities;
+package com.example.assets.activities.activities;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

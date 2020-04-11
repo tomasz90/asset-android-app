@@ -1,12 +1,12 @@
-package com.example.assets.activities;
+package com.example.assets.activities.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,10 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
-import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.viewmodel.AssetViewModel;
-import com.example.assets.util.AssetDetailsAdapter;
+import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.Objects;
 
 import lombok.SneakyThrows;
 
-public class MainActivity extends AbstractListActivity {
+public class MainActivity extends AppCompatActivity {
 
     private TextView totalValue;
     private AssetViewModel assetViewModel;
@@ -97,10 +96,5 @@ public class MainActivity extends AbstractListActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void clickItem(View v, TextView tv) {
-        //this is for clicking item on the list
     }
 }

@@ -1,7 +1,6 @@
 package com.example.assets.asset_types;
 
-import com.example.assets.activities.AddCurrencyListActivity;
-import com.example.assets.asset_types.AssetType;
+import com.example.assets.activities.activities.AddCurrencyListActivity;
 
 import java.util.HashMap;
 
