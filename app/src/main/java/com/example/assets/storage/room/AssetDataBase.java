@@ -9,16 +9,16 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = Asset.class, version = 1)
-public abstract class NoteDataBase extends RoomDatabase {
-    private static NoteDataBase instance;
+@Database(entities = Asset.class, version = 2)
+public abstract class AssetDataBase extends RoomDatabase {
+    private static AssetDataBase instance;
 
     public abstract AssetDao assetDao();
 
-    public static synchronized NoteDataBase getInstance(Context context){
+    public static synchronized AssetDataBase getInstance(Context context){
         if (instance == null) {
             instance = Room
-                    .databaseBuilder(context.getApplicationContext(), NoteDataBase.class, "note_database")
+                    .databaseBuilder(context.getApplicationContext(), AssetDataBase.class, "asset_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallBack)
                     .build();
@@ -38,7 +38,7 @@ public abstract class NoteDataBase extends RoomDatabase {
 
         AssetDao assetDao;
 
-        private PopulateDbAsyncTask(NoteDataBase db) {
+        private PopulateDbAsyncTask(AssetDataBase db) {
             this.assetDao = db.assetDao();
         }
 

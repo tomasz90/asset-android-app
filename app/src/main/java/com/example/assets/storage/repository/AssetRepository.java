@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDao;
-import com.example.assets.storage.room.NoteDataBase;
+import com.example.assets.storage.room.AssetDataBase;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class AssetRepository {
     private LiveData<List<Asset>> allAssets;
 
     public AssetRepository(Application application) {
-        NoteDataBase dataBase = NoteDataBase.getInstance(application);
+        AssetDataBase dataBase = AssetDataBase.getInstance(application);
         assetDao = dataBase.assetDao();
         allAssets = assetDao.getAll();
     }

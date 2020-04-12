@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.assets.R;
 import com.example.assets.storage.room.Asset;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,8 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getAdditionalInfo());
         holder.quantity.setText(String.valueOf(currentAsset.getQuantity()));
+        holder.rate.setText(String.valueOf(currentAsset.getRate()));
+        holder.value.setText(String.valueOf(currentAsset.getValue()));
     }
 
     @Override
@@ -44,16 +47,19 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
     }
 
     class AssetHolder extends RecyclerView.ViewHolder {
-
         TextView symbol;
         TextView additionalInfo;
         TextView quantity;
+        TextView rate;
+        TextView value;
 
         AssetHolder(@NonNull View itemView) {
             super(itemView);
             symbol = itemView.findViewById(R.id.asset);
             additionalInfo = itemView.findViewById(R.id.additional_info);
             quantity = itemView.findViewById(R.id.units);
+            rate = itemView.findViewById(R.id.unit_price);
+            value = itemView.findViewById(R.id.value);
         }
     }
 }

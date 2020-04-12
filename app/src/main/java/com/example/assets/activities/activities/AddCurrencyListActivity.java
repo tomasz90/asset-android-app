@@ -23,15 +23,15 @@ public class AddCurrencyListActivity extends AbstractListActivity {
         setContentView(R.layout.recycler_view_generic);
 
         List<String> items = Arrays.asList(
-                AssetConstants.CurrencyType.EUR,
-                AssetConstants.CurrencyType.USD,
-                AssetConstants.CurrencyType.CHF,
-                AssetConstants.CurrencyType.GBP,
-                AssetConstants.CurrencyType.JPY,
-                AssetConstants.CurrencyType.PLN,
-                AssetConstants.CurrencyType.NOK,
-                AssetConstants.CurrencyType.DDK,
-                AssetConstants.CurrencyType.SEK);
+                AssetConstants.Currency.EUR,
+                AssetConstants.Currency.USD,
+                AssetConstants.Currency.CHF,
+                AssetConstants.Currency.GBP,
+                AssetConstants.Currency.JPY,
+                AssetConstants.Currency.PLN,
+                AssetConstants.Currency.NOK,
+                AssetConstants.Currency.DDK,
+                AssetConstants.Currency.SEK);
 
         setUpSimpleList(items);
     }

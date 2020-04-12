@@ -2,7 +2,7 @@ package com.example.assets.asset_types;
 
 public class AssetConstants {
 
-    public class AssetType {
+    public class Type {
         public static final String CRYPTOCCURRENCIES = "Cryptocurrencies";
         public static final String CURRENCIES = "Currencies";
         public static final String NOBLE_METALS = "Noble metals";
@@ -11,7 +11,7 @@ public class AssetConstants {
         public static final String ETFS = "ETFs";
     }
 
-    class CryptoCurrencyType {
+    class CryptoCurrency {
         public static final String BTC = "BTC";
         public static final String ETH = "ETH";
         public static final String LTC = "LTC";
@@ -20,7 +20,7 @@ public class AssetConstants {
         public static final String IOTA = "IOTA";
     }
 
-    public class CurrencyType {
+    public class Currency {
         public static final String EUR = "EUR";
         public static final String USD = "USD";
         public static final String CHF = "CHF";
@@ -32,18 +32,18 @@ public class AssetConstants {
         public static final String DDK = "DKK";
     }
 
-    class MetalType {
+    class Metal {
         public static final String GOLD = "Gold";
         public static final String SILVER = "Silver";
         public static final String PLATINUM = "Platinum";
         public static final String PALLADIUM = "Palladium";
     }
 
-    class StockType {
+    class Stock {
         public static final String STOCK = "Item";
     }
 
-    class ETFType {
+    class ETF {
         public static final String ETF = "ETF EXAMPLE";
     }
 
