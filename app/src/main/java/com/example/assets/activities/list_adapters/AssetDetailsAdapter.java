@@ -1,5 +1,6 @@
 package com.example.assets.activities.list_adapters;
 
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,14 @@ import com.example.assets.R;
 import com.example.assets.storage.room.Asset;
 
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapter.AssetHolder> {
 
-    private List<Asset> assets = new ArrayList<>();
+    private Pair<List<Asset>, JSONObject> assets = new Pair<>(new ArrayList<>(), new JSONObject());
 
     @NonNull
     @Override
@@ -28,7 +31,7 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull AssetHolder holder, int position) {
-        Asset currentAsset = assets.get(position);
+        Asset currentAsset = assets.first.get(position);
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getAdditionalInfo());
         holder.quantity.setText(String.valueOf(currentAsset.getQuantity()));
@@ -38,10 +41,10 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
 
     @Override
     public int getItemCount() {
-        return assets.size();
+        return assets.first.size();
     }
 
-    public void setAssets(List<Asset> assets) {
+    public void setAssets(Pair<List<Asset>, JSONObject> assets) {
         this.assets = assets;
         notifyDataSetChanged();
     }

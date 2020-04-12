@@ -38,21 +38,24 @@ public class ApiDataProvider {
         ApiDataProvider.activity = activity;
     }
 
+    public ApiDataProvider() {}
+
+
     public void populateTextViews(boolean withCleanCache, DataUpdater updater) {
-        boolean isConnected = AssetServices.isConnected(activity);
-        if (withCleanCache) {
-            if (isConnected) {
-                cache.invalidate(currencies);
-            } else {
-                ToastManager.displayToast(activity);
-                return;
-            }
-        } else {
-            if (!isConnected && (cache.getIfPresent(currencies) == null)) {
-                ToastManager.displayToast(activity);
-                return;
-            }
-        }
+//        boolean isConnected = AssetServices.isConnected(activity);
+//        if (withCleanCache) {
+//            if (isConnected) {
+//                cache.invalidate(currencies);
+//            } else {
+//                ToastManager.displayToast(activity);
+//                return;
+//            }
+//        } else {
+//            if (!isConnected && (cache.getIfPresent(currencies) == null)) {
+//                ToastManager.displayToast(activity);
+//                return;
+//            }
+//        }
         getAsync(updater).execute();
     }
 

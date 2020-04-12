@@ -2,6 +2,7 @@ package com.example.assets.activities.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,12 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
-        assetViewModel.getAll().observe(this, new Observer<List<Asset>>() {
-            @Override
-            public void onChanged(List<Asset> assets) {
-                adapter.setAssets(assets);
-            }
-        });
+        assetViewModel.getAll().observe(this, (Observer<Pair<List<Asset>, JSONObject>>) assets -> adapter.setAssets(assets));
 
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
