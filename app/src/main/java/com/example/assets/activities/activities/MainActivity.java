@@ -70,12 +70,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        System.out.println("onResume main ...............................................................................................");
-    }
-
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
