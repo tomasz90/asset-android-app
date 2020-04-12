@@ -31,7 +31,9 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull AssetHolder holder, int position) {
+
         Asset currentAsset = assets.first.get(position);
+        JSONObject jsonObject = assets.second;
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getAdditionalInfo());
         holder.quantity.setText(String.valueOf(currentAsset.getQuantity()));

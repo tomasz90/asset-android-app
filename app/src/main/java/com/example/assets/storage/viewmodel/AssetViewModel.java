@@ -21,18 +21,20 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import lombok.SneakyThrows;
+
 public class AssetViewModel extends AndroidViewModel {
 
     private AssetRepository assetRepository;
     private LiveData<List<Asset>> allAssets;
-    private MutableLiveData mutableLiveData;
+    private MutableLiveData mutableLiveData = new MutableLiveData();
     private CustomLiveData customLiveData;
 
     public AssetViewModel(@NonNull Application application) {
         super(application);
         assetRepository = new AssetRepository(application);
         allAssets = assetRepository.getAll();
-        mutableLiveData = new MutableLiveData();
+        setMutableLiveDataFromApi();
         customLiveData = new CustomLiveData(allAssets, mutableLiveData);
     }
 
@@ -52,11 +54,11 @@ public class AssetViewModel extends AndroidViewModel {
        assetRepository.deleteAll();
     }
 
+    @SneakyThrows
     public void setMutableLiveDataFromApi() {
         new ApiDataProvider().populateTextViews(true, new ApiDataProvider.DataUpdater() {
             @Override
             public void updateUI(JSONObject dataFromApi) throws JSONException {
-                mutableLiveData = new MutableLiveData();
                 mutableLiveData.setValue(dataFromApi);
             }
         });
