@@ -10,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.assets.R;
 import com.example.assets.constants.IntentExtra;
 import com.example.assets.storage.repository.AssetRepository;
 import com.example.assets.storage.room.Asset;
+import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.example.assets.util.ApiDataProvider;
 
 public class AddAssetActivity extends AppCompatActivity {
@@ -23,6 +25,7 @@ public class AddAssetActivity extends AppCompatActivity {
     EditText editText;
     TextView calculatedValueTextView;
     float value;
+    private AssetViewModel assetViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,8 @@ public class AddAssetActivity extends AppCompatActivity {
 
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
-            new AssetRepository(this.getApplication()).insert(new Asset(assetSymbol, "currency", Float.parseFloat(editText.getText().toString()), "info"));
+            assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
+            assetViewModel.insert(new Asset(assetSymbol, "currency", Float.parseFloat(editText.getText().toString()), "info"));
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
         });

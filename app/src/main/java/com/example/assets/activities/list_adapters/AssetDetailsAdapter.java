@@ -32,7 +32,7 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         AssetDetails currentAsset = assets.get(position);
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getAdditionalInfo());
-        holder.quantity.setText(c.getString(R.string.float_two_decimal_dollar, currentAsset.getQuantity()));
+        holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
         holder.rate.setText(c.getString(R.string.float_two_decimal_dollar, currentAsset.getRate()));
         holder.value.setText(c.getString(R.string.float_no_decimal_dollar, currentAsset.getValue()));
     }

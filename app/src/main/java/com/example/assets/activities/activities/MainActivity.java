@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         totalValue = findViewById(R.id.total_value);
         totalValue.setOnClickListener(v -> {
+            assetViewModel.refreshDataFromCache(true);
             System.out.println("from button ...............................................................................................");
         });
     }

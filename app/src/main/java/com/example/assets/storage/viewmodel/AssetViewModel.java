@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.SneakyThrows;
@@ -36,7 +37,7 @@ public class AssetViewModel extends AndroidViewModel {
         super(application);
         assetRepository = new AssetRepository(application);
         LiveData<List<Asset>> allAssets = assetRepository.getAll();
-        setMutableLiveDataFromCache();
+        refreshDataFromCache(false);
         CustomLiveData trigger = new CustomLiveData(allAssets, apiLiveData);
         assetDetails = Transformations.map(trigger, value -> getAssetDetails(value.first, value.second));
     }
@@ -49,6 +50,7 @@ public class AssetViewModel extends AndroidViewModel {
                 assetDetails.add(new AssetDetails(asset, 1/Float.parseFloat(second.getString(asset.getSymbol()))));
             }
         }
+        assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
         return assetDetails;
     }
 
@@ -69,8 +71,8 @@ public class AssetViewModel extends AndroidViewModel {
     }
 
     @SneakyThrows
-    public void setMutableLiveDataFromCache() {
-        new ApiDataProvider().getData(true, new ApiDataProvider.DataUpdater() {
+    public void refreshDataFromCache(boolean withCleanCache) {
+        new ApiDataProvider().getData(withCleanCache, new ApiDataProvider.DataUpdater() {
             @Override
             public void update(JSONObject dataFromApi) throws JSONException {
                 apiLiveData.setValue(dataFromApi);

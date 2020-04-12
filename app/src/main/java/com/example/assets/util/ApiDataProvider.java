@@ -42,20 +42,20 @@ public class ApiDataProvider {
 
 
     public void getData(boolean withCleanCache, DataUpdater updater) {
-//        boolean isConnected = AssetServices.isConnected(activity);
-//        if (withCleanCache) {
+        //boolean isConnected = AssetServices.isConnected(activity);
+        if (withCleanCache) {
 //            if (isConnected) {
-//                cache.invalidate(currencies);
+                cache.invalidate(currencies);
 //            } else {
-//                ToastManager.displayToast(activity);
+////                ToastManager.displayToast(activity);
 //                return;
 //            }
 //        } else {
 //            if (!isConnected && (cache.getIfPresent(currencies) == null)) {
-//                ToastManager.displayToast(activity);
+//                //ToastManager.displayToast(activity);
 //                return;
 //            }
-//        }
+        }
         getAsync(updater).execute();
     }
 
