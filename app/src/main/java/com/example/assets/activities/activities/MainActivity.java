@@ -47,7 +47,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
-        assetViewModel.getAll().observe(this, (Observer<List<AssetDetails>>) assets -> adapter.setAssets(assets));
+        assetViewModel.getAll().observe(this, (Observer<List<AssetDetails>>) assets -> {
+            adapter.setAssets(assets);
+            float value = 0f;
+            for(AssetDetails assetDetails : assets) {
+                value += Float.parseFloat(assetDetails.getValue());
+            }
+            totalValue.setText(String.valueOf(value));
+        });
 
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);

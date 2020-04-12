@@ -30,24 +30,6 @@ public abstract class AssetDataBase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            new PopulateDbAsyncTask(instance).execute();
         }
     };
-
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        AssetDao assetDao;
-
-        private PopulateDbAsyncTask(AssetDataBase db) {
-            this.assetDao = db.assetDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            assetDao.insert(new Asset("Symbol1", "Type1", 4f, "info"));
-            assetDao.insert(new Asset("Symbol2", "Type1", 5f, "info"));
-            assetDao.insert(new Asset("Symbol3", "Type1", 7f, "info"));
-            return null;
-        }
-    }
 }

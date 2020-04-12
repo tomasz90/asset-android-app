@@ -26,6 +26,4 @@ public interface AssetDao {
 
     @Query("SELECT * FROM asset_table ORDER BY symbol DESC")
     LiveData<List<Asset>> getAll();
-
-
 }
