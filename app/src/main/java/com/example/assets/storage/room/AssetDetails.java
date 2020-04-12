@@ -3,29 +3,25 @@ package com.example.assets.storage.room;
 public class AssetDetails extends Asset {
 
     private Asset asset;
-    private String rate;
-    private String value;
+    private float rate;
+    private float value;
 
-    public AssetDetails(Asset asset, String rate) {
+    public AssetDetails(Asset asset, float rate) {
         super(asset.getSymbol(), asset.getType(), asset.getQuantity(), asset.getAdditionalInfo());
         this.asset = asset;
         this.rate = rate;
-        try {
-            this.value = String.valueOf(1 / Float.parseFloat(rate) * asset.getQuantity());
-        } catch (Exception e) {
-            this.value = "-";
-        }
+        this.value = rate * asset.getQuantity();
     }
 
     public Asset getAsset() {
         return asset;
     }
 
-    public String getRate() {
+    public float getRate() {
         return rate;
     }
 
-    public String getValue() {
+    public float getValue() {
         return value;
     }
 }

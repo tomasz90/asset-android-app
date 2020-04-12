@@ -46,7 +46,7 @@ public class AssetViewModel extends AndroidViewModel {
         List<AssetDetails> assetDetails = new ArrayList<>();
         if(first != null && second != null) {
             for (Asset asset : first) {
-                assetDetails.add(new AssetDetails(asset, second.getString(asset.getSymbol())));
+                assetDetails.add(new AssetDetails(asset, 1/Float.parseFloat(second.getString(asset.getSymbol()))));
             }
         }
         return assetDetails;

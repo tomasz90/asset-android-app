@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
             adapter.setAssets(assets);
             float value = 0f;
             for(AssetDetails assetDetails : assets) {
-                value += Float.parseFloat(assetDetails.getValue());
+                value += assetDetails.getValue();
             }
-            totalValue.setText(String.valueOf(value));
+            totalValue.setText(getString(R.string.total_value_text_view, value));
         });
 
 

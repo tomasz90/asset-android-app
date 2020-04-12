@@ -1,5 +1,6 @@
 package com.example.assets.activities.list_adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +28,13 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull AssetHolder holder, int position) {
-
+        Context c = holder.itemView.getContext();
         AssetDetails currentAsset = assets.get(position);
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getAdditionalInfo());
-        holder.quantity.setText(String.valueOf(currentAsset.getQuantity()));
-        holder.rate.setText(String.valueOf(currentAsset.getRate()));
-        holder.value.setText(String.valueOf(currentAsset.getValue()));
+        holder.quantity.setText(c.getString(R.string.float_two_decimal_dollar, currentAsset.getQuantity()));
+        holder.rate.setText(c.getString(R.string.float_two_decimal_dollar, currentAsset.getRate()));
+        holder.value.setText(c.getString(R.string.float_no_decimal_dollar, currentAsset.getValue()));
     }
 
     @Override
