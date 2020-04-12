@@ -12,29 +12,12 @@ public class Asset {
     private String type;
     private float quantity;
     private String additionalInfo;
-    private String rate;
-    private String value;
 
     public Asset(String symbol, String type, float quantity, String additionalInfo) {
         this.symbol = symbol;
         this.type = type;
         this.quantity = quantity;
         this.additionalInfo = additionalInfo;
-        this.rate = "#";
-        this.value = "#";
-    }
-
-    public void addDetails(String rate, String value) {
-        this.rate = rate;
-        this.value = value;
-    }
-
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 
     public void setId(int id) {
@@ -49,7 +32,7 @@ public class Asset {
         return symbol;
     }
 
-    public String getType() {
+    String getType() {
         return type;
     }
 
@@ -59,13 +42,5 @@ public class Asset {
 
     public float getQuantity() {
         return quantity;
-    }
-
-    public String getRate() {
-        return rate;
-    }
-
-    public String getValue() {
-        return value;
     }
 }

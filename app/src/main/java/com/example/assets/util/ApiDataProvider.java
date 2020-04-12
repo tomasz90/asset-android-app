@@ -41,7 +41,7 @@ public class ApiDataProvider {
     public ApiDataProvider() {}
 
 
-    public void populateTextViews(boolean withCleanCache, DataUpdater updater) {
+    public void getData(boolean withCleanCache, DataUpdater updater) {
 //        boolean isConnected = AssetServices.isConnected(activity);
 //        if (withCleanCache) {
 //            if (isConnected) {
@@ -75,12 +75,12 @@ public class ApiDataProvider {
             @SneakyThrows
             @Override
             protected void onPostExecute(JSONObject result) {
-                updater.updateUI(result);
+                updater.update(result);
             }
         };
     }
 
     public interface DataUpdater {
-        void updateUI(JSONObject dataFromApi) throws JSONException;
+        void update(JSONObject dataFromApi) throws JSONException;
     }
 }

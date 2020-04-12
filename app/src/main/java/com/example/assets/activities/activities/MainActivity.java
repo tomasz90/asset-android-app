@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
 import com.example.assets.storage.room.Asset;
+import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
-        assetViewModel.getAll().observe(this, (Observer<Pair<List<Asset>, JSONObject>>) assets -> adapter.setAssets(assets));
+        assetViewModel.getAll().observe(this, (Observer<List<AssetDetails>>) assets -> adapter.setAssets(assets));
 
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);

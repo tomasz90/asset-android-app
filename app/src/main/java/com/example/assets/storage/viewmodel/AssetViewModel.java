@@ -10,15 +10,18 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 
 import com.example.assets.storage.repository.AssetRepository;
 import com.example.assets.storage.room.Asset;
+import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.util.ApiDataProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.SneakyThrows;
@@ -26,16 +29,27 @@ import lombok.SneakyThrows;
 public class AssetViewModel extends AndroidViewModel {
 
     private AssetRepository assetRepository;
-    private LiveData<List<Asset>> allAssets;
-    private MutableLiveData mutableLiveData = new MutableLiveData();
-    private CustomLiveData customLiveData;
+    private MutableLiveData<JSONObject> apiLiveData = new MutableLiveData();
+    private LiveData<List<AssetDetails>> assetDetails;
 
     public AssetViewModel(@NonNull Application application) {
         super(application);
         assetRepository = new AssetRepository(application);
-        allAssets = assetRepository.getAll();
-        setMutableLiveDataFromApi();
-        customLiveData = new CustomLiveData(allAssets, mutableLiveData);
+        LiveData<List<Asset>> allAssets = assetRepository.getAll();
+        setMutableLiveDataFromCache();
+        CustomLiveData trigger = new CustomLiveData(allAssets, apiLiveData);
+        assetDetails = Transformations.map(trigger, value -> getAssetDetails(value.first, value.second));
+    }
+
+    @SneakyThrows
+    private List<AssetDetails> getAssetDetails(List<Asset> first, JSONObject second) {
+        List<AssetDetails> assetDetails = new ArrayList<>();
+        if(first != null && second != null) {
+            for (Asset asset : first) {
+                assetDetails.add(new AssetDetails(asset, second.getString(asset.getSymbol())));
+            }
+        }
+        return assetDetails;
     }
 
     public void insert(Asset asset) {
@@ -55,30 +69,29 @@ public class AssetViewModel extends AndroidViewModel {
     }
 
     @SneakyThrows
-    public void setMutableLiveDataFromApi() {
-        new ApiDataProvider().populateTextViews(true, new ApiDataProvider.DataUpdater() {
+    public void setMutableLiveDataFromCache() {
+        new ApiDataProvider().getData(true, new ApiDataProvider.DataUpdater() {
             @Override
-            public void updateUI(JSONObject dataFromApi) throws JSONException {
-                mutableLiveData.setValue(dataFromApi);
+            public void update(JSONObject dataFromApi) throws JSONException {
+                apiLiveData.setValue(dataFromApi);
             }
         });
     }
 
-    public MediatorLiveData<Pair<List<Asset>, JSONObject>> getAll() {
-        return customLiveData;
+    public LiveData<List<AssetDetails>> getAll() {
+        return assetDetails;
     }
 
-
     class CustomLiveData extends MediatorLiveData<Pair<List<Asset>, JSONObject>> {
-        public CustomLiveData(LiveData<List<Asset>> code, LiveData<JSONObject> nbDays) {
-            addSource(code, new Observer<List<Asset>>() {
+        public CustomLiveData(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData) {
+            addSource(assets, new Observer<List<Asset>>() {
                 public void onChanged(@Nullable List<Asset> first) {
-                    setValue(Pair.create(first, nbDays.getValue()));
+                    setValue(Pair.create(first, apiData.getValue()));
                 }
             });
-            addSource(nbDays, new Observer<JSONObject>() {
+            addSource(apiData, new Observer<JSONObject>() {
                 public void onChanged(@Nullable JSONObject second) {
-                    setValue(Pair.create(code.getValue(), second));
+                    setValue(Pair.create(assets.getValue(), second));
                 }
             });
         }
