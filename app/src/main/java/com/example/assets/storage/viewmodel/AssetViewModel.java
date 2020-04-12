@@ -32,9 +32,11 @@ public class AssetViewModel extends AndroidViewModel {
     private AssetRepository assetRepository;
     private MutableLiveData<JSONObject> apiLiveData = new MutableLiveData();
     private LiveData<List<AssetDetails>> assetDetails;
+    private Application application;
 
     public AssetViewModel(@NonNull Application application) {
         super(application);
+        this.application = application;
         assetRepository = new AssetRepository(application);
         LiveData<List<Asset>> allAssets = assetRepository.getAll();
         refreshDataFromCache(false);
@@ -72,7 +74,7 @@ public class AssetViewModel extends AndroidViewModel {
 
     @SneakyThrows
     public void refreshDataFromCache(boolean withCleanCache) {
-        new ApiDataProvider().getData(withCleanCache, new ApiDataProvider.DataUpdater() {
+        new ApiDataProvider(application).getData(withCleanCache, new ApiDataProvider.DataUpdater() {
             @Override
             public void update(JSONObject dataFromApi) throws JSONException {
                 apiLiveData.setValue(dataFromApi);

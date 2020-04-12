@@ -1,5 +1,6 @@
 package com.example.assets.util;
 
+import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,7 @@ import lombok.SneakyThrows;
 public class ApiDataProvider {
 
     private static String currencies = "currencies";
-    private static AppCompatActivity activity;
+    private Application application;
 
     private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
@@ -34,27 +35,25 @@ public class ApiDataProvider {
             .expireAfterWrite(10, TimeUnit.MINUTES)
             .build(loader);
 
-    public ApiDataProvider(AppCompatActivity activity) {
-        ApiDataProvider.activity = activity;
+    public ApiDataProvider(Application application) {
+        this.application = application;
     }
-
-    public ApiDataProvider() {}
 
 
     public void getData(boolean withCleanCache, DataUpdater updater) {
-        //boolean isConnected = AssetServices.isConnected(activity);
+        boolean isConnected = AssetServices.isConnected(application);
         if (withCleanCache) {
-//            if (isConnected) {
+            if (isConnected) {
                 cache.invalidate(currencies);
-//            } else {
-////                ToastManager.displayToast(activity);
-//                return;
-//            }
-//        } else {
-//            if (!isConnected && (cache.getIfPresent(currencies) == null)) {
-//                //ToastManager.displayToast(activity);
-//                return;
-//            }
+            } else {
+                ToastManager.displayToast(application);
+                return;
+            }
+        } else {
+            if (!isConnected && (cache.getIfPresent(currencies) == null)) {
+                ToastManager.displayToast(application);
+                return;
+            }
         }
         getAsync(updater).execute();
     }
