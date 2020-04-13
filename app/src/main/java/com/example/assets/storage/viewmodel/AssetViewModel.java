@@ -39,18 +39,17 @@ public class AssetViewModel extends AndroidViewModel {
         this.application = application;
         assetRepository = new AssetRepository(application);
         LiveData<List<Asset>> allAssets = assetRepository.getAll();
-        LiveData<List<Asset>> allGroupedAssets = assetRepository.getAllGrouped();
         refreshDataFromCache(false);
-        CustomLiveData trigger = new CustomLiveData(allGroupedAssets, apiLiveData);
+        CustomLiveData trigger = new CustomLiveData(allAssets, apiLiveData);
         assetDetails = Transformations.map(trigger, value -> getAssetDetails(value.first, value.second));
     }
 
     @SneakyThrows
     private List<AssetDetails> getAssetDetails(List<Asset> first, JSONObject second) {
         List<AssetDetails> assetDetails = new ArrayList<>();
-        if(first != null && second != null) {
+        if (first != null && second != null) {
             for (Asset asset : first) {
-                assetDetails.add(new AssetDetails(asset, 1/Float.parseFloat(second.getString(asset.getSymbol()))));
+                assetDetails.add(new AssetDetails(asset, 1 / Float.parseFloat(second.getString(asset.getSymbol()))));
             }
         }
         assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
@@ -59,6 +58,10 @@ public class AssetViewModel extends AndroidViewModel {
 
     public void insert(Asset asset) {
         assetRepository.insert(asset);
+    }
+
+    public void insertOrUpdate(Asset asset) {
+        assetRepository.insertOrUpdate(asset);
     }
 
     public void update(Asset asset) {
@@ -70,7 +73,7 @@ public class AssetViewModel extends AndroidViewModel {
     }
 
     public void deleteAll() {
-       assetRepository.deleteAll();
+        assetRepository.deleteAll();
     }
 
     @SneakyThrows

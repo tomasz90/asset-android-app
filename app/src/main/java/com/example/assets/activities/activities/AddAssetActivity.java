@@ -47,7 +47,7 @@ public class AddAssetActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
             assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
-            assetViewModel.insert(new Asset(assetSymbol, "currency", Float.parseFloat(editText.getText().toString()), "info"));
+            assetViewModel.insertOrUpdate(new Asset(assetSymbol, "currency", Float.parseFloat(editText.getText().toString()), "info"));
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
         });

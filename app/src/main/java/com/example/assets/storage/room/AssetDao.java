@@ -5,14 +5,25 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.RawQuery;
-import androidx.room.SkipQueryVerification;
 import androidx.room.Update;
 
 import java.util.List;
 
 @Dao
 public interface AssetDao {
+
+    default void insertOrUpdate(Asset newAsset) {
+        Asset oldAsset = getMatchingAsset(newAsset.getSymbol(), newAsset.getInfo());
+        if (oldAsset != null) {
+            oldAsset.setQuantity(oldAsset.getQuantity() + newAsset.getQuantity());
+            update(oldAsset);
+        } else {
+            insert(newAsset);
+        }
+    }
+
+    @Query("SELECT * FROM asset_table WHERE symbol = :symbol AND info = :info")
+    Asset getMatchingAsset(String symbol, String info);
 
     @Insert
     void insert(Asset asset);
@@ -26,9 +37,6 @@ public interface AssetDao {
     @Query("DELETE FROM asset_table")
     void deleteAll();
 
-    @Query("SELECT * FROM asset_table ORDER BY symbol DESC")
+    @Query("SELECT * FROM asset_table")
     LiveData<List<Asset>> getAll();
-
-    @Query("SELECT id, symbol, type, SUM(quantity) as quantity, info FROM asset_table GROUP BY symbol, type, info")
-    LiveData<List<Asset>> getAllGrouped();
 }

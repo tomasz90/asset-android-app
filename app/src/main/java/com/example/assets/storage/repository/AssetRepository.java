@@ -15,19 +15,18 @@ import java.util.List;
 public class AssetRepository {
     private AssetDao assetDao;
     private LiveData<List<Asset>> allAssets;
-    private LiveData<List<Asset>> allGroupedAssets;
 
     public AssetRepository(Application application) {
         AssetDataBase dataBase = AssetDataBase.getInstance(application);
         assetDao = dataBase.assetDao();
         allAssets = assetDao.getAll();
-        allGroupedAssets = assetDao.getAllGrouped();
     }
-
 
     public void insert(Asset asset) {
         new InsertNoteAsyncTask(assetDao).execute(asset);
     }
+
+    public void insertOrUpdate(Asset asset) { new InsertOrUpdateNoteAsyncTask(assetDao).execute(asset);}
 
     public void update(Asset asset) {
         new UpdateNoteAsyncTask(assetDao).execute(asset);
@@ -45,10 +44,6 @@ public class AssetRepository {
         return allAssets;
     }
 
-    public LiveData<List<Asset>> getAllGrouped() {
-        return allGroupedAssets;
-    }
-
     private static class InsertNoteAsyncTask extends AsyncTask<Asset, Void, Void> {
 
         private AssetDao assetDao;
@@ -60,6 +55,21 @@ public class AssetRepository {
         @Override
         protected Void doInBackground(Asset... assets) {
             assetDao.insert(assets[0]);
+            return null;
+        }
+    }
+
+    private static class InsertOrUpdateNoteAsyncTask extends AsyncTask<Asset, Void, Void> {
+
+        private AssetDao assetDao;
+
+        InsertOrUpdateNoteAsyncTask(AssetDao assetDao) {
+            this.assetDao = assetDao;
+        }
+
+        @Override
+        protected Void doInBackground(Asset... assets) {
+            assetDao.insertOrUpdate(assets[0]);
             return null;
         }
     }

@@ -43,4 +43,8 @@ public class Asset {
     public float getQuantity() {
         return quantity;
     }
+
+    void setQuantity(float quantity) {
+        this.quantity = quantity;
+    }
 }
