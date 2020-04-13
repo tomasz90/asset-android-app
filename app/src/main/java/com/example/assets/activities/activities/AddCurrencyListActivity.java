@@ -1,4 +1,4 @@
-package com.example.assets.activities;
+package com.example.assets.activities.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,10 +7,8 @@ import android.widget.TextView;
 
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
-import com.example.assets.asset_types.CurrencyType;
+import com.example.assets.asset_types.AssetConstants;
 import com.example.assets.constants.IntentExtra;
-import com.example.assets.fragments.FragmentTemplate;
-import com.example.assets.fragments.FragmentValues;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,19 +22,18 @@ public class AddCurrencyListActivity extends AbstractListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
 
-        List<FragmentValues> values = Arrays.asList(
-                new FragmentValues(CurrencyType.EUR),
-                new FragmentValues(CurrencyType.USD),
-                new FragmentValues(CurrencyType.CHF),
-                new FragmentValues(CurrencyType.GBP),
-                new FragmentValues(CurrencyType.JPY),
-                new FragmentValues(CurrencyType.PLN),
-                new FragmentValues(CurrencyType.NOK),
-                new FragmentValues(CurrencyType.DDK),
-                new FragmentValues(CurrencyType.SEK));
+        List<String> items = Arrays.asList(
+                AssetConstants.Currency.EUR,
+                AssetConstants.Currency.USD,
+                AssetConstants.Currency.CHF,
+                AssetConstants.Currency.GBP,
+                AssetConstants.Currency.JPY,
+                AssetConstants.Currency.PLN,
+                AssetConstants.Currency.NOK,
+                AssetConstants.Currency.DDK,
+                AssetConstants.Currency.SEK);
 
-        FragmentTemplate template = new FragmentTemplate(R.layout.fragment_generic, R.id.generic_asset);
-        setUpList(R.id.generic_list, template, values);
+        setUpSimpleList(items);
     }
 
     @SneakyThrows

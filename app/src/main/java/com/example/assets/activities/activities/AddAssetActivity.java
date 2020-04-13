@@ -1,4 +1,4 @@
-package com.example.assets.activities;
+package com.example.assets.activities.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.assets.R;
 import com.example.assets.constants.IntentExtra;
+import com.example.assets.storage.room.Asset;
+import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.example.assets.util.ApiDataProvider;
-import com.example.assets.util.StorageManager;
-
 
 public class AddAssetActivity extends AppCompatActivity {
 
@@ -23,6 +24,7 @@ public class AddAssetActivity extends AppCompatActivity {
     EditText editText;
     TextView calculatedValueTextView;
     float value;
+    private AssetViewModel assetViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class AddAssetActivity extends AppCompatActivity {
 
         calculatedValueTextView = findViewById(R.id.calculated_value);
 
-        new ApiDataProvider(this).populateTextViews(false, dataFromApi -> {
+        new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
             float rate = 1 / Float.parseFloat(dataFromApi.getString(assetSymbol));
             String textToDisplay = getString(R.string.rate, assetSymbol, rate);
             calculatedValueTextView.setText(textToDisplay);
@@ -44,10 +46,8 @@ public class AddAssetActivity extends AppCompatActivity {
 
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
-
-            StorageManager manager = new StorageManager(this);
-            manager.addEntry(assetSymbol, editText.getText().toString());
-
+            assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
+            assetViewModel.insertOrUpdate(new Asset(assetSymbol, "currency", Float.parseFloat(editText.getText().toString()), "info"));
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
         });
@@ -79,7 +79,7 @@ public class AddAssetActivity extends AppCompatActivity {
                 } else {
                     value = Float.parseFloat(s.toString());
                 }
-                new ApiDataProvider(AddAssetActivity.this).populateTextViews(false, data -> {
+                new ApiDataProvider(getApplication()).getData(false, data -> {
                     float rate = 1 / Float.parseFloat(data.getString(assetSymbol));
                     String textToDisplay = getString(R.string.calculated_value, value * rate);
                     calculatedValueTextView.setText(textToDisplay);

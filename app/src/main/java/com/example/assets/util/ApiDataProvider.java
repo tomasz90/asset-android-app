@@ -1,10 +1,9 @@
 package com.example.assets.util;
 
+import android.app.Application;
 import android.os.AsyncTask;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.assets.activities.AssetServices;
+import com.example.assets.activities.activities.AssetServices;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -19,7 +18,7 @@ import lombok.SneakyThrows;
 public class ApiDataProvider {
 
     private static String currencies = "currencies";
-    private static AppCompatActivity activity;
+    private Application application;
 
     private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
@@ -34,22 +33,23 @@ public class ApiDataProvider {
             .expireAfterWrite(10, TimeUnit.MINUTES)
             .build(loader);
 
-    public ApiDataProvider(AppCompatActivity activity) {
-        ApiDataProvider.activity = activity;
+    public ApiDataProvider(Application application) {
+        this.application = application;
     }
 
-    public void populateTextViews(boolean withCleanCache, DataUpdater updater) {
-        boolean isConnected = AssetServices.isConnected(activity);
+
+    public void getData(boolean withCleanCache, DataUpdater updater) {
+        boolean isConnected = AssetServices.isConnected(application);
         if (withCleanCache) {
             if (isConnected) {
                 cache.invalidate(currencies);
             } else {
-                ToastManager.displayToast(activity);
+                ToastManager.displayToast(application);
                 return;
             }
         } else {
             if (!isConnected && (cache.getIfPresent(currencies) == null)) {
-                ToastManager.displayToast(activity);
+                ToastManager.displayToast(application);
                 return;
             }
         }
@@ -72,12 +72,12 @@ public class ApiDataProvider {
             @SneakyThrows
             @Override
             protected void onPostExecute(JSONObject result) {
-                updater.updateUI(result);
+                updater.update(result);
             }
         };
     }
 
     public interface DataUpdater {
-        void updateUI(JSONObject dataFromApi) throws JSONException;
+        void update(JSONObject dataFromApi) throws JSONException;
     }
 }

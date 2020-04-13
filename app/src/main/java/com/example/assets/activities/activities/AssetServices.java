@@ -1,5 +1,6 @@
-package com.example.assets.activities;
+package com.example.assets.activities.activities;
 
+import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -32,7 +33,7 @@ public class AssetServices {
         return rates;
     }
 
-    public static boolean isConnected(AppCompatActivity activity) {
+    public static boolean isConnected(Application activity) {
         ConnectivityManager cm =
                 (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();

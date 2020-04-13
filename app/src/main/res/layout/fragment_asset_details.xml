@@ -31,6 +31,7 @@
             android:layout_marginEnd="16dp"
             android:text="5.445 USD"
             android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@+id/asset"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/asset" />
 
@@ -38,20 +39,22 @@
             android:id="@+id/units"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="140dp"
             android:text="3oz."
-            app:layout_constraintBottom_toBottomOf="@+id/value"
+            app:layout_constraintBottom_toBottomOf="@+id/asset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/value" />
+            app:layout_constraintTop_toTopOf="@+id/asset" />
 
         <TextView
             android:id="@+id/unit_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="148dp"
             android:text="1450 USD"
-            app:layout_constraintBottom_toBottomOf="@+id/value"
+            app:layout_constraintBottom_toBottomOf="@+id/asset"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.55"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/asset" />
 
         <TextView
