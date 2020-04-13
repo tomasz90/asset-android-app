@@ -11,13 +11,13 @@ public class Asset {
     private String symbol;
     private String type;
     private float quantity;
-    private String additionalInfo;
+    private String info;
 
-    public Asset(String symbol, String type, float quantity, String additionalInfo) {
+    public Asset(String symbol, String type, float quantity, String info) {
         this.symbol = symbol;
         this.type = type;
         this.quantity = quantity;
-        this.additionalInfo = additionalInfo;
+        this.info = info;
     }
 
     public void setId(int id) {
@@ -36,8 +36,8 @@ public class Asset {
         return type;
     }
 
-    public String getAdditionalInfo() {
-        return additionalInfo;
+    public String getInfo() {
+        return info;
     }
 
     public float getQuantity() {

@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.assets.R;
 import com.example.assets.constants.IntentExtra;
-import com.example.assets.storage.repository.AssetRepository;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.example.assets.util.ApiDataProvider;

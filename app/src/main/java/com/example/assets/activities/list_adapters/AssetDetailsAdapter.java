@@ -31,7 +31,7 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         Context c = holder.itemView.getContext();
         AssetDetails currentAsset = assets.get(position);
         holder.symbol.setText(currentAsset.getSymbol());
-        holder.additionalInfo.setText(currentAsset.getAdditionalInfo());
+        holder.additionalInfo.setText(currentAsset.getInfo());
         holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
         holder.rate.setText(c.getString(R.string.float_two_decimal_dollar, currentAsset.getRate()));
         holder.value.setText(c.getString(R.string.float_no_decimal_dollar, currentAsset.getValue()));

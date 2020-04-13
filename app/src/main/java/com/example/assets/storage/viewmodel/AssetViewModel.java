@@ -39,8 +39,9 @@ public class AssetViewModel extends AndroidViewModel {
         this.application = application;
         assetRepository = new AssetRepository(application);
         LiveData<List<Asset>> allAssets = assetRepository.getAll();
+        LiveData<List<Asset>> allGroupedAssets = assetRepository.getAllGrouped();
         refreshDataFromCache(false);
-        CustomLiveData trigger = new CustomLiveData(allAssets, apiLiveData);
+        CustomLiveData trigger = new CustomLiveData(allGroupedAssets, apiLiveData);
         assetDetails = Transformations.map(trigger, value -> getAssetDetails(value.first, value.second));
     }
 

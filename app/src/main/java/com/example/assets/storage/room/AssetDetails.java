@@ -7,7 +7,7 @@ public class AssetDetails extends Asset {
     private float value;
 
     public AssetDetails(Asset asset, float rate) {
-        super(asset.getSymbol(), asset.getType(), asset.getQuantity(), asset.getAdditionalInfo());
+        super(asset.getSymbol(), asset.getType(), asset.getQuantity(), asset.getInfo());
         this.asset = asset;
         this.rate = rate;
         this.value = rate * asset.getQuantity();

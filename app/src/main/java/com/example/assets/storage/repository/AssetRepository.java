@@ -15,11 +15,13 @@ import java.util.List;
 public class AssetRepository {
     private AssetDao assetDao;
     private LiveData<List<Asset>> allAssets;
+    private LiveData<List<Asset>> allGroupedAssets;
 
     public AssetRepository(Application application) {
         AssetDataBase dataBase = AssetDataBase.getInstance(application);
         assetDao = dataBase.assetDao();
         allAssets = assetDao.getAll();
+        allGroupedAssets = assetDao.getAllGrouped();
     }
 
 
@@ -41,6 +43,10 @@ public class AssetRepository {
 
     public LiveData<List<Asset>> getAll() {
         return allAssets;
+    }
+
+    public LiveData<List<Asset>> getAllGrouped() {
+        return allGroupedAssets;
     }
 
     private static class InsertNoteAsyncTask extends AsyncTask<Asset, Void, Void> {
