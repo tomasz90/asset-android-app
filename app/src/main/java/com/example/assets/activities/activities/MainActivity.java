@@ -2,19 +2,23 @@ package com.example.assets.activities.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
+import com.example.assets.constants.IntentExtra;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
@@ -23,6 +27,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,11 +55,32 @@ public class MainActivity extends AppCompatActivity {
         assetViewModel.getAll().observe(this, (Observer<List<AssetDetails>>) assets -> {
             adapter.setAssets(assets);
             float value = 0f;
-            for(AssetDetails assetDetails : assets) {
+            for (AssetDetails assetDetails : assets) {
                 value += assetDetails.getValue();
             }
             totalValue.setText(getString(R.string.total_value_text_view, value));
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Asset swipedAsset = adapter.getAssetAtPosition(viewHolder.getAdapterPosition());
+                if (direction == ItemTouchHelper.RIGHT) {
+                    assetViewModel.delete(swipedAsset);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
+                    intent.putExtra(IntentExtra.ASSET, swipedAsset.getSymbol());
+                    intent.putExtra("as", swipedAsset);
+                    startActivity(intent);
+                }
+            }
+        }).attachToRecyclerView(recyclerView);
 
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);

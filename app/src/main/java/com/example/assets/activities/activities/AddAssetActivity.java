@@ -23,6 +23,7 @@ public class AddAssetActivity extends AppCompatActivity {
     String assetSymbol;
     EditText editText;
     TextView calculatedValueTextView;
+    Asset asset;
     float value;
     private AssetViewModel assetViewModel;
 
@@ -32,7 +33,7 @@ public class AddAssetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_asset);
 
         assetSymbol = getIntent().getStringExtra(IntentExtra.ASSET);
-
+        asset = (Asset) getIntent().getSerializableExtra("as");
         TextView symbolTextView = findViewById(R.id.asset_symbol);
         symbolTextView.setText(assetSymbol);
 
@@ -47,7 +48,16 @@ public class AddAssetActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
             assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
-            assetViewModel.insertOrUpdate(new Asset(assetSymbol, "currency", Float.parseFloat(editText.getText().toString()), "info"));
+            float setQuantity = Float.parseFloat(editText.getText().toString());
+            if (asset == null) {
+                assetViewModel.insertOrUpdate(new Asset(assetSymbol, "currency", setQuantity, "info"));
+            } else {
+                Asset newAsset = asset;
+                // TODO: 4/14/2020 resolve update
+                newAsset.setQuantity(setQuantity);
+                assetViewModel.delete(asset);
+                assetViewModel.insert(asset);
+            }
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
         });
@@ -59,6 +69,9 @@ public class AddAssetActivity extends AppCompatActivity {
         });
 
         editText = findViewById(R.id.amount_input);
+        if (asset != null) {
+            editText.setText(getString(R.string.float_two_decimal, asset.getQuantity()));
+        }
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

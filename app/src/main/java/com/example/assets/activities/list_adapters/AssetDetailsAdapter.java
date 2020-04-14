@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
+import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
         holder.rate.setText(c.getString(R.string.float_two_decimal_dollar, currentAsset.getRate()));
         holder.value.setText(c.getString(R.string.float_no_decimal_dollar, currentAsset.getValue()));
+    }
+
+    public Asset getAssetAtPosition(int position) {
+        return assets.get(position).getAsset();
     }
 
     @Override

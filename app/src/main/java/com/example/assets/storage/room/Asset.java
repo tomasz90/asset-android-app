@@ -3,8 +3,10 @@ package com.example.assets.storage.room;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "asset_table")
-public class Asset {
+public class Asset implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -44,7 +46,7 @@ public class Asset {
         return quantity;
     }
 
-    void setQuantity(float quantity) {
+    public void setQuantity(float quantity) {
         this.quantity = quantity;
     }
 }
