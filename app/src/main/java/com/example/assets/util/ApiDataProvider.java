@@ -37,7 +37,6 @@ public class ApiDataProvider {
         this.application = application;
     }
 
-
     public void getData(boolean withCleanCache, DataUpdater updater) {
         boolean isConnected = AssetServices.isConnected(application);
         if (withCleanCache) {

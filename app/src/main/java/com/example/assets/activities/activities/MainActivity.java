@@ -2,8 +2,6 @@ package com.example.assets.activities.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -18,16 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
-import com.example.assets.constants.IntentExtra;
+import com.example.assets.constants.Constants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import org.json.JSONObject;
-
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     assetViewModel.delete(swipedAsset);
                 } else {
                     Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
-                    intent.putExtra(IntentExtra.ASSET, swipedAsset.getSymbol());
+                    intent.putExtra(Constants.ASSET, swipedAsset.getSymbol());
                     intent.putExtra("as", swipedAsset);
                     startActivity(intent);
                 }

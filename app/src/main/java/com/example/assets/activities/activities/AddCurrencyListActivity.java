@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.asset_types.AssetConstants;
-import com.example.assets.constants.IntentExtra;
+import com.example.assets.constants.Constants;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +42,7 @@ public class AddCurrencyListActivity extends AbstractListActivity {
         // TODO: 4/3/2020 implelemnt put extra intent
         String symbolAsset = tv.getText().toString();
         Intent intent = new Intent(this, AddAssetActivity.class);
-        intent.putExtra(IntentExtra.ASSET, symbolAsset);
+        intent.putExtra(Constants.ASSET, symbolAsset);
         startActivity(intent);
     }
 }

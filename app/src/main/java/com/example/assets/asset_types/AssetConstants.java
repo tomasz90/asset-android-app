@@ -11,7 +11,7 @@ public class AssetConstants {
         public static final String ETFS = "ETFs";
     }
 
-    class CryptoCurrency {
+    public class CryptoCurrency {
         public static final String BTC = "BTC";
         public static final String ETH = "ETH";
         public static final String LTC = "LTC";
@@ -32,20 +32,18 @@ public class AssetConstants {
         public static final String DDK = "DKK";
     }
 
-    class Metal {
+    public class Metal {
         public static final String GOLD = "Gold";
         public static final String SILVER = "Silver";
         public static final String PLATINUM = "Platinum";
         public static final String PALLADIUM = "Palladium";
     }
 
-    class Stock {
+    public class Stock {
         public static final String STOCK = "Item";
     }
 
-    class ETF {
+    public class ETF {
         public static final String ETF = "ETF EXAMPLE";
     }
-
-
 }

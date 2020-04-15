@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.assets.R;
-import com.example.assets.constants.IntentExtra;
+import com.example.assets.constants.Constants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.example.assets.util.ApiDataProvider;
@@ -32,7 +32,7 @@ public class AddAssetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
 
-        assetSymbol = getIntent().getStringExtra(IntentExtra.ASSET);
+        assetSymbol = getIntent().getStringExtra(Constants.ASSET);
         asset = (Asset) getIntent().getSerializableExtra("as");
         TextView symbolTextView = findViewById(R.id.asset_symbol);
         symbolTextView.setText(assetSymbol);
@@ -90,7 +90,7 @@ public class AddAssetActivity extends AppCompatActivity {
                     saveButton.setBackgroundColor(getColor(R.color.greyed_magenta));
                     saveButton.setEnabled(false);
                 } else {
-                    value = Float.parseFloat(s.toString());
+                    value = Float.parseFloat(s.toString().replace(",","."));
                 }
                 new ApiDataProvider(getApplication()).getData(false, data -> {
                     float rate = 1 / Float.parseFloat(data.getString(assetSymbol));
