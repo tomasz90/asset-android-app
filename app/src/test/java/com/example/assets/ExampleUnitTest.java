@@ -1,6 +1,6 @@
 package com.example.assets;
 
-import com.example.assets.activities.activities.AssetServices;
+import com.example.assets.util.AssetServices;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;

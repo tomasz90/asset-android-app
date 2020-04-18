@@ -1,4 +1,4 @@
-package com.example.assets.activities.activities;
+package com.example.assets.util;
 
 import android.app.Application;
 import android.content.Context;

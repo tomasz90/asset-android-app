@@ -3,7 +3,6 @@ package com.example.assets.util;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import com.example.assets.activities.activities.AssetServices;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
