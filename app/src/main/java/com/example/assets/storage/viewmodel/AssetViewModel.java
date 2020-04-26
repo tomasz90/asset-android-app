@@ -50,7 +50,7 @@ public class AssetViewModel extends AndroidViewModel {
     }
 
     public void update(Asset asset) {
-        assetRepository.insert(asset);
+        assetRepository.update(asset);
     }
 
     public void delete(Asset asset) {

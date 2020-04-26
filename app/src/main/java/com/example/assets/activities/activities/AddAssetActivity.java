@@ -63,13 +63,11 @@ public class AddAssetActivity extends AppCompatActivity {
             assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
             float setQuantity = Utils.toFloat(editText.getText());
             if (editedAsset == null) {
-                assetViewModel.insertOrUpdate(new Asset(assetSymbol, assetType, setQuantity, "info"));
+                assetViewModel.insertOrUpdate(new Asset(assetSymbol, assetType, setQuantity, ""));
             } else {
                 Asset newAsset = editedAsset;
-                // TODO: 4/14/2020 resolve update
                 newAsset.setQuantity(setQuantity);
-                assetViewModel.delete(editedAsset);
-                assetViewModel.insert(editedAsset);
+                assetViewModel.update(editedAsset);
             }
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
