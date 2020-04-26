@@ -22,6 +22,7 @@ import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import java.util.List;
 import java.util.Objects;
 
 import lombok.SneakyThrows;
@@ -40,17 +41,14 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.asset_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        final AssetDetailsAdapter adapter = new AssetDetailsAdapter();
+
+        AssetDetailsAdapter adapter = new AssetDetailsAdapter();
         recyclerView.setAdapter(adapter);
 
         assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
         assetViewModel.getAll().observe(this, assets -> {
             adapter.setAssets(assets);
-            float value = 0f;
-            for (AssetDetails assetDetails : assets) {
-                value += assetDetails.getValue();
-            }
-            totalValue.setText(getString(R.string.total_value_text_view, value));
+            setTotalValue(assets);
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
@@ -74,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attachToRecyclerView(recyclerView);
 
-
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AssetTypeListActivity.class);
@@ -86,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
             assetViewModel.refreshDataFromCache(true);
             System.out.println("from button ...............................................................................................");
         });
+    }
+
+    private void setTotalValue(List<AssetDetails> assets) {
+        float value = 0f;
+        for (AssetDetails assetDetails : assets) {
+            value += assetDetails.getValue();
+        }
+        totalValue.setText(getString(R.string.total_value_text_view, value));
     }
 
     private void setToolbar() {
