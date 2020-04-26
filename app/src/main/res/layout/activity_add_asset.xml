@@ -41,7 +41,8 @@
             android:id="@+id/amount_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
+            android:inputType="number"
+            android:digits="0123456789.,"
             android:textSize="24sp" />
 
     </com.google.android.material.textfield.TextInputLayout>

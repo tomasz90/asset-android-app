@@ -18,6 +18,8 @@ import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.viewmodel.AssetViewModel;
 import com.example.assets.util.ApiDataProvider;
 
+import org.apache.commons.codec.binary.StringUtils;
+
 public class AddAssetActivity extends AppCompatActivity {
 
     String assetSymbol;
@@ -98,6 +100,7 @@ public class AddAssetActivity extends AppCompatActivity {
                     saveButton.setBackgroundColor(getColor(R.color.greyed_magenta));
                     saveButton.setEnabled(false);
                 } else {
+                    doNotAllowToEnterMoreDecimalSeparators(s);
                     value = Float.parseFloat(s.toString().replace(",","."));
                 }
                 new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
@@ -107,5 +110,12 @@ public class AddAssetActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    void doNotAllowToEnterMoreDecimalSeparators(Editable editable) {
+        String s = editable.toString();
+        if (s.contains(".") && s.contains(",") ||  s.chars().filter(ch -> ch =='.').count() > 1 || s.chars().filter(ch -> ch ==',').count() > 1) {
+            editable.delete(s.length()-1, s.length());
+        }
     }
 }
