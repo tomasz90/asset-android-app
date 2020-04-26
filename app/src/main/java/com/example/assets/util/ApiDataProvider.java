@@ -3,7 +3,7 @@ package com.example.assets.util;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import com.example.assets.constants.Constants;
+import com.example.assets.constants.AssetConstants;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -69,9 +69,9 @@ public class ApiDataProvider {
             protected JSONObject doInBackground(String... strings) {
                 if (assetType == null) {
                     return new JSONObject()
-                            .put(Constants.CURRENCIES, cache.getUnchecked(Constants.CURRENCIES))
-                            .put(Constants.CRYPTOS, cache.getUnchecked(Constants.CRYPTOS))
-                            .put(Constants.METALS, cache.getUnchecked(Constants.METALS));
+                            .put(AssetConstants.CURRENCIES, cache.getUnchecked(AssetConstants.CURRENCIES))
+                            .put(AssetConstants.CRYPTOS, cache.getUnchecked(AssetConstants.CRYPTOS))
+                            .put(AssetConstants.METALS, cache.getUnchecked(AssetConstants.METALS));
                 }
                 return cache.getUnchecked(assetType);
             }

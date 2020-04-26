@@ -14,6 +14,7 @@ import com.example.assets.storage.repository.AssetRepository;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.util.ApiDataProvider;
+import com.example.assets.util.Utils;
 
 import org.json.JSONObject;
 
@@ -74,7 +75,8 @@ public class AssetViewModel extends AndroidViewModel {
         List<AssetDetails> assetDetails = new ArrayList<>();
         if (first != null && second != null) {
             for (Asset asset : first) {
-                assetDetails.add(new AssetDetails(asset, Float.parseFloat(second.getJSONObject(asset.getType()).getString(asset.getSymbol()))));
+                String rate = second.getJSONObject(asset.getType()).getString(asset.getSymbol());
+                assetDetails.add(new AssetDetails(asset, Utils.toFloat(rate)));
             }
         }
         assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());

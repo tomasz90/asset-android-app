@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.example.assets.constants.Constants;
+import com.example.assets.constants.AssetConstants;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
@@ -15,13 +15,13 @@ import org.json.JSONObject;
 
 public class AssetServices {
 
-    public static JSONObject getCurrencyRates() throws Exception {
+    private static JSONObject getCurrencyRates() throws Exception {
         String resp = Unirest.get("https://api.exchangeratesapi.io/latest?base=USD").asString().getBody();
         System.out.println("NETWORK REQUEST ###########################################################################################");
         return filterCurrencies(new JSONObject(resp).getJSONObject("rates"));
     }
 
-    public static JSONObject getCryptoRates() throws Exception {
+    private static JSONObject getCryptoRates() throws Exception {
         String resp = Unirest.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest")
                 .header("X-CMC_PRO_API_KEY", "dfff4181-377d-4dfe-8b50-52245c63eb05").asString().getBody();
         JSONObject rates = new JSONObject();
@@ -34,30 +34,35 @@ public class AssetServices {
         return filterCryptos(rates);
     }
 
-    public static JSONObject getMetalRates() throws UnirestException, JSONException {
+    private static JSONObject getMetalRates() throws UnirestException, JSONException {
         String resp = Unirest.get("https://www.moneymetals.com/ajax/spot-prices").asString().getBody();
         JSONObject rates = new JSONObject(resp);
         return filterMetals(rates);
     }
 
-    public static boolean isConnected(Application activity) {
-        ConnectivityManager cm =
-                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    static JSONObject getRates(String assetType) throws Exception {
+        switch (assetType) {
+            case AssetConstants.CURRENCIES:
+                return getCurrencyRates();
+            case AssetConstants.CRYPTOS:
+                return getCryptoRates();
+            case AssetConstants.METALS:
+                return getMetalRates();
+        }
+        return null;
     }
 
     static JSONObject filterCurrencies(JSONObject raw) throws JSONException {
         JSONObject filtered = new JSONObject();
-        for (String currency : Constants.ALL_CURRENCIES) {
-            filtered.put(currency, 1 / Float.parseFloat((raw.get(currency)).toString()));
+        for (String currency : AssetConstants.ALL_CURRENCIES) {
+            filtered.put(currency, 1 / Utils.toFloat(raw.get(currency)));
         }
         return filtered;
     }
 
     static JSONObject filterCryptos(JSONObject raw) throws JSONException {
         JSONObject filtered = new JSONObject();
-        for (String crypto : Constants.ALL_CRYPTOS) {
+        for (String crypto : AssetConstants.ALL_CRYPTOS) {
             filtered.put(crypto, raw.getString(crypto));
         }
         return filtered;
@@ -65,7 +70,7 @@ public class AssetServices {
 
     static JSONObject filterMetals(JSONObject raw) throws JSONException {
         JSONObject filteredRates = new JSONObject();
-        for (String metal : Constants.ALL_METALS) {
+        for (String metal : AssetConstants.ALL_METALS) {
             filteredRates.put(metal, raw.getJSONObject(metal)
                     .getString("price")
                     .replace("$", "")
@@ -74,15 +79,10 @@ public class AssetServices {
         return filteredRates;
     }
 
-    static JSONObject getRates(String assetType) throws Exception {
-        switch (assetType) {
-            case Constants.CURRENCIES:
-                return getCurrencyRates();
-            case Constants.CRYPTOS:
-                return getCryptoRates();
-            case Constants.METALS:
-                return getMetalRates();
-        }
-        return null;
+    static boolean isConnected(Application activity) {
+        ConnectivityManager cm =
+                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

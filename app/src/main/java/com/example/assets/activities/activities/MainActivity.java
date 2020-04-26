@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
 import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
-import com.example.assets.constants.Constants;
+import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
                     assetViewModel.delete(swipedAsset);
                 } else {
                     Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
-                    intent.putExtra(Constants.ASSET_SYMBOL, swipedAsset.getSymbol());
-                    intent.putExtra(Constants.EDITED_ASSET, swipedAsset);
+                    intent.putExtra(AssetConstants.ASSET_SYMBOL, swipedAsset.getSymbol());
+                    intent.putExtra(AssetConstants.EDITED_ASSET, swipedAsset);
                     startActivity(intent);
                 }
             }

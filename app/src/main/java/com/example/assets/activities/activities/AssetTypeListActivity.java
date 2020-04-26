@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
-import com.example.assets.constants.Constants;
+import com.example.assets.constants.AssetConstants;
 
 import java.util.Objects;
 
@@ -19,15 +19,15 @@ public class AssetTypeListActivity extends AbstractListActivity {
         setContentView(R.layout.recycler_view_generic);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_assets_activity_title);
 
-        setUpSimpleList(Constants.ALL_ASSETS);
+        setUpSimpleList(AssetConstants.ALL_ASSETS);
     }
 
     @Override
     public void clickItem(View v, TextView tv) {
         String assetType = tv.getText().toString();
         Intent intent = new Intent(this, AssetListActivity.class);
-        intent.putStringArrayListExtra(Constants.SPECIFIC_ASSETS, Constants.assetMap.get(assetType));
-        intent.putExtra(Constants.ASSET_TYPE, assetType);
+        intent.putStringArrayListExtra(AssetConstants.SPECIFIC_ASSETS, AssetConstants.assetMap.get(assetType));
+        intent.putExtra(AssetConstants.ASSET_TYPE, assetType);
         this.startActivity(intent);
     }
 }
