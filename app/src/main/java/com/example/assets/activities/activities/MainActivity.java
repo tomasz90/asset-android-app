@@ -9,21 +9,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
+import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
 import com.example.assets.constants.Constants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
-import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import java.util.List;
 import java.util.Objects;
 
 import lombok.SneakyThrows;
@@ -45,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
         final AssetDetailsAdapter adapter = new AssetDetailsAdapter();
         recyclerView.setAdapter(adapter);
 
-
         assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
-        assetViewModel.getAll().observe(this, (Observer<List<AssetDetails>>) assets -> {
+        assetViewModel.getAll().observe(this, assets -> {
             adapter.setAssets(assets);
             float value = 0f;
             for (AssetDetails assetDetails : assets) {
