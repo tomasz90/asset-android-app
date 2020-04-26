@@ -23,7 +23,7 @@ public class AddAssetActivity extends AppCompatActivity {
     String assetSymbol;
     EditText editText;
     TextView calculatedValueTextView;
-    Asset asset;
+    Asset editedAsset;
     float value;
     private AssetViewModel assetViewModel;
 
@@ -33,7 +33,7 @@ public class AddAssetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_asset);
 
         assetSymbol = getIntent().getStringExtra(Constants.ASSET);
-        asset = (Asset) getIntent().getSerializableExtra("as");
+        editedAsset = (Asset) getIntent().getSerializableExtra(Constants.EDITED_ASSET);
         TextView symbolTextView = findViewById(R.id.asset_symbol);
         symbolTextView.setText(assetSymbol);
 
@@ -49,14 +49,14 @@ public class AddAssetActivity extends AppCompatActivity {
         saveButton.setOnClickListener(view -> {
             assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
             float setQuantity = Float.parseFloat(editText.getText().toString());
-            if (asset == null) {
+            if (editedAsset == null) {
                 assetViewModel.insertOrUpdate(new Asset(assetSymbol, "currency", setQuantity, "info"));
             } else {
-                Asset newAsset = asset;
+                Asset newAsset = editedAsset;
                 // TODO: 4/14/2020 resolve update
                 newAsset.setQuantity(setQuantity);
-                assetViewModel.delete(asset);
-                assetViewModel.insert(asset);
+                assetViewModel.delete(editedAsset);
+                assetViewModel.insert(editedAsset);
             }
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
@@ -69,8 +69,8 @@ public class AddAssetActivity extends AppCompatActivity {
         });
 
         editText = findViewById(R.id.amount_input);
-        if (asset != null) {
-            editText.setText(getString(R.string.float_two_decimal, asset.getQuantity()));
+        if (editedAsset != null) {
+            editText.setText(getString(R.string.float_two_decimal, editedAsset.getQuantity()));
         }
         editText.addTextChangedListener(new TextWatcher() {
             @Override

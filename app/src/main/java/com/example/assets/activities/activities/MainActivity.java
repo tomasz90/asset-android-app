@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
                     intent.putExtra(Constants.ASSET, swipedAsset.getSymbol());
-                    intent.putExtra("as", swipedAsset);
+                    intent.putExtra(Constants.EDITED_ASSET, swipedAsset);
                     startActivity(intent);
                 }
             }
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         ExtendedFloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AddAssetListActivity.class);
+            Intent intent = new Intent(MainActivity.this, AssetTypeListActivity.class);
             startActivity(intent);
         });
 

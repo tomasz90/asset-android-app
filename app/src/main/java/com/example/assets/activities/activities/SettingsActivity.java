@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.storage.repository.AssetRepository;
+import com.example.assets.storage.viewmodel.AssetViewModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +27,7 @@ public class SettingsActivity extends AbstractListActivity {
 
     @Override
     public void clickItem(View v, TextView tv) {
-        new AssetRepository(this.getApplication()).deleteAll();
+        new AssetViewModel(this.getApplication()).deleteAll();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

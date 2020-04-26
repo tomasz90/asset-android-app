@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.activities.AddAssetListActivity" />
-        <activity android:name=".activities.activities.AddCurrencyListActivity" />
+        <activity android:name=".activities.activities.AssetTypeListActivity" />
+        <activity android:name=".activities.activities.AssetListActivity" />
         <activity android:name=".activities.activities.AddAssetActivity"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activities.activities.DoneActivity" />

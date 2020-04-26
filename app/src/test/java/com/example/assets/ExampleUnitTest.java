@@ -47,7 +47,7 @@ public class ExampleUnitTest {
 
     @Test
     public void addition_isCorrect() throws Exception {
-        AssetServices.getCryptoRates();
+        JSONObject object = AssetServices.getCryptoRates();
     }
 
     @Test

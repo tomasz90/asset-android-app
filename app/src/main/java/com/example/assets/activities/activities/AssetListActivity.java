@@ -7,39 +7,25 @@ import android.widget.TextView;
 
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
-import com.example.assets.asset_types.AssetConstants;
 import com.example.assets.constants.Constants;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
 
 import lombok.SneakyThrows;
 
-public class AddCurrencyListActivity extends AbstractListActivity {
+public class AssetListActivity extends AbstractListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
-
-        List<String> items = Arrays.asList(
-                AssetConstants.Currency.EUR,
-                AssetConstants.Currency.USD,
-                AssetConstants.Currency.CHF,
-                AssetConstants.Currency.GBP,
-                AssetConstants.Currency.JPY,
-                AssetConstants.Currency.PLN,
-                AssetConstants.Currency.NOK,
-                AssetConstants.Currency.DDK,
-                AssetConstants.Currency.SEK);
-
-        setUpSimpleList(items);
+        ArrayList<String> assets = getIntent().getStringArrayListExtra(Constants.SPECIFIC_ASSETS);
+        setUpSimpleList(assets);
     }
 
     @SneakyThrows
     @Override
     public void clickItem(View v, TextView tv) {
-        // TODO: 4/3/2020 implelemnt put extra intent
         String symbolAsset = tv.getText().toString();
         Intent intent = new Intent(this, AddAssetActivity.class);
         intent.putExtra(Constants.ASSET, symbolAsset);

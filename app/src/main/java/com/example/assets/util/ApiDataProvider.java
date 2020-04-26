@@ -16,14 +16,18 @@ import lombok.SneakyThrows;
 
 public class ApiDataProvider {
 
-    private static String currencies = "currencies";
+    private static final String CURRENCIES = "currencies";
+    private static final String CRYPTOS = "cryptos";
     private Application application;
 
     private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
         @Override
         public JSONObject load(String key) throws Exception {
             JSONObject currencyRates = AssetServices.getCurrencyRates();
-            JSONObject allRates = new JSONObject().put(key, currencyRates);
+            JSONObject cryptoRates = AssetServices.getCryptoRates();
+            JSONObject allRates = new JSONObject()
+                    .put(CURRENCIES, currencyRates)
+                    .put(CRYPTOS, cryptoRates);
             return allRates.getJSONObject(key);
         }
     };
@@ -37,16 +41,17 @@ public class ApiDataProvider {
     }
 
     public void getData(boolean withCleanCache, DataUpdater updater) {
+        String assetType = CURRENCIES;
         boolean isConnected = AssetServices.isConnected(application);
         if (withCleanCache) {
             if (isConnected) {
-                cache.invalidate(currencies);
+                cache.invalidate(assetType);
             } else {
                 ToastManager.displayToast(application);
                 return;
             }
         } else {
-            if (!isConnected && (cache.getIfPresent(currencies) == null)) {
+            if (!isConnected && (cache.getIfPresent(assetType) == null)) {
                 ToastManager.displayToast(application);
                 return;
             }
@@ -64,7 +69,7 @@ public class ApiDataProvider {
 
             @Override
             protected JSONObject doInBackground(String... strings) {
-                return cache.getUnchecked(currencies);
+                return cache.getUnchecked(CURRENCIES);
             }
 
             @SneakyThrows

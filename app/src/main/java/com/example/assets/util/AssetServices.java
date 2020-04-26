@@ -5,11 +5,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.assets.constants.Constants;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AssetServices {
@@ -17,7 +18,7 @@ public class AssetServices {
     public static JSONObject getCurrencyRates() throws Exception {
         String resp = Unirest.get("https://api.exchangeratesapi.io/latest?base=USD").asString().getBody();
         System.out.println("NETWORK REQUEST ###########################################################################################");
-        return new JSONObject(resp).getJSONObject("rates");
+        return filterCurrencies(new JSONObject(resp).getJSONObject("rates"));
     }
 
     public static JSONObject getCryptoRates() throws Exception {
@@ -30,7 +31,13 @@ public class AssetServices {
             String rate = array.getJSONObject(i).getJSONObject("quote").getJSONObject("USD").get("price").toString();
             rates.put(symbol, rate);
         }
-        return rates;
+        return filterCryptos(rates);
+    }
+
+    public static JSONObject getMetalRates() throws UnirestException, JSONException {
+        String resp = Unirest.get("https://www.moneymetals.com/ajax/spot-prices").asString().getBody();
+        JSONObject rates = new JSONObject(resp);
+        return filterMetals(rates);
     }
 
     public static boolean isConnected(Application activity) {
@@ -38,5 +45,32 @@ public class AssetServices {
                 (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    static JSONObject filterCurrencies(JSONObject raw) throws JSONException {
+        JSONObject filtered = new JSONObject();
+        for (String currency : Constants.ALL_CURRENCIES) {
+            filtered.put(currency, raw.get(currency));
+        }
+        return filtered;
+    }
+
+    static JSONObject filterCryptos(JSONObject raw) throws JSONException {
+        JSONObject filtered = new JSONObject();
+        for (String crypto : Constants.ALL_CRYPTOS) {
+            filtered.put(crypto, raw.getString(crypto));
+        }
+        return filtered;
+    }
+
+    static JSONObject filterMetals(JSONObject raw) throws JSONException {
+        JSONObject filteredRates = new JSONObject();
+        for (String metal : Constants.ALL_METALS) {
+            filteredRates.put(metal, raw.getJSONObject(metal)
+                    .getString("price")
+                    .replace("$", "")
+                    .replace(",", ""));
+        }
+        return filteredRates;
     }
 }
