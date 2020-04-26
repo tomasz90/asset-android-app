@@ -105,7 +105,7 @@ public class AddAssetActivity extends AppCompatActivity {
                     saveButton.setBackgroundColor(getColor(R.color.greyed_magenta));
                     saveButton.setEnabled(false);
                 } else {
-                    doNotAllowToEnterMoreDecimalSeparators(s);
+                    doNotAllowToEnterInvalidQuantity(s);
                     value = Utils.toFloat(s);
                 }
                 new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
@@ -117,9 +117,11 @@ public class AddAssetActivity extends AppCompatActivity {
         });
     }
 
-   private void doNotAllowToEnterMoreDecimalSeparators(Editable editable) {
+   private void doNotAllowToEnterInvalidQuantity(Editable editable) {
         String s = editable.toString();
-        if (s.chars().filter(ch -> ch == decimalSeparator).count() > 1) {
+        boolean isMoreThenOneSeparator = s.chars().filter(ch -> ch == decimalSeparator).count() > 1;
+        boolean isSeparatorFirst = s.startsWith(String.valueOf(decimalSeparator));
+        if (isMoreThenOneSeparator || isSeparatorFirst ) {
             editable.delete(s.length() - 1, s.length());
         }
     }

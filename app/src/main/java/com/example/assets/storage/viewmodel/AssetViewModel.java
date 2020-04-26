@@ -27,7 +27,7 @@ import lombok.SneakyThrows;
 public class AssetViewModel extends AndroidViewModel {
 
     private AssetRepository assetRepository;
-    private MutableLiveData<JSONObject> apiLiveData = new MutableLiveData();
+    private MutableLiveData<JSONObject> rates = new MutableLiveData();
     private LiveData<List<AssetDetails>> assetDetails;
     private Application application;
 
@@ -37,7 +37,7 @@ public class AssetViewModel extends AndroidViewModel {
         assetRepository = new AssetRepository(application);
         LiveData<List<Asset>> allAssets = assetRepository.getAll();
         refreshDataFromCache(false);
-        CustomLiveData trigger = new CustomLiveData(allAssets, apiLiveData);
+        CustomLiveData trigger = new CustomLiveData(allAssets, rates);
         assetDetails = Transformations.map(trigger, value -> getAssetDetails(value.first, value.second));
     }
 
@@ -67,15 +67,15 @@ public class AssetViewModel extends AndroidViewModel {
 
     @SneakyThrows
     public void refreshDataFromCache(boolean withCleanCache) {
-        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> apiLiveData.setValue(dataFromApi));
+        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
     }
 
     @SneakyThrows
-    private List<AssetDetails> getAssetDetails(List<Asset> first, JSONObject second) {
+    private List<AssetDetails> getAssetDetails(List<Asset> assets, JSONObject rates) {
         List<AssetDetails> assetDetails = new ArrayList<>();
-        if (first != null && second != null) {
-            for (Asset asset : first) {
-                String rate = second.getJSONObject(asset.getType()).getString(asset.getSymbol());
+        if (assets != null && rates != null) {
+            for (Asset asset : assets) {
+                String rate = rates.getJSONObject(asset.getType()).getString(asset.getSymbol());
                 assetDetails.add(new AssetDetails(asset, Utils.toFloat(rate)));
             }
         }
