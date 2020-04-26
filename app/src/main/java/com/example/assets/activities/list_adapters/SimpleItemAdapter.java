@@ -33,14 +33,11 @@ public class SimpleItemAdapter extends RecyclerView.Adapter<SimpleItemAdapter.Si
             super(itemView);
             tv = itemView.findViewById(R.id.generic_asset);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(v, tv);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(v, tv);
                     }
                 }
             });

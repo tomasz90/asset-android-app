@@ -74,7 +74,7 @@ public class AssetViewModel extends AndroidViewModel {
         List<AssetDetails> assetDetails = new ArrayList<>();
         if (first != null && second != null) {
             for (Asset asset : first) {
-                assetDetails.add(new AssetDetails(asset, 1 / Float.parseFloat(second.getString(asset.getSymbol()))));
+                assetDetails.add(new AssetDetails(asset, Float.parseFloat(second.getJSONObject(asset.getType()).getString(asset.getSymbol()))));
             }
         }
         assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());

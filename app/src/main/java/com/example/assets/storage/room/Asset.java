@@ -34,7 +34,7 @@ public class Asset implements Serializable {
         return symbol;
     }
 
-    String getType() {
+    public String getType() {
         return type;
     }
 

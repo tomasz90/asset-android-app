@@ -24,9 +24,10 @@ public class AssetTypeListActivity extends AbstractListActivity {
 
     @Override
     public void clickItem(View v, TextView tv) {
-        String asset = tv.getText().toString();
+        String assetType = tv.getText().toString();
         Intent intent = new Intent(this, AssetListActivity.class);
-        intent.putStringArrayListExtra(Constants.SPECIFIC_ASSETS, Constants.assetMap.get(asset));
+        intent.putStringArrayListExtra(Constants.SPECIFIC_ASSETS, Constants.assetMap.get(assetType));
+        intent.putExtra(Constants.ASSET_TYPE, assetType);
         this.startActivity(intent);
     }
 }

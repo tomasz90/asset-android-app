@@ -28,7 +28,8 @@ public class AssetListActivity extends AbstractListActivity {
     public void clickItem(View v, TextView tv) {
         String symbolAsset = tv.getText().toString();
         Intent intent = new Intent(this, AddAssetActivity.class);
-        intent.putExtra(Constants.ASSET, symbolAsset);
+        intent.putExtra(Constants.ASSET_SYMBOL, symbolAsset);
+        intent.putExtra(Constants.ASSET_TYPE, getIntent().getStringExtra(Constants.ASSET_TYPE));
         startActivity(intent);
     }
 }

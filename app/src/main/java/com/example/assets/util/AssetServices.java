@@ -50,7 +50,7 @@ public class AssetServices {
     static JSONObject filterCurrencies(JSONObject raw) throws JSONException {
         JSONObject filtered = new JSONObject();
         for (String currency : Constants.ALL_CURRENCIES) {
-            filtered.put(currency, raw.get(currency));
+            filtered.put(currency, 1 / Float.parseFloat((raw.get(currency)).toString()));
         }
         return filtered;
     }
@@ -72,5 +72,17 @@ public class AssetServices {
                     .replace(",", ""));
         }
         return filteredRates;
+    }
+
+    static JSONObject getRates(String assetType) throws Exception {
+        switch (assetType) {
+            case Constants.CURRENCIES:
+                return getCurrencyRates();
+            case Constants.CRYPTOS:
+                return getCryptoRates();
+            case Constants.METALS:
+                return getMetalRates();
+        }
+        return null;
     }
 }

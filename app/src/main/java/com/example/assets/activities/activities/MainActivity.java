@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     assetViewModel.delete(swipedAsset);
                 } else {
                     Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
-                    intent.putExtra(Constants.ASSET, swipedAsset.getSymbol());
+                    intent.putExtra(Constants.ASSET_SYMBOL, swipedAsset.getSymbol());
                     intent.putExtra(Constants.EDITED_ASSET, swipedAsset);
                     startActivity(intent);
                 }

@@ -21,6 +21,7 @@ import com.example.assets.util.ApiDataProvider;
 public class AddAssetActivity extends AppCompatActivity {
 
     String assetSymbol;
+    String assetType;
     EditText editText;
     TextView calculatedValueTextView;
     Asset editedAsset;
@@ -32,15 +33,22 @@ public class AddAssetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
 
-        assetSymbol = getIntent().getStringExtra(Constants.ASSET);
         editedAsset = (Asset) getIntent().getSerializableExtra(Constants.EDITED_ASSET);
+        assetType = getIntent().getStringExtra(Constants.ASSET_TYPE);
+
+        if (assetType == null) {
+            assetType = editedAsset.getType();
+        }
+
+        assetSymbol = getIntent().getStringExtra(Constants.ASSET_SYMBOL);
+
         TextView symbolTextView = findViewById(R.id.asset_symbol);
         symbolTextView.setText(assetSymbol);
 
         calculatedValueTextView = findViewById(R.id.calculated_value);
 
         new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
-            float rate = 1 / Float.parseFloat(dataFromApi.getString(assetSymbol));
+            float rate = Float.parseFloat(dataFromApi.getJSONObject(assetType).getString(assetSymbol));
             String textToDisplay = getString(R.string.rate, assetSymbol, rate);
             calculatedValueTextView.setText(textToDisplay);
         });
@@ -50,7 +58,7 @@ public class AddAssetActivity extends AppCompatActivity {
             assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
             float setQuantity = Float.parseFloat(editText.getText().toString());
             if (editedAsset == null) {
-                assetViewModel.insertOrUpdate(new Asset(assetSymbol, "currency", setQuantity, "info"));
+                assetViewModel.insertOrUpdate(new Asset(assetSymbol, assetType, setQuantity, "info"));
             } else {
                 Asset newAsset = editedAsset;
                 // TODO: 4/14/2020 resolve update
@@ -92,8 +100,8 @@ public class AddAssetActivity extends AppCompatActivity {
                 } else {
                     value = Float.parseFloat(s.toString().replace(",","."));
                 }
-                new ApiDataProvider(getApplication()).getData(false, data -> {
-                    float rate = 1 / Float.parseFloat(data.getString(assetSymbol));
+                new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
+                    float rate = Float.parseFloat(dataFromApi.getJSONObject(assetType).getString(assetSymbol));
                     String textToDisplay = getString(R.string.calculated_value, value * rate);
                     calculatedValueTextView.setText(textToDisplay);
                 });

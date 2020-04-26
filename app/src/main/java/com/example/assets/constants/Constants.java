@@ -7,7 +7,8 @@ import java.util.List;
 
 public class Constants {
 
-    public static final String ASSET = "asset";
+    public static final String ASSET_SYMBOL = "assetSymbol";
+    public static final String ASSET_TYPE = "assetType";
     public static final String SPECIFIC_ASSETS = "specificAssets";
     public static final String EDITED_ASSET = "editedAsset";
 
@@ -32,9 +33,9 @@ public class Constants {
     private static final String PLATINUM = "Platinum";
     private static final String PALLADIUM = "Palladium";
 
-    private static final String CURRENCIES = "Currencies";
-    private static final String CRYPTOS = "Cryptocurrencies";
-    private static final String METALS = "Noble metals";
+    public static final String CURRENCIES = "Currencies";
+    public static final String CRYPTOS = "Cryptocurrencies";
+    public static final String METALS = "Metals";
 
     public static final ArrayList<String> ALL_CURRENCIES = new ArrayList<>(Arrays.asList(EUR, USD, CHF, JPY, GBP, PLN, NOK, SEK, DDK));
     public static final ArrayList<String> ALL_CRYPTOS = new ArrayList<>(Arrays.asList(BTC, ETH, LTC, XRP, NEO));
