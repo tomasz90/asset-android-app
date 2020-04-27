@@ -29,7 +29,7 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activities.activities.DoneActivity" />
         <activity android:name=".activities.activities.SettingsActivity" />
-
+        <activity android:name=".activities.activities.ChooseBaseCurrencyActivity" />
     </application>
 
 </manifest>

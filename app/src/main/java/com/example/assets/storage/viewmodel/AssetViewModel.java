@@ -24,6 +24,8 @@ import java.util.List;
 
 import lombok.SneakyThrows;
 
+import static com.example.assets.util.BaseCurrency.getBaseCurrency;
+
 public class AssetViewModel extends AndroidViewModel {
 
     private AssetRepository assetRepository;
@@ -75,8 +77,8 @@ public class AssetViewModel extends AndroidViewModel {
         List<AssetDetails> assetDetails = new ArrayList<>();
         if (assets != null && rates != null) {
             for (Asset asset : assets) {
-                String rate = rates.getJSONObject(asset.getType()).getString(asset.getSymbol());
-                assetDetails.add(new AssetDetails(asset, Utils.toFloat(rate)));
+                float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * getBaseCurrency().getRate();
+                assetDetails.add(new AssetDetails(asset, rate));
             }
         }
         assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
