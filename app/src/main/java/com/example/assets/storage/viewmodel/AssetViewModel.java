@@ -66,8 +66,8 @@ public class AssetViewModel extends AndroidViewModel {
         assetRepository.deleteAll();
     }
 
-    public void setBaseCurrency() {
-
+    public void setBaseCurrency(BaseCurrency baseCurrency) {
+        assetRepository.setBaseCurrency(baseCurrency);
     }
 
     public LiveData<List<AssetDetails>> getAll() {
@@ -84,18 +84,21 @@ public class AssetViewModel extends AndroidViewModel {
         List<AssetDetails> assetDetails = new ArrayList<>();
         if (assets != null && rates != null) {
             if (baseCurrency == null) {
-                baseCurrency = new BaseCurrency("USD", 1f);
+                baseCurrency = new BaseCurrency("USD");
                 assetRepository.setBaseCurrency(baseCurrency);
             }
-            baseCurrency.setRate(Utils.toFloat(rates.getJSONObject(CURRENCIES).getString(baseCurrency.getSymbol())));
+            baseCurrency.setRate(1 / Utils.toFloat(rates.getJSONObject(CURRENCIES).getString(baseCurrency.getSymbol())));
             for (Asset asset : assets) {
-
                 float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrency.getRate();
-                assetDetails.add(new AssetDetails(asset, rate));
+                assetDetails.add(new AssetDetails(asset, rate, baseCurrency));
             }
         }
         assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
         return assetDetails;
+    }
+
+    public LiveData<BaseCurrency> getBaseCurrency() {
+        return assetRepository.getBaseCurrency();
     }
 
     static class CustomLiveData extends MediatorLiveData<Pair> {

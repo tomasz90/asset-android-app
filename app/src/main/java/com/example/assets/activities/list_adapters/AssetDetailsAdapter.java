@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.assets.R;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
-import com.example.assets.storage.room.BaseCurrency;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,8 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getInfo());
         holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
-        holder.rate.setText(c.getString(R.string.float_two_decimal_currency, currentAsset.getRate(), "usd"));
-        holder.value.setText(c.getString(R.string.float_no_decimal_currency, currentAsset.getValue(), "usd"));
+        holder.rate.setText(c.getString(R.string.float_two_decimal_currency, currentAsset.getRate(), currentAsset.getBaseCurrency().getSymbol()));
+        holder.value.setText(c.getString(R.string.float_no_decimal_currency, currentAsset.getValue(), currentAsset.getBaseCurrency().getSymbol()));
     }
 
     public Asset getAssetAtPosition(int position) {

@@ -91,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
         for (AssetDetails assetDetails : assets) {
             value += assetDetails.getValue();
         }
-        totalValue.setText(getString(R.string.total_value_text_view, value, "usd"));
+        if (!assets.isEmpty()) {
+            totalValue.setText(getString(R.string.total_value_text_view, value, assets.get(0).getBaseCurrency().getSymbol()));
+        }
     }
 
     private void setToolbar() {

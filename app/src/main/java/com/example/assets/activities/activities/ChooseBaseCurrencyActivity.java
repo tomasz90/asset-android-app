@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.constants.AssetConstants;
+import com.example.assets.storage.room.BaseCurrency;
 import com.example.assets.storage.viewmodel.AssetViewModel;
 
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class ChooseBaseCurrencyActivity extends AbstractListActivity {
     @Override
     public void clickItem(View v, TextView tv) {
         String assetSymbol = tv.getText().toString();
-new AssetViewModel(this).
+new AssetViewModel(getApplication()).setBaseCurrency(new BaseCurrency(assetSymbol));
 
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);

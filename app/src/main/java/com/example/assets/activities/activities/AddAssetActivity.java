@@ -37,6 +37,7 @@ public class AddAssetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
+        assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
 
         editedAsset = (Asset) getIntent().getSerializableExtra(AssetConstants.EDITED_ASSET);
         assetType = getIntent().getStringExtra(AssetConstants.ASSET_TYPE);
@@ -54,13 +55,14 @@ public class AddAssetActivity extends AppCompatActivity {
 
         new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
             float rate = Utils.toFloat(dataFromApi.getJSONObject(assetType).getString(assetSymbol));
-            String textToDisplay = getString(R.string.rate, assetSymbol, rate);
-            calculatedValueTextView.setText(textToDisplay);
+            assetViewModel.getBaseCurrency().observe(AddAssetActivity.this, baseCurrency -> {
+                String textToDisplay = getString(R.string.rate, assetSymbol, baseCurrency.getSymbol(), rate*baseCurrency.getRate());
+                calculatedValueTextView.setText(textToDisplay);
+            });
         });
 
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
-            assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
             float setQuantity = Utils.toFloat(editText.getText());
             if (editedAsset == null) {
                 assetViewModel.insertOrUpdate(new Asset(assetSymbol, assetType, setQuantity, ""));
@@ -108,8 +110,10 @@ public class AddAssetActivity extends AppCompatActivity {
                 }
                 new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
                     float rate = Utils.toFloat(dataFromApi.getJSONObject(assetType).getString(assetSymbol));
-                    String textToDisplay = getString(R.string.calculated_value, value * rate);
-                    calculatedValueTextView.setText(textToDisplay);
+                    assetViewModel.getBaseCurrency().observe(AddAssetActivity.this, baseCurrency -> {
+                        String textToDisplay = getString(R.string.calculated_value, value * rate, baseCurrency.getSymbol());
+                        calculatedValueTextView.setText(textToDisplay);
+                    });
                 });
             }
         });

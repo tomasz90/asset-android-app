@@ -15,9 +15,9 @@ public class BaseCurrency {
     private String symbol;
     private float rate;
 
-    public BaseCurrency(String symbol, float rate) {
+    public BaseCurrency(String symbol) {
         this.symbol = symbol;
-        this.rate = rate;
+        this.rate = 0f;
     }
 
     public int getId() {
