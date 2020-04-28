@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!assets.isEmpty()) {
             totalValue.setText(getString(R.string.total_value_text_view, value, assets.get(0).getBaseCurrency().getSymbol()));
+        } else {
+            totalValue.setText(getString(R.string.total_value_text_view, value, "$"));
         }
     }
 

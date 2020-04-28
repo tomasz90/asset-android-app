@@ -111,7 +111,7 @@ public class AddAssetActivity extends AppCompatActivity {
                 new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
                     float rate = Utils.toFloat(dataFromApi.getJSONObject(assetType).getString(assetSymbol));
                     assetViewModel.getBaseCurrency().observe(AddAssetActivity.this, baseCurrency -> {
-                        String textToDisplay = getString(R.string.calculated_value, value * rate, baseCurrency.getSymbol());
+                        String textToDisplay = getString(R.string.calculated_value, value * rate * baseCurrency.getRate(), baseCurrency.getSymbol());
                         calculatedValueTextView.setText(textToDisplay);
                     });
                 });
