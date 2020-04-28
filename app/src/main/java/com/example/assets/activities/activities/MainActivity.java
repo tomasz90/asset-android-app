@@ -20,6 +20,7 @@ import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
+import com.example.assets.storage.room.BaseCurrency;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         for (AssetDetails assetDetails : assets) {
             value += assetDetails.getValue();
         }
-        totalValue.setText(getString(R.string.total_value_text_view, value));
+        totalValue.setText(getString(R.string.total_value_text_view, value, "usd"));
     }
 
     private void setToolbar() {

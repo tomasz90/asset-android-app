@@ -29,16 +29,17 @@
     <string name="amount">amount</string>
     <string name="save_asset">save asset</string>
 
-    <string name="total_value_text_view">%1$.0f $</string>
+    <string name="total_value_text_view">%1$.0f %2$s</string>
     <string name="value_value">%1$.0f $</string>
     <string name="calculated_value">value = %1$.02f USD</string>
     <string name="rate">%1$s/USD = %2$.02f</string>
     <string name="float_two_decimal">%1$.02f</string>
-    <string name="float_two_decimal_dollar">%1$.02f $</string>
-    <string name="float_no_decimal_dollar">%1$.0f $</string>
+    <string name="float_two_decimal_currency">%1$.02f %2$s</string>
+    <string name="float_no_decimal_currency">%1$.0f %2$s</string>
     <string name="float_no_decimal">%1$.0f</string>
     <string name="remove_all">Remove all assets</string>
     <string name="change_base_currency">Choose base currency</string>
+    <string name="choose_base_currency">Choose base currency</string>
 
 
 </resources>
