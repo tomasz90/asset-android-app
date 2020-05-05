@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
 import com.example.assets.storage.repository.AssetRepository;
@@ -85,8 +86,19 @@ public class AssetViewModel extends AndroidViewModel {
 
     static class CustomLiveData extends MediatorLiveData<Pair<List<Asset>, JSONObject>> {
         CustomLiveData(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData) {
-            addSource(assets, first -> setValue(Pair.create(first, apiData.getValue())));
-            addSource(apiData, second -> setValue(Pair.create(assets.getValue(), second)));
+            addSource(assets, new Observer<List<Asset>>() {
+                @Override
+                public void onChanged(List<Asset> assets) {
+                    setValue(Pair.create(assets, apiData.getValue()));
+                }
+            });
+
+            addSource(apiData, new Observer<JSONObject>() {
+                @Override
+                public void onChanged(JSONObject apiData) {
+                    setValue(Pair.create(assets.getValue(), apiData));
+                }
+            });
         }
     }
 }
