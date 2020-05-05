@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
 import com.example.assets.storage.repository.AssetRepository;
@@ -43,7 +44,7 @@ public class AssetViewModel extends AndroidViewModel {
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         refreshDataFromCache(false);
         CustomLiveData trigger = new CustomLiveData(allAssets, rates, baseCurrency);
-        assetDetails = Transformations.map(trigger, pair -> getAssetDetails(pair.first, pair.second, pair.third));
+        assetDetails = Transformations.map(trigger, pair -> getAssetDetails(Pair.first, Pair.second, Pair.third));
     }
 
     public void insert(Asset asset) {
@@ -105,31 +106,42 @@ public class AssetViewModel extends AndroidViewModel {
 
     static class CustomLiveData extends MediatorLiveData<Pair> {
         CustomLiveData(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
-            addSource(assets, (f) -> setValue(Pair.setFirst(assets.getValue())));
-            addSource(apiData, (s) -> setValue(Pair.setSecond(apiData.getValue())));
-            addSource(base, (t) -> setValue(Pair.setThird(base.getValue())));
+            addSource(assets, new Observer<List<Asset>>() {
+                @Override
+                public void onChanged(List<Asset> assets) {
+                    setValue(Pair.create(assets, apiData.getValue(), base.getValue()));
+                }
+            });
+
+            addSource(apiData, new Observer<JSONObject>() {
+                @Override
+                public void onChanged(JSONObject apiData) {
+                    setValue(Pair.create(assets.getValue(), apiData, base.getValue()));
+                }
+            });
+
+            addSource(base, new Observer<BaseCurrency>() {
+                @Override
+                public void onChanged(BaseCurrency base) {
+                    setValue(Pair.create(assets.getValue(), apiData.getValue(), base));
+                }
+            });
         }
     }
 
     static class Pair {
-        static Pair pair;
         static List<Asset> first;
         static JSONObject second;
         static BaseCurrency third;
 
-        static Pair setFirst(List<Asset> first) {
+        private Pair(List<Asset> first, JSONObject second, BaseCurrency third) {
             Pair.first = first;
-            return pair;
-        }
-
-        static Pair setSecond(JSONObject second) {
             Pair.second = second;
-            return pair;
+            Pair.third = third;
         }
 
-        static Pair setThird(BaseCurrency third) {
-            Pair.third = third;
-            return pair;
+        static Pair create(List<Asset> first, JSONObject second, BaseCurrency third) {
+            return new Pair(first, second, third);
         }
     }
 }
