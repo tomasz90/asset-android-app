@@ -10,8 +10,12 @@ import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.BaseCurrency;
 import com.example.assets.storage.viewmodel.AssetViewModel;
+import com.example.assets.util.ApiDataProvider;
+import com.example.assets.util.Utils;
 
 import java.util.Objects;
+
+import static com.example.assets.constants.AssetConstants.CURRENCIES;
 
 public class ChooseBaseCurrencyActivity extends AbstractListActivity {
 
@@ -25,8 +29,11 @@ public class ChooseBaseCurrencyActivity extends AbstractListActivity {
 
     @Override
     public void clickItem(View v, TextView tv) {
-        String assetSymbol = tv.getText().toString();
-        new AssetViewModel(getApplication()).setBaseCurrency(new BaseCurrency(assetSymbol, 1f));
+        String baseCurrencySymbol = tv.getText().toString();
+        new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
+            float baseCurrencyRate =  1 / Utils.toFloat(dataFromApi.getJSONObject(CURRENCIES).getString(baseCurrencySymbol));
+            new AssetViewModel(getApplication()).setBaseCurrency(new BaseCurrency(baseCurrencySymbol, baseCurrencyRate));
+        });
 
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);

@@ -83,8 +83,7 @@ public class AssetViewModel extends AndroidViewModel {
         List<AssetDetails> assetDetails = new ArrayList<>();
         if (assets != null && rates != null && baseCurrency != null) {
             for (Asset asset : assets) {
-                float baseCurrencyRate =  1 / Utils.toFloat(rates.getJSONObject(CURRENCIES).getString(baseCurrency.getSymbol()));
-                float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrencyRate;
+                float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrency.getRate();
                 assetDetails.add(new AssetDetails(asset, rate, baseCurrency));
             }
         }
