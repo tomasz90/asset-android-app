@@ -6,10 +6,6 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "base_currency_table")
 public class BaseCurrency {
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @PrimaryKey
     private int id = 1;
     private String symbol;
@@ -30,6 +26,10 @@ public class BaseCurrency {
 
     public float getRate() {
         return rate;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setRate(float rate) {

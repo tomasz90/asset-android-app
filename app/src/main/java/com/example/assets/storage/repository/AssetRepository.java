@@ -16,8 +16,8 @@ import java.util.List;
 public class AssetRepository {
 
     private AssetDao assetDao;
-    private LiveData<List<Asset>> allAssets;
     private BaseCurrencyDao baseCurrencyDao;
+    private LiveData<List<Asset>> allAssets;
     private LiveData<BaseCurrency> baseCurrency;
 
     private static final String INSERT = "insert";
@@ -29,13 +29,13 @@ public class AssetRepository {
     public AssetRepository(Application application) {
         AssetDataBase dataBase = AssetDataBase.getInstance(application);
         assetDao = dataBase.assetDao();
-        allAssets = assetDao.getAll();
         baseCurrencyDao = dataBase.baseCurrencyDao();
+        allAssets = assetDao.getAll();
         baseCurrency = baseCurrencyDao.get();
     }
 
-    public void setBaseCurrency(BaseCurrency baseCurrency) {
-        getAsyncBaseCurrencyTask(baseCurrencyDao).execute(baseCurrency);
+    public void updateBaseCurrency(BaseCurrency baseCurrency) {
+        updateBaseCurrencyQuery(baseCurrencyDao).execute(baseCurrency);
     }
 
     public LiveData<BaseCurrency> getBaseCurrency() {
@@ -47,26 +47,26 @@ public class AssetRepository {
     }
 
     public void insert(Asset asset) {
-        getAsyncAssetTask(INSERT, assetDao).execute(asset);
+        asyncAssetQuery(INSERT, assetDao).execute(asset);
     }
 
     public void upsert(Asset asset) {
-        getAsyncAssetTask(UPSERT, assetDao).execute(asset);
+        asyncAssetQuery(UPSERT, assetDao).execute(asset);
     }
 
     public void update(Asset asset) {
-        getAsyncAssetTask(UPDATE, assetDao).execute(asset);
+        asyncAssetQuery(UPDATE, assetDao).execute(asset);
     }
 
     public void delete(Asset asset) {
-        getAsyncAssetTask(DELETE, assetDao).execute(asset);
+        asyncAssetQuery(DELETE, assetDao).execute(asset);
     }
 
     public void deleteAll() {
-        getAsyncAssetTask(DELETE_ALL, assetDao).execute();
+        asyncAssetQuery(DELETE_ALL, assetDao).execute();
     }
 
-    private static AsyncTask<Asset, Void, Void> getAsyncAssetTask(String query, AssetDao assetDao) {
+    private static AsyncTask<Asset, Void, Void> asyncAssetQuery(String query, AssetDao assetDao) {
         return new AsyncTask<Asset, Void, Void>() {
 
             @Override
@@ -93,7 +93,7 @@ public class AssetRepository {
         };
     }
 
-    private static AsyncTask<BaseCurrency, Void, Void> getAsyncBaseCurrencyTask(BaseCurrencyDao baseCurrencyDao) {
+    private static AsyncTask<BaseCurrency, Void, Void> updateBaseCurrencyQuery(BaseCurrencyDao baseCurrencyDao) {
         return new AsyncTask<BaseCurrency, Void, Void>() {
 
             @Override

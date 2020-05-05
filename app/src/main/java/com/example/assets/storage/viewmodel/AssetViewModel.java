@@ -1,8 +1,6 @@
 package com.example.assets.storage.viewmodel;
 
 import android.app.Application;
-import android.renderscript.Allocation;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -44,7 +42,7 @@ public class AssetViewModel extends AndroidViewModel {
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         refreshDataFromCache(false);
         CustomLiveData trigger = new CustomLiveData(allAssets, rates, baseCurrency);
-        assetDetails = Transformations.map(trigger, pair -> getAssetDetails(Pair.first, Pair.second, Pair.third));
+        assetDetails = Transformations.map(trigger, triplet -> getAssetDetails(triplet.first, triplet.second, triplet.third));
     }
 
     public void insert(Asset asset) {
@@ -68,7 +66,7 @@ public class AssetViewModel extends AndroidViewModel {
     }
 
     public void setBaseCurrency(BaseCurrency baseCurrency) {
-        assetRepository.setBaseCurrency(baseCurrency);
+        assetRepository.updateBaseCurrency(baseCurrency);
     }
 
     public LiveData<List<AssetDetails>> getAll() {
@@ -83,16 +81,10 @@ public class AssetViewModel extends AndroidViewModel {
     @SneakyThrows
     private List<AssetDetails> getAssetDetails(List<Asset> assets, JSONObject rates, BaseCurrency baseCurrency) {
         List<AssetDetails> assetDetails = new ArrayList<>();
-        if (assets != null && rates != null) {
-            if (baseCurrency == null) {
-                baseCurrency = new BaseCurrency("USD", 1f);
-                assetRepository.setBaseCurrency(baseCurrency);
-            }
-            float baseCurrencyRate = 1 / Utils.toFloat(rates.getJSONObject(CURRENCIES).getString(baseCurrency.getSymbol()));
-            baseCurrency.setRate(baseCurrencyRate);
-            assetRepository.setBaseCurrency(baseCurrency);
+        if (assets != null && rates != null && baseCurrency != null) {
             for (Asset asset : assets) {
-                float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrency.getRate();
+                float baseCurrencyRate =  1 / Utils.toFloat(rates.getJSONObject(CURRENCIES).getString(baseCurrency.getSymbol()));
+                float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrencyRate;
                 assetDetails.add(new AssetDetails(asset, rate, baseCurrency));
             }
         }
@@ -104,44 +96,29 @@ public class AssetViewModel extends AndroidViewModel {
         return assetRepository.getBaseCurrency();
     }
 
-    static class CustomLiveData extends MediatorLiveData<Pair> {
+    class CustomLiveData extends MediatorLiveData<Triplet> {
         CustomLiveData(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
-            addSource(assets, new Observer<List<Asset>>() {
-                @Override
-                public void onChanged(List<Asset> assets) {
-                    setValue(Pair.create(assets, apiData.getValue(), base.getValue()));
-                }
-            });
+            addSource(assets, assets1 -> setValue(create(assets1, apiData.getValue(), base.getValue())));
 
-            addSource(apiData, new Observer<JSONObject>() {
-                @Override
-                public void onChanged(JSONObject apiData) {
-                    setValue(Pair.create(assets.getValue(), apiData, base.getValue()));
-                }
-            });
+            addSource(apiData, apiData1 -> setValue(create(assets.getValue(), apiData1, base.getValue())));
 
-            addSource(base, new Observer<BaseCurrency>() {
-                @Override
-                public void onChanged(BaseCurrency base) {
-                    setValue(Pair.create(assets.getValue(), apiData.getValue(), base));
-                }
-            });
+            addSource(base, base1 -> setValue(create(assets.getValue(), apiData.getValue(), base1)));
         }
     }
 
-    static class Pair {
-        static List<Asset> first;
-        static JSONObject second;
-        static BaseCurrency third;
+    static class Triplet {
+        List<Asset> first;
+        JSONObject second;
+        BaseCurrency third;
 
-        private Pair(List<Asset> first, JSONObject second, BaseCurrency third) {
-            Pair.first = first;
-            Pair.second = second;
-            Pair.third = third;
+        private Triplet(List<Asset> first, JSONObject second, BaseCurrency third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
         }
+    }
 
-        static Pair create(List<Asset> first, JSONObject second, BaseCurrency third) {
-            return new Pair(first, second, third);
-        }
+    Triplet create(List<Asset> first, JSONObject second, BaseCurrency third) {
+        return new Triplet(first, second, third);
     }
 }
