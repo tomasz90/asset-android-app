@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
 import com.example.assets.storage.repository.AssetRepository;
@@ -24,8 +23,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import lombok.SneakyThrows;
-
-import static com.example.assets.constants.AssetConstants.CURRENCIES;
 
 public class AssetViewModel extends AndroidViewModel {
 
@@ -97,11 +94,9 @@ public class AssetViewModel extends AndroidViewModel {
 
     class CustomLiveData extends MediatorLiveData<Triplet> {
         CustomLiveData(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
-            addSource(assets, assets1 -> setValue(create(assets1, apiData.getValue(), base.getValue())));
-
-            addSource(apiData, apiData1 -> setValue(create(assets.getValue(), apiData1, base.getValue())));
-
-            addSource(base, base1 -> setValue(create(assets.getValue(), apiData.getValue(), base1)));
+            addSource(assets, assets1 -> setValue(Triplet.create(assets1, apiData.getValue(), base.getValue())));
+            addSource(apiData, apiData1 -> setValue(Triplet.create(assets.getValue(), apiData1, base.getValue())));
+            addSource(base, base1 -> setValue(Triplet.create(assets.getValue(), apiData.getValue(), base1)));
         }
     }
 
@@ -115,9 +110,9 @@ public class AssetViewModel extends AndroidViewModel {
             this.second = second;
             this.third = third;
         }
-    }
 
-    Triplet create(List<Asset> first, JSONObject second, BaseCurrency third) {
-        return new Triplet(first, second, third);
+        static Triplet create(List<Asset> first, JSONObject second, BaseCurrency third) {
+            return new Triplet(first, second, third);
+        }
     }
 }
