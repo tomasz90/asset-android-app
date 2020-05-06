@@ -1,5 +1,6 @@
 package com.example.assets.activities.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,7 +21,7 @@ import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
-import com.example.assets.storage.room.BaseCurrency;
+import com.example.assets.util.ToastManager;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -47,9 +48,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
+        ProgressDialog loadingInfo = ToastManager.displayLoading(this);
         assetViewModel.getAll().observe(this, assets -> {
-            adapter.setAssets(assets);
-            setTotalValue(assets);
+            if (assets != null) {
+                adapter.setAssets(assets);
+                setTotalValue(assets);
+                loadingInfo.dismiss();
+            }
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {

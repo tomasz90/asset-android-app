@@ -1,6 +1,7 @@
 package com.example.assets.util;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.view.Gravity;
 import android.view.View;
@@ -11,7 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assets.R;
 
-class ToastManager {
+public class ToastManager {
+
+    public static ProgressDialog displayLoading(AppCompatActivity activity) {
+        ProgressDialog mDialog = new ProgressDialog(activity);
+        mDialog.setMessage("Loading...");
+        mDialog.setCancelable(false);
+        mDialog.show();
+        return mDialog;
+    }
 
     static void displayToast(Application application) {
         Toast toast = Toast.makeText(application, "Network not available :(", Toast.LENGTH_SHORT);

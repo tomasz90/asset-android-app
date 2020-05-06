@@ -83,9 +83,10 @@ public class AssetViewModel extends AndroidViewModel {
                 float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrency.getRate();
                 assetDetails.add(new AssetDetails(asset, rate, baseCurrency));
             }
+            assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
+            return assetDetails;
         }
-        assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
-        return assetDetails;
+        return null;
     }
 
     public LiveData<BaseCurrency> getBaseCurrency() {
