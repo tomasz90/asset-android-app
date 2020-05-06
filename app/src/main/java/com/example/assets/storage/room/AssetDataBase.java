@@ -9,7 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Asset.class, BaseCurrency.class}, version = 4)
+@Database(entities = {Asset.class, BaseCurrency.class}, version = 5)
 public abstract class AssetDataBase extends RoomDatabase {
     private static AssetDataBase instance;
 
@@ -31,7 +31,7 @@ public abstract class AssetDataBase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            db.execSQL("INSERT INTO base_currency_table (symbol, rate) VALUES ('USD', 1.0)");
+            db.execSQL("INSERT INTO base_currency_table (symbol) VALUES ('USD')");
         }
     };
 }

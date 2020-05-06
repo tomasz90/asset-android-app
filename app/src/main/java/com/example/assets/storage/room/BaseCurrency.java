@@ -9,11 +9,9 @@ public class BaseCurrency {
     @PrimaryKey
     private int id = 1;
     private String symbol;
-    private float rate;
 
-    public BaseCurrency(String symbol, float rate) {
+    public BaseCurrency(String symbol) {
         this.symbol = symbol;
-        this.rate = rate;
     }
 
     public int getId() {
@@ -24,15 +22,7 @@ public class BaseCurrency {
         return symbol;
     }
 
-    public float getRate() {
-        return rate;
-    }
-
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setRate(float rate) {
-        this.rate = rate;
     }
 }

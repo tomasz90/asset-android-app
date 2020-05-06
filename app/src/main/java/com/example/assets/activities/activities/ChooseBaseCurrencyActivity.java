@@ -31,8 +31,7 @@ public class ChooseBaseCurrencyActivity extends AbstractListActivity {
     public void clickItem(View v, TextView tv) {
         String baseCurrencySymbol = tv.getText().toString();
         new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
-            float baseCurrencyRate =  1 / Utils.toFloat(dataFromApi.getJSONObject(CURRENCIES).getString(baseCurrencySymbol));
-            new AssetViewModel(getApplication()).setBaseCurrency(new BaseCurrency(baseCurrencySymbol, baseCurrencyRate));
+            new AssetViewModel(getApplication()).setBaseCurrency(new BaseCurrency(baseCurrencySymbol));
         });
 
         Intent i = new Intent(this, MainActivity.class);
