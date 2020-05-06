@@ -27,7 +27,6 @@
         android:layout_marginTop="44dp"
         android:background="?android:selectableItemBackground"
         android:clickable="true"
-        android:text="0 $"
         android:textAlignment="center"
         android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
