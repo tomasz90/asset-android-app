@@ -1,5 +1,6 @@
 package com.example.assets.util;
 
+import android.text.Editable;
 import android.util.Pair;
 
 import com.example.assets.storage.room.entity.BaseCurrency;
@@ -28,6 +29,15 @@ public class Utils {
             return rate * baseCurrencyRate;
         }
         return 0f;
+    }
+
+    public static void doNotAllowToEnterInvalidQuantity(Editable editable, char decimalSeparator) {
+        String s = editable.toString();
+        boolean isMoreThenOneSeparator = s.chars().filter(ch -> ch == decimalSeparator).count() > 1;
+        boolean isSeparatorFirst = s.startsWith(String.valueOf(decimalSeparator));
+        if (isMoreThenOneSeparator || isSeparatorFirst) {
+            editable.delete(s.length() - 1, s.length());
+        }
     }
 
     static boolean isAllNotNull(Object... objects) {

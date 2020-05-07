@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.constants.AssetConstants;
+import com.example.assets.storage.room.entity.Asset;
 
 import java.util.ArrayList;
 
@@ -26,10 +27,10 @@ public class AssetListActivity extends AbstractListActivity {
     @SneakyThrows
     @Override
     public void clickItem(View v, TextView tv) {
-        String symbolAsset = tv.getText().toString();
+        String assetSymbol = tv.getText().toString();
+        String assetType = getIntent().getStringExtra(AssetConstants.ASSET_TYPE);
         Intent intent = new Intent(this, AddAssetActivity.class);
-        intent.putExtra(AssetConstants.ASSET_SYMBOL, symbolAsset);
-        intent.putExtra(AssetConstants.ASSET_TYPE, getIntent().getStringExtra(AssetConstants.ASSET_TYPE));
+        intent.putExtra(AssetConstants.EDITED_ASSET, new Asset(assetSymbol, assetType, -1, null));
         startActivity(intent);
     }
 }
