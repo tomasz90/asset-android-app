@@ -4,21 +4,29 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.dao.AssetDao;
 import com.example.assets.storage.room.AssetDataBase;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.room.dao.BaseCurrencyDao;
+import com.example.assets.util.ApiDataProvider;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
+import lombok.SneakyThrows;
+
 public class AssetRepository {
 
+    private Application application;
     private AssetDao assetDao;
     private BaseCurrencyDao baseCurrencyDao;
     private LiveData<List<Asset>> allAssets;
     private LiveData<BaseCurrency> baseCurrency;
+    private MutableLiveData<JSONObject> rates = new MutableLiveData();
 
     private static final String INSERT = "insert";
     private static final String UPDATE = "update";
@@ -27,27 +35,26 @@ public class AssetRepository {
     private static final String DELETE_ALL = "delete_all";
 
     public AssetRepository(Application application) {
+        this.application = application;
+        updateRates(false);
         AssetDataBase dataBase = AssetDataBase.getInstance(application);
         assetDao = dataBase.assetDao();
         baseCurrencyDao = dataBase.baseCurrencyDao();
         allAssets = assetDao.getAll();
         baseCurrency = baseCurrencyDao.get();
-    }
 
-    public void updateBaseCurrency(BaseCurrency baseCurrency) {
-        updateBaseCurrencyQuery(baseCurrencyDao).execute(baseCurrency);
     }
 
     public LiveData<BaseCurrency> getBaseCurrency() {
         return baseCurrency;
     }
 
-    public LiveData<List<Asset>> getAllAssets() {
-        return allAssets;
+    public void updateBaseCurrency(BaseCurrency baseCurrency) {
+        updateBaseCurrencyQuery(baseCurrencyDao).execute(baseCurrency);
     }
 
-    public void insert(Asset asset) {
-        asyncAssetQuery(INSERT, assetDao).execute(asset);
+    public LiveData<List<Asset>> getAllAssets() {
+        return allAssets;
     }
 
     public void upsertAsset(Asset asset) {
@@ -64,6 +71,10 @@ public class AssetRepository {
 
     public void deleteAllAsset() {
         asyncAssetQuery(DELETE_ALL, assetDao).execute();
+    }
+
+    public LiveData<JSONObject> getRates() {
+        return rates;
     }
 
     private static AsyncTask<Asset, Void, Void> asyncAssetQuery(String query, AssetDao assetDao) {
@@ -102,5 +113,10 @@ public class AssetRepository {
                 return null;
             }
         };
+    }
+
+    @SneakyThrows
+    public void updateRates(boolean withCleanCache) {
+        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
     }
 }

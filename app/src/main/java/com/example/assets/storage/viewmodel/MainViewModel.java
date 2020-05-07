@@ -64,4 +64,8 @@ public class MainViewModel extends AbstractViewModel {
         }
         return null;
     }
+
+    public void updateRates(boolean withCleanCache) {
+        assetRepository.updateRates(withCleanCache);
+    }
 }
