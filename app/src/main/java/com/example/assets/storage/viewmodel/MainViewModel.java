@@ -5,13 +5,12 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
-import com.example.assets.util.Triplet;
+import com.example.assets.util.TripleLiveData;
 import com.example.assets.util.Utils;
 
 import org.json.JSONObject;
@@ -23,7 +22,6 @@ import java.util.List;
 import lombok.SneakyThrows;
 
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
-import static com.example.assets.util.Utils.isAllNotNull;
 
 public class MainViewModel extends AbstractViewModel {
 
@@ -35,8 +33,8 @@ public class MainViewModel extends AbstractViewModel {
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
 
-        AssetDetailsTrigger trigger = new AssetDetailsTrigger(allAssets, rates, baseCurrency);
-        assetDetails = Transformations.map(trigger, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
+        TripleLiveData<List<Asset>, JSONObject, BaseCurrency> tripleLiveData = new TripleLiveData<>(allAssets, rates, baseCurrency);
+        assetDetails = Transformations.map(tripleLiveData, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
     }
 
     public void deleteAsset(Asset asset) {
@@ -64,32 +62,5 @@ public class MainViewModel extends AbstractViewModel {
             return new Pair<>(assetDetails, baseCurrency);
         }
         return null;
-    }
-
-    static class AssetDetailsTrigger extends MediatorLiveData<Triplet<List<Asset>, JSONObject, BaseCurrency>> {
-        AssetDetailsTrigger(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
-
-            addSource(assets, _assets -> {
-                JSONObject _apiData = apiData.getValue();
-                BaseCurrency _base = base.getValue();
-                if (isAllNotNull(_assets, _apiData, _base)) {
-                    setValue(new Triplet<>(_assets, _apiData, _base));
-                }
-            });
-            addSource(apiData, _apiData -> {
-                List<Asset> _assets = assets.getValue();
-                BaseCurrency _base = base.getValue();
-                if (isAllNotNull(_assets, _apiData, _base)) {
-                    setValue(new Triplet<>(_assets, _apiData, _base));
-                }
-            });
-            addSource(base, _base -> {
-                List<Asset> _assets = assets.getValue();
-                JSONObject _apiData = apiData.getValue();
-                if (isAllNotNull(_assets, _apiData, _base)) {
-                    setValue(new Triplet<>(_assets, _apiData, _base));
-                }
-            });
-        }
     }
 }
