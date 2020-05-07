@@ -50,19 +50,19 @@ public class AssetRepository {
         asyncAssetQuery(INSERT, assetDao).execute(asset);
     }
 
-    public void upsert(Asset asset) {
+    public void upsertAsset(Asset asset) {
         asyncAssetQuery(UPSERT, assetDao).execute(asset);
     }
 
-    public void update(Asset asset) {
+    public void updateAsset(Asset asset) {
         asyncAssetQuery(UPDATE, assetDao).execute(asset);
     }
 
-    public void delete(Asset asset) {
+    public void deleteAsset(Asset asset) {
         asyncAssetQuery(DELETE, assetDao).execute(asset);
     }
 
-    public void deleteAll() {
+    public void deleteAllAsset() {
         asyncAssetQuery(DELETE_ALL, assetDao).execute();
     }
 

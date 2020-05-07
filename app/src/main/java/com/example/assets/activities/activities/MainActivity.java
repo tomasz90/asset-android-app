@@ -20,7 +20,7 @@ import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
 import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
-import com.example.assets.storage.viewmodel.AssetViewModel;
+import com.example.assets.storage.viewmodel.MainViewModel;
 import com.example.assets.util.Dialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
@@ -32,7 +32,7 @@ import lombok.SneakyThrows;
 public class MainActivity extends AppCompatActivity {
 
     private TextView totalValue;
-    private AssetViewModel assetViewModel;
+    private MainViewModel assetViewModel;
 
     @SneakyThrows
     @Override
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         AssetDetailsAdapter adapter = new AssetDetailsAdapter();
         recyclerView.setAdapter(adapter);
 
-        assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
+        assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         ProgressDialog loadingInfo = Dialog.displayLoading(this);
         assetViewModel.getAssetDetails().observe(this, assets -> {
             if (assets != null) {
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Asset swipedAsset = adapter.getAssetAtPosition(viewHolder.getAdapterPosition());
                 if (direction == ItemTouchHelper.RIGHT) {
-                    assetViewModel.delete(swipedAsset);
+                    assetViewModel.deleteAsset(swipedAsset);
                 } else {
                     Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
                     intent.putExtra(AssetConstants.ASSET_SYMBOL, swipedAsset.getSymbol());
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_remove:
-                new AssetViewModel(this.getApplication()).deleteAll();
+                new MainViewModel(this.getApplication()).deleteAllAsset();
                 break;
             case R.id.action_change_base_currency:
                 Intent intent = new Intent(this, ChooseBaseCurrencyActivity.class);

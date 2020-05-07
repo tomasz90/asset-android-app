@@ -1,20 +1,15 @@
 package com.example.assets.storage.viewmodel;
 
 import android.app.Application;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.example.assets.storage.repository.AssetRepository;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.room.BaseCurrency;
-import com.example.assets.util.ApiDataProvider;
 import com.example.assets.util.Utils;
 
 import org.json.JSONObject;
@@ -27,57 +22,26 @@ import lombok.SneakyThrows;
 
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
 
-public class AssetViewModel extends AndroidViewModel {
+public class MainViewModel extends AbstractViewModel {
 
-    private AssetRepository assetRepository;
-    private MutableLiveData<JSONObject> rates = new MutableLiveData();
     private LiveData<List<AssetDetails>> assetDetails;
-    private RatesAndBaseCurrencyLiveData ratesAndBaseCurrency;
 
-    private Application application;
-
-    public AssetViewModel(@NonNull Application application) {
+    public MainViewModel(@NonNull Application application) {
         super(application);
-        this.application = application;
-        assetRepository = new AssetRepository(application);
-
-        refreshDataFromCache(false);
 
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
-        ratesAndBaseCurrency = new RatesAndBaseCurrencyLiveData(rates, baseCurrency);
-
         LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
+
         AssetDetailsTrigger trigger = new AssetDetailsTrigger(allAssets, rates, baseCurrency);
         assetDetails = Transformations.map(trigger, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
     }
 
-    @SneakyThrows
-    public void refreshDataFromCache(boolean withCleanCache) {
-        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
+    public void deleteAsset(Asset asset) {
+        assetRepository.deleteAsset(asset);
     }
 
-    public void insertOrUpdate(Asset asset) {
-        assetRepository.upsert(asset);
-    }
-
-    public void update(Asset asset) {
-        assetRepository.update(asset);
-    }
-
-    public void delete(Asset asset) {
-        assetRepository.delete(asset);
-    }
-
-    public void deleteAll() {
-        assetRepository.deleteAll();
-    }
-
-    public void updateBaseCurrency(BaseCurrency baseCurrency) {
-        assetRepository.updateBaseCurrency(baseCurrency);
-    }
-
-    public LiveData<Pair<JSONObject, BaseCurrency>> getRatesAndBaseCurrency() {
-        return ratesAndBaseCurrency;
+    public void deleteAllAsset() {
+        assetRepository.deleteAllAsset();
     }
 
     public LiveData<List<AssetDetails>> getAssetDetails() {
@@ -101,16 +65,28 @@ public class AssetViewModel extends AndroidViewModel {
 
     static class AssetDetailsTrigger extends MediatorLiveData<Triplet> {
         AssetDetailsTrigger(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
-            addSource(assets, assets1 -> setValue(Triplet.create(assets1, apiData.getValue(), base.getValue())));
-            addSource(apiData, apiData1 -> setValue(Triplet.create(assets.getValue(), apiData1, base.getValue())));
-            addSource(base, base1 -> setValue(Triplet.create(assets.getValue(), apiData.getValue(), base1)));
-        }
-    }
 
-    static class RatesAndBaseCurrencyLiveData extends MediatorLiveData<Pair<JSONObject, BaseCurrency>> {
-        RatesAndBaseCurrencyLiveData(LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
-            addSource(apiData, apiData1 -> setValue(Pair.create(apiData1, base.getValue())));
-            addSource(base, base1 -> setValue(Pair.create(apiData.getValue(), base1)));
+            addSource(assets, _assets -> {
+                JSONObject _apiData = apiData.getValue();
+                BaseCurrency _base = base.getValue();
+                if (isAllNotNull(_assets, _apiData, _base)) {
+                    setValue(Triplet.create(_assets, _apiData, _base));
+                }
+            });
+            addSource(apiData, _apiData -> {
+                List<Asset> _assets = assets.getValue();
+                BaseCurrency _base = base.getValue();
+                if (isAllNotNull(_assets, _apiData, _base)) {
+                    setValue(Triplet.create(_assets, _apiData, _base));
+                }
+            });
+            addSource(base, _base -> {
+                List<Asset> _assets = assets.getValue();
+                JSONObject _apiData = apiData.getValue();
+                if (isAllNotNull(_assets, _apiData, _base)) {
+                    setValue(Triplet.create(_assets, _apiData, _base));
+                }
+            });
         }
     }
 
@@ -128,5 +104,14 @@ public class AssetViewModel extends AndroidViewModel {
         static Triplet create(List<Asset> first, JSONObject second, BaseCurrency third) {
             return new Triplet(first, second, third);
         }
+    }
+
+    static boolean isAllNotNull(Object... objects) {
+        for (Object o : objects) {
+            if (o == null) {
+                return false;
+            }
+        }
+        return true;
     }
 }
