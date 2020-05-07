@@ -65,9 +65,28 @@ public class MainViewModel extends AbstractViewModel {
 
     static class AssetDetailsTrigger extends MediatorLiveData<Triplet> {
         AssetDetailsTrigger(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
-            addSource(assets, assets1 -> setValue(Triplet.create(assets1, apiData.getValue(), base.getValue())));
-            addSource(apiData, apiData1 -> setValue(Triplet.create(assets.getValue(), apiData1, base.getValue())));
-            addSource(base, base1 -> setValue(Triplet.create(assets.getValue(), apiData.getValue(), base1)));
+
+            addSource(assets, _assets -> {
+                JSONObject _apiData = apiData.getValue();
+                BaseCurrency _base = base.getValue();
+                if (isAllNotNull(_assets, _apiData, _base)) {
+                    setValue(Triplet.create(_assets, _apiData, _base));
+                }
+            });
+            addSource(apiData, _apiData -> {
+                List<Asset> _assets = assets.getValue();
+                BaseCurrency _base = base.getValue();
+                if (isAllNotNull(_assets, _apiData, _base)) {
+                    setValue(Triplet.create(_assets, _apiData, _base));
+                }
+            });
+            addSource(base, _base -> {
+                List<Asset> _assets = assets.getValue();
+                JSONObject _apiData = apiData.getValue();
+                if (isAllNotNull(_assets, _apiData, _base)) {
+                    setValue(Triplet.create(_assets, _apiData, _base));
+                }
+            });
         }
     }
 
@@ -85,5 +104,14 @@ public class MainViewModel extends AbstractViewModel {
         static Triplet create(List<Asset> first, JSONObject second, BaseCurrency third) {
             return new Triplet(first, second, third);
         }
+    }
+
+    static boolean isAllNotNull(Object... objects) {
+        for (Object o : objects) {
+            if (o == null) {
+                return false;
+            }
+        }
+        return true;
     }
 }
