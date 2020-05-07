@@ -11,6 +11,7 @@ import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.util.MultiLiveData;
+import com.example.assets.util.Triplet;
 import com.example.assets.util.Utils;
 
 import org.json.JSONObject;
@@ -33,7 +34,7 @@ public class MainViewModel extends AbstractViewModel {
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
 
-        MultiLiveData.Triple<List<Asset>, JSONObject, BaseCurrency> tripleLiveData = new MultiLiveData.Triple<>(allAssets, rates, baseCurrency);
+        LiveData<Triplet<List<Asset>, JSONObject, BaseCurrency>> tripleLiveData = new MultiLiveData.Triple<>(allAssets, rates, baseCurrency);
         assetDetails = Transformations.map(tripleLiveData, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
     }
 
