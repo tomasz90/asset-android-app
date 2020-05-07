@@ -19,7 +19,8 @@ public abstract class AbstractListActivity extends AppCompatActivity {
        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
        RecyclerView recyclerView = this.findViewById(R.id.generic_list);
        recyclerView.setLayoutManager(layoutManager);
-       SimpleItemAdapter simpleItemAdapter = new SimpleItemAdapter(items);
+       SimpleItemAdapter simpleItemAdapter = new SimpleItemAdapter();
+       simpleItemAdapter.setItems(items);
        recyclerView.setAdapter(simpleItemAdapter);
        simpleItemAdapter.setOnItemClickListener(this::clickItem);
    }

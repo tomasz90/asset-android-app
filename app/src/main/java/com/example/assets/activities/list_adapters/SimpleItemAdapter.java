@@ -17,12 +17,27 @@ public class SimpleItemAdapter extends RecyclerView.Adapter<SimpleItemAdapter.Si
     private List<String> items;
     private OnItemListener listener;
 
-    public interface OnItemListener {
-        void onItemClick(View v, TextView tv);
+    public void setItems(List<String> items) {
+        this.items = items;
     }
 
-    public void setOnItemClickListener(OnItemListener listener) {
-        this.listener = listener;
+    @NonNull
+    @Override
+    public SimpleItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_generic, parent, false);
+        return new SimpleItemHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull SimpleItemHolder holder, int position) {
+        // fill textViews with data
+        String currentItem = items.get(position);
+        holder.tv.setText(currentItem);
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
     }
 
     class SimpleItemHolder extends RecyclerView.ViewHolder {
@@ -44,27 +59,12 @@ public class SimpleItemAdapter extends RecyclerView.Adapter<SimpleItemAdapter.Si
         }
     }
 
-    public SimpleItemAdapter(List<String> items) {
-        this.items = items;
+    public void setOnItemClickListener(OnItemListener listener) {
+        this.listener = listener;
     }
 
-    @NonNull
-    @Override
-    public SimpleItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_generic, parent, false);
-        return new SimpleItemHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull SimpleItemHolder holder, int position) {
-        // fill textViews with data
-        String currentItem = items.get(position);
-        holder.tv.setText(currentItem);
-    }
-
-    @Override
-    public int getItemCount() {
-        return items.size();
+    public interface OnItemListener {
+        void onItemClick(View v, TextView tv);
     }
 }
 

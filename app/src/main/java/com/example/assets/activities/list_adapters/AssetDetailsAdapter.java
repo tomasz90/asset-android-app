@@ -15,12 +15,17 @@ import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapter.AssetHolder> {
 
-    private Pair<List<AssetDetails>, BaseCurrency> assetsDetails = Pair.create(Collections.EMPTY_LIST, null);
+    private Pair<List<AssetDetails>, BaseCurrency> assetsDetails = Pair.create(new ArrayList<>(), null);
+
+    public void setAssetsDetails(Pair<List<AssetDetails>, BaseCurrency> assetsDetails) {
+        this.assetsDetails = assetsDetails;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -41,18 +46,13 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         holder.value.setText(c.getString(R.string.float_no_decimal_currency, currentAsset.getValue(), baseCurrency.getSymbol()));
     }
 
-    public Asset getAssetAtPosition(int position) {
-        return assetsDetails.first.get(position).getAsset();
-    }
-
     @Override
     public int getItemCount() {
         return assetsDetails.first.size();
     }
 
-    public void setAssetsDetails(Pair<List<AssetDetails>, BaseCurrency> assetsDetails) {
-        this.assetsDetails = assetsDetails;
-        notifyDataSetChanged();
+    public Asset getAssetAtPosition(int position) {
+        return assetsDetails.first.get(position).getAsset();
     }
 
     static class AssetHolder extends RecyclerView.ViewHolder {
