@@ -52,11 +52,9 @@ public class MainActivity extends AppCompatActivity {
         assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         ProgressDialog loadingInfo = Dialog.displayLoading(this);
         assetViewModel.getAssetDetails().observe(this, assetsDetails -> {
-            if (assetsDetails != null) {
                 adapter.setAssetsDetails(assetsDetails);
                 setTotalValue(assetsDetails);
                 loadingInfo.dismiss();
-            }
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
