@@ -19,8 +19,11 @@ import com.example.assets.constants.AssetConstants;
 import com.example.assets.constants.Constants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.viewmodel.AssetViewModel;
-import com.example.assets.util.ApiDataProvider;
 import com.example.assets.util.Utils;
+
+import lombok.SneakyThrows;
+
+import static com.example.assets.util.Utils.getAssetRate;
 
 public class AddAssetActivity extends AppCompatActivity {
 
@@ -33,11 +36,12 @@ public class AddAssetActivity extends AppCompatActivity {
     private float value;
     private char decimalSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
 
+    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
-
+        assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
         editedAsset = (Asset) getIntent().getSerializableExtra(AssetConstants.EDITED_ASSET);
         assetType = getIntent().getStringExtra(AssetConstants.ASSET_TYPE);
 
@@ -52,15 +56,16 @@ public class AddAssetActivity extends AppCompatActivity {
 
         calculatedValueTextView = findViewById(R.id.calculated_value);
 
-        new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
-            float rate = Utils.toFloat(dataFromApi.getJSONObject(assetType).getString(assetSymbol));
-            String textToDisplay = getString(R.string.rate, assetSymbol, rate);
-            calculatedValueTextView.setText(textToDisplay);
+        assetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
+            float rate = getAssetRate(assetType, assetSymbol, pair);
+            if (pair.second != null) {
+                String textToDisplay = getString(R.string.rate, assetSymbol, pair.second.getSymbol(), rate);
+                calculatedValueTextView.setText(textToDisplay);
+            }
         });
 
         Button saveButton = findViewById(R.id.fab);
         saveButton.setOnClickListener(view -> {
-            assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
             float setQuantity = Utils.toFloat(editText.getText());
             if (editedAsset == null) {
                 assetViewModel.insertOrUpdate(new Asset(assetSymbol, assetType, setQuantity, ""));
@@ -106,20 +111,21 @@ public class AddAssetActivity extends AppCompatActivity {
                     doNotAllowToEnterInvalidQuantity(s);
                     value = Utils.toFloat(s);
                 }
-                new ApiDataProvider(getApplication()).getData(false, dataFromApi -> {
-                    float rate = Utils.toFloat(dataFromApi.getJSONObject(assetType).getString(assetSymbol));
-                    String textToDisplay = getString(R.string.calculated_value, value * rate);
+
+                assetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
+                    float rate = getAssetRate(assetType, assetSymbol, pair);
+                    String textToDisplay = getString(R.string.calculated_value, value * rate, pair.second.getSymbol());
                     calculatedValueTextView.setText(textToDisplay);
                 });
             }
         });
     }
 
-   private void doNotAllowToEnterInvalidQuantity(Editable editable) {
+    private void doNotAllowToEnterInvalidQuantity(Editable editable) {
         String s = editable.toString();
         boolean isMoreThenOneSeparator = s.chars().filter(ch -> ch == decimalSeparator).count() > 1;
         boolean isSeparatorFirst = s.startsWith(String.valueOf(decimalSeparator));
-        if (isMoreThenOneSeparator || isSeparatorFirst ) {
+        if (isMoreThenOneSeparator || isSeparatorFirst) {
             editable.delete(s.length() - 1, s.length());
         }
     }

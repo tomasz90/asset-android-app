@@ -1,6 +1,7 @@
 package com.example.assets.util;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.view.Gravity;
 import android.view.View;
@@ -11,10 +12,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assets.R;
 
-class ToastManager {
+import static com.example.assets.constants.Constants.MESSAGE_LOADING;
 
-    static void displayToast(Application application) {
-        Toast toast = Toast.makeText(application, "Network not available :(", Toast.LENGTH_SHORT);
+public class Dialog {
+
+    public static ProgressDialog displayLoading(AppCompatActivity activity) {
+        ProgressDialog mDialog = new ProgressDialog(activity);
+        mDialog.setMessage(MESSAGE_LOADING);
+        mDialog.setCancelable(false);
+        mDialog.show();
+        return mDialog;
+    }
+
+    static void displayToast(Application application, String message) {
+        Toast toast = Toast.makeText(application, message, Toast.LENGTH_SHORT);
 
         View view = toast.getView();
         //Gets the actual oval background of the Toast then sets the colour filter

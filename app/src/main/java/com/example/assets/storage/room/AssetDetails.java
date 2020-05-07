@@ -6,11 +6,14 @@ public class AssetDetails extends Asset {
     private float rate;
     private float value;
 
-    public AssetDetails(Asset asset, float rate) {
+    private BaseCurrency baseCurrency;
+
+    public AssetDetails(Asset asset, float rate, BaseCurrency baseCurrency) {
         super(asset.getSymbol(), asset.getType(), asset.getQuantity(), asset.getInfo());
         this.asset = asset;
         this.rate = rate;
         this.value = rate * asset.getQuantity();
+        this.baseCurrency = baseCurrency;
     }
 
     public Asset getAsset() {
@@ -23,5 +26,9 @@ public class AssetDetails extends Asset {
 
     public float getValue() {
         return value;
+    }
+
+    public BaseCurrency getBaseCurrency() {
+        return baseCurrency;
     }
 }

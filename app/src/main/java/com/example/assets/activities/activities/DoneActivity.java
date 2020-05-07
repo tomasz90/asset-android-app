@@ -17,7 +17,7 @@ public class DoneActivity extends AppCompatActivity {
 
         int TIME_OUT = 2000;
         new Handler().postDelayed(() -> {
-            Intent i = new Intent(DoneActivity.this, MainActivity.class);
+            Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             finish();
         }, TIME_OUT);

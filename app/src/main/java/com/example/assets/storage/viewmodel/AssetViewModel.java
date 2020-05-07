@@ -8,12 +8,12 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
 
 import com.example.assets.storage.repository.AssetRepository;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
+import com.example.assets.storage.room.BaseCurrency;
 import com.example.assets.util.ApiDataProvider;
 import com.example.assets.util.Utils;
 
@@ -25,29 +25,39 @@ import java.util.List;
 
 import lombok.SneakyThrows;
 
+import static com.example.assets.constants.AssetConstants.CURRENCIES;
+
 public class AssetViewModel extends AndroidViewModel {
 
     private AssetRepository assetRepository;
     private MutableLiveData<JSONObject> rates = new MutableLiveData();
     private LiveData<List<AssetDetails>> assetDetails;
+    private RatesAndBaseCurrencyLiveData ratesAndBaseCurrency;
+
     private Application application;
 
     public AssetViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
         assetRepository = new AssetRepository(application);
-        LiveData<List<Asset>> allAssets = assetRepository.getAll();
+
         refreshDataFromCache(false);
-        CustomLiveData trigger = new CustomLiveData(allAssets, rates);
-        assetDetails = Transformations.map(trigger, value -> getAssetDetails(value.first, value.second));
+
+        LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
+        ratesAndBaseCurrency = new RatesAndBaseCurrencyLiveData(rates, baseCurrency);
+
+        LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
+        AssetDetailsTrigger trigger = new AssetDetailsTrigger(allAssets, rates, baseCurrency);
+        assetDetails = Transformations.map(trigger, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
     }
 
-    public void insert(Asset asset) {
-        assetRepository.insert(asset);
+    @SneakyThrows
+    public void refreshDataFromCache(boolean withCleanCache) {
+        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
     }
 
     public void insertOrUpdate(Asset asset) {
-        assetRepository.insertOrUpdate(asset);
+        assetRepository.upsert(asset);
     }
 
     public void update(Asset asset) {
@@ -62,43 +72,61 @@ public class AssetViewModel extends AndroidViewModel {
         assetRepository.deleteAll();
     }
 
-    public LiveData<List<AssetDetails>> getAll() {
+    public void updateBaseCurrency(BaseCurrency baseCurrency) {
+        assetRepository.updateBaseCurrency(baseCurrency);
+    }
+
+    public LiveData<Pair<JSONObject, BaseCurrency>> getRatesAndBaseCurrency() {
+        return ratesAndBaseCurrency;
+    }
+
+    public LiveData<List<AssetDetails>> getAssetDetails() {
         return assetDetails;
     }
 
     @SneakyThrows
-    public void refreshDataFromCache(boolean withCleanCache) {
-        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
-    }
-
-    @SneakyThrows
-    private List<AssetDetails> getAssetDetails(List<Asset> assets, JSONObject rates) {
+    private List<AssetDetails> createAssetDetails(List<Asset> assets, JSONObject rates, BaseCurrency baseCurrency) {
         List<AssetDetails> assetDetails = new ArrayList<>();
-        if (assets != null && rates != null) {
+        if (assets != null && rates != null && baseCurrency != null) {
             for (Asset asset : assets) {
-                String rate = rates.getJSONObject(asset.getType()).getString(asset.getSymbol());
-                assetDetails.add(new AssetDetails(asset, Utils.toFloat(rate)));
+                float baseCurrencyRate = 1 / Utils.toFloat(rates.getJSONObject(CURRENCIES).getString(baseCurrency.getSymbol()));
+                float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrencyRate;
+                assetDetails.add(new AssetDetails(asset, rate, baseCurrency));
             }
+            assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
+            return assetDetails;
         }
-        assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
-        return assetDetails;
+        return null;
     }
 
-    static class CustomLiveData extends MediatorLiveData<Pair<List<Asset>, JSONObject>> {
-        CustomLiveData(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData) {
-            addSource(assets, new Observer<List<Asset>>() {
-                @Override
-                public void onChanged(List<Asset> assets) {
-                    setValue(Pair.create(assets, apiData.getValue()));
-                }
-            });
+    static class AssetDetailsTrigger extends MediatorLiveData<Triplet> {
+        AssetDetailsTrigger(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
+            addSource(assets, assets1 -> setValue(Triplet.create(assets1, apiData.getValue(), base.getValue())));
+            addSource(apiData, apiData1 -> setValue(Triplet.create(assets.getValue(), apiData1, base.getValue())));
+            addSource(base, base1 -> setValue(Triplet.create(assets.getValue(), apiData.getValue(), base1)));
+        }
+    }
 
-            addSource(apiData, new Observer<JSONObject>() {
-                @Override
-                public void onChanged(JSONObject apiData) {
-                    setValue(Pair.create(assets.getValue(), apiData));
-                }
-            });
+    static class RatesAndBaseCurrencyLiveData extends MediatorLiveData<Pair<JSONObject, BaseCurrency>> {
+        RatesAndBaseCurrencyLiveData(LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
+            addSource(apiData, apiData1 -> setValue(Pair.create(apiData1, base.getValue())));
+            addSource(base, base1 -> setValue(Pair.create(apiData.getValue(), base1)));
+        }
+    }
+
+    static class Triplet {
+        List<Asset> first;
+        JSONObject second;
+        BaseCurrency third;
+
+        private Triplet(List<Asset> first, JSONObject second, BaseCurrency third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
+        }
+
+        static Triplet create(List<Asset> first, JSONObject second, BaseCurrency third) {
+            return new Triplet(first, second, third);
         }
     }
 }

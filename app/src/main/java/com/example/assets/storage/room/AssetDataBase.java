@@ -9,11 +9,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = Asset.class, version = 1)
+@Database(entities = {Asset.class, BaseCurrency.class}, version = 5)
 public abstract class AssetDataBase extends RoomDatabase {
     private static AssetDataBase instance;
 
     public abstract AssetDao assetDao();
+    public abstract BaseCurrencyDao baseCurrencyDao();
 
     public static synchronized AssetDataBase getInstance(Context context){
         if (instance == null) {
@@ -30,6 +31,7 @@ public abstract class AssetDataBase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+            db.execSQL("INSERT INTO base_currency_table (symbol) VALUES ('USD')");
         }
     };
 }

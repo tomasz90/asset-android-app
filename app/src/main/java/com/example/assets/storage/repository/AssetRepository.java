@@ -5,117 +5,102 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDao;
 import com.example.assets.storage.room.AssetDataBase;
+import com.example.assets.storage.room.BaseCurrency;
+import com.example.assets.storage.room.BaseCurrencyDao;
 
 import java.util.List;
 
 public class AssetRepository {
+
     private AssetDao assetDao;
+    private BaseCurrencyDao baseCurrencyDao;
     private LiveData<List<Asset>> allAssets;
+    private LiveData<BaseCurrency> baseCurrency;
+
+    private static final String INSERT = "insert";
+    private static final String UPDATE = "update";
+    private static final String UPSERT = "upsert";
+    private static final String DELETE = "delete";
+    private static final String DELETE_ALL = "delete_all";
 
     public AssetRepository(Application application) {
         AssetDataBase dataBase = AssetDataBase.getInstance(application);
         assetDao = dataBase.assetDao();
+        baseCurrencyDao = dataBase.baseCurrencyDao();
         allAssets = assetDao.getAll();
+        baseCurrency = baseCurrencyDao.get();
     }
 
-    public void insert(Asset asset) {
-        new InsertNoteAsyncTask(assetDao).execute(asset);
+    public void updateBaseCurrency(BaseCurrency baseCurrency) {
+        updateBaseCurrencyQuery(baseCurrencyDao).execute(baseCurrency);
     }
 
-    public void insertOrUpdate(Asset asset) { new InsertOrUpdateNoteAsyncTask(assetDao).execute(asset);}
-
-    public void update(Asset asset) {
-        new UpdateNoteAsyncTask(assetDao).execute(asset);
+    public LiveData<BaseCurrency> getBaseCurrency() {
+        return baseCurrency;
     }
 
-    public void delete(Asset asset) {
-        new DeleteNoteAsyncTask(assetDao).execute(asset);
-    }
-
-    public void deleteAll() {
-        new DeleteAllNoteAsyncTask(assetDao).execute();
-    }
-
-    public LiveData<List<Asset>> getAll() {
+    public LiveData<List<Asset>> getAllAssets() {
         return allAssets;
     }
 
-    private static class InsertNoteAsyncTask extends AsyncTask<Asset, Void, Void> {
-
-        private AssetDao assetDao;
-
-        InsertNoteAsyncTask(AssetDao assetDao) {
-            this.assetDao = assetDao;
-        }
-
-        @Override
-        protected Void doInBackground(Asset... assets) {
-            assetDao.insert(assets[0]);
-            return null;
-        }
+    public void insert(Asset asset) {
+        asyncAssetQuery(INSERT, assetDao).execute(asset);
     }
 
-    private static class InsertOrUpdateNoteAsyncTask extends AsyncTask<Asset, Void, Void> {
-
-        private AssetDao assetDao;
-
-        InsertOrUpdateNoteAsyncTask(AssetDao assetDao) {
-            this.assetDao = assetDao;
-        }
-
-        @Override
-        protected Void doInBackground(Asset... assets) {
-            assetDao.insertOrUpdate(assets[0]);
-            return null;
-        }
+    public void upsert(Asset asset) {
+        asyncAssetQuery(UPSERT, assetDao).execute(asset);
     }
 
-    private static class UpdateNoteAsyncTask extends AsyncTask<Asset, Void, Void> {
-
-        private AssetDao assetDao;
-
-        UpdateNoteAsyncTask(AssetDao assetDao) {
-            this.assetDao = assetDao;
-        }
-
-        @Override
-        protected Void doInBackground(Asset... assets) {
-            assetDao.update(assets[0]);
-            return null;
-        }
+    public void update(Asset asset) {
+        asyncAssetQuery(UPDATE, assetDao).execute(asset);
     }
 
-    private static class DeleteNoteAsyncTask extends AsyncTask<Asset, Void, Void> {
-
-        private AssetDao assetDao;
-
-        DeleteNoteAsyncTask(AssetDao assetDao) {
-            this.assetDao = assetDao;
-        }
-
-        @Override
-        protected Void doInBackground(Asset... assets) {
-            assetDao.delete(assets[0]);
-            return null;
-        }
+    public void delete(Asset asset) {
+        asyncAssetQuery(DELETE, assetDao).execute(asset);
     }
 
-    private static class DeleteAllNoteAsyncTask extends AsyncTask<Void, Void, Void> {
+    public void deleteAll() {
+        asyncAssetQuery(DELETE_ALL, assetDao).execute();
+    }
 
-        private AssetDao assetDao;
+    private static AsyncTask<Asset, Void, Void> asyncAssetQuery(String query, AssetDao assetDao) {
+        return new AsyncTask<Asset, Void, Void>() {
 
-        DeleteAllNoteAsyncTask(AssetDao assetDao) {
-            this.assetDao = assetDao;
-        }
+            @Override
+            protected Void doInBackground(Asset... assets) {
+                switch (query) {
+                    case INSERT:
+                        assetDao.insert(assets[0]);
+                        break;
+                    case UPDATE:
+                        assetDao.update(assets[0]);
+                        break;
+                    case UPSERT:
+                        assetDao.upsert(assets[0]);
+                        break;
+                    case DELETE:
+                        assetDao.delete(assets[0]);
+                        break;
+                    case DELETE_ALL:
+                        assetDao.deleteAll();
+                        break;
+                }
+                return null;
+            }
+        };
+    }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            assetDao.deleteAll();
-            return null;
-        }
+    private static AsyncTask<BaseCurrency, Void, Void> updateBaseCurrencyQuery(BaseCurrencyDao baseCurrencyDao) {
+        return new AsyncTask<BaseCurrency, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(BaseCurrency... baseCurrencies) {
+                baseCurrencyDao.update(baseCurrencies[0]);
+                return null;
+            }
+        };
     }
 }

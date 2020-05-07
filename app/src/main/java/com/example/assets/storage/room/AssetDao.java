@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface AssetDao {
 
-    default void insertOrUpdate(Asset newAsset) {
+    default void upsert(Asset newAsset) {
         Asset oldAsset = getMatchingAsset(newAsset.getSymbol(), newAsset.getInfo());
         if (oldAsset != null) {
             oldAsset.setQuantity(oldAsset.getQuantity() + newAsset.getQuantity());

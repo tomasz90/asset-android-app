@@ -1,5 +1,6 @@
 package com.example.assets.activities.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
+import com.example.assets.util.Dialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -46,9 +48,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
-        assetViewModel.getAll().observe(this, assets -> {
-            adapter.setAssets(assets);
-            setTotalValue(assets);
+        ProgressDialog loadingInfo = Dialog.displayLoading(this);
+        assetViewModel.getAssetDetails().observe(this, assets -> {
+            if (assets != null) {
+                adapter.setAssets(assets);
+                setTotalValue(assets);
+                loadingInfo.dismiss();
+            }
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
@@ -90,7 +96,11 @@ public class MainActivity extends AppCompatActivity {
         for (AssetDetails assetDetails : assets) {
             value += assetDetails.getValue();
         }
-        totalValue.setText(getString(R.string.total_value_text_view, value));
+        if (!assets.isEmpty()) {
+            totalValue.setText(getString(R.string.total_value_text_view, value, assets.get(0).getBaseCurrency().getSymbol()));
+        } else {
+            totalValue.setText(getString(R.string.total_value_text_view, value, "$"));
+        }
     }
 
     private void setToolbar() {
@@ -112,13 +122,15 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
+        switch (id) {
+            case R.id.action_remove:
+                new AssetViewModel(this.getApplication()).deleteAll();
+                break;
+            case R.id.action_change_base_currency:
+                Intent intent = new Intent(this, ChooseBaseCurrencyActivity.class);
+                startActivity(intent);
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
