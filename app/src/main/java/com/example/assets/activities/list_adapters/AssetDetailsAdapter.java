@@ -1,6 +1,7 @@
 package com.example.assets.activities.list_adapters;
 
 import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
-import com.example.assets.storage.room.Asset;
-import com.example.assets.storage.room.AssetDetails;
+import com.example.assets.storage.room.entity.Asset;
+import com.example.assets.storage.room.entity.AssetDetails;
+import com.example.assets.storage.room.entity.BaseCurrency;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapter.AssetHolder> {
 
-    private List<AssetDetails> assets = new ArrayList<>();
+    private Pair<List<AssetDetails>, BaseCurrency> assetsDetails = Pair.create(Collections.EMPTY_LIST, null);
 
     @NonNull
     @Override
@@ -30,29 +32,30 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
     @Override
     public void onBindViewHolder(@NonNull AssetHolder holder, int position) {
         Context c = holder.itemView.getContext();
-        AssetDetails currentAsset = assets.get(position);
+        AssetDetails currentAsset = assetsDetails.first.get(position);
+        BaseCurrency baseCurrency = assetsDetails.second;
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getInfo());
         holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
-        holder.rate.setText(c.getString(R.string.float_two_decimal_currency, currentAsset.getRate(), currentAsset.getBaseCurrency().getSymbol()));
-        holder.value.setText(c.getString(R.string.float_no_decimal_currency, currentAsset.getValue(), currentAsset.getBaseCurrency().getSymbol()));
+        holder.rate.setText(c.getString(R.string.float_two_decimal_currency, currentAsset.getRate(), baseCurrency.getSymbol()));
+        holder.value.setText(c.getString(R.string.float_no_decimal_currency, currentAsset.getValue(), baseCurrency.getSymbol()));
     }
 
     public Asset getAssetAtPosition(int position) {
-        return assets.get(position).getAsset();
+        return assetsDetails.first.get(position).getAsset();
     }
 
     @Override
     public int getItemCount() {
-        return assets.size();
+        return assetsDetails.first.size();
     }
 
-    public void setAssets(List<AssetDetails> assets) {
-        this.assets = assets;
+    public void setAssetsDetails(Pair<List<AssetDetails>, BaseCurrency> assetsDetails) {
+        this.assetsDetails = assetsDetails;
         notifyDataSetChanged();
     }
 
-    class AssetHolder extends RecyclerView.ViewHolder {
+    static class AssetHolder extends RecyclerView.ViewHolder {
         TextView symbol;
         TextView additionalInfo;
         TextView quantity;

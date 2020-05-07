@@ -1,4 +1,4 @@
-package com.example.assets.storage.room;
+package com.example.assets.storage.room.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

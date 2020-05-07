@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
-import com.example.assets.storage.room.BaseCurrency;
+import com.example.assets.storage.room.entity.BaseCurrency;
 
 public class ChooseBaseCurrencyViewModel extends AbstractViewModel {
 

@@ -5,11 +5,11 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.assets.storage.room.Asset;
-import com.example.assets.storage.room.AssetDao;
+import com.example.assets.storage.room.entity.Asset;
+import com.example.assets.storage.room.dao.AssetDao;
 import com.example.assets.storage.room.AssetDataBase;
-import com.example.assets.storage.room.BaseCurrency;
-import com.example.assets.storage.room.BaseCurrencyDao;
+import com.example.assets.storage.room.entity.BaseCurrency;
+import com.example.assets.storage.room.dao.BaseCurrencyDao;
 
 import java.util.List;
 

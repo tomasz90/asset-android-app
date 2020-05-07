@@ -2,7 +2,7 @@ package com.example.assets.util;
 
 import android.util.Pair;
 
-import com.example.assets.storage.room.BaseCurrency;
+import com.example.assets.storage.room.entity.BaseCurrency;
 
 import org.json.JSONObject;
 
@@ -28,5 +28,14 @@ public class Utils {
             return rate * baseCurrencyRate;
         }
         return 0f;
+    }
+
+    static boolean isAllNotNull(Object... objects) {
+        for (Object o : objects) {
+            if (o == null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -8,9 +8,8 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.activities.abstract_.AbstractListActivity;
 import com.example.assets.constants.AssetConstants;
-import com.example.assets.storage.room.BaseCurrency;
+import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.ChooseBaseCurrencyViewModel;
-import com.example.assets.storage.viewmodel.MainViewModel;
 
 import java.util.Objects;
 

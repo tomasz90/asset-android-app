@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.assets.R;
 import com.example.assets.constants.AssetConstants;
 import com.example.assets.constants.Constants;
-import com.example.assets.storage.room.Asset;
+import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.viewmodel.AddAssetViewModel;
 import com.example.assets.util.Utils;
 
