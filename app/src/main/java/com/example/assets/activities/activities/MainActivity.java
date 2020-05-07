@@ -51,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         ProgressDialog loadingInfo = Dialog.displayLoading(this);
-        assetViewModel.getAssetDetails().observe(this, assets -> {
-            if (assets != null) {
-                adapter.setAssets(assets);
-                setTotalValue(assets);
+        assetViewModel.getAssetDetails().observe(this, assetsDetails -> {
+            if (assetsDetails != null) {
+                adapter.setAssetsDetails(assetsDetails);
+                setTotalValue(assetsDetails);
                 loadingInfo.dismiss();
             }
         });

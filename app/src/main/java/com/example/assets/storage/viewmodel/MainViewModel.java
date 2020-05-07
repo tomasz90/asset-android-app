@@ -11,6 +11,7 @@ import androidx.lifecycle.Transformations;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
+import com.example.assets.util.Triplet;
 import com.example.assets.util.Utils;
 
 import org.json.JSONObject;
@@ -22,6 +23,7 @@ import java.util.List;
 import lombok.SneakyThrows;
 
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
+import static com.example.assets.util.Utils.isAllNotNull;
 
 public class MainViewModel extends AbstractViewModel {
 
@@ -89,26 +91,5 @@ public class MainViewModel extends AbstractViewModel {
                 }
             });
         }
-    }
-
-    static class Triplet<S, T, U> {
-        S first;
-        T second;
-        U third;
-
-        private Triplet(S first, T second, U third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
-        }
-    }
-
-    static boolean isAllNotNull(Object... objects) {
-        for (Object o : objects) {
-            if (o == null) {
-                return false;
-            }
-        }
-        return true;
     }
 }

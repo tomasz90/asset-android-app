@@ -20,7 +20,7 @@ import java.util.List;
 
 public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapter.AssetHolder> {
 
-    private Pair<List<AssetDetails>, BaseCurrency> assets = Pair.create(Collections.EMPTY_LIST, null);
+    private Pair<List<AssetDetails>, BaseCurrency> assetsDetails = Pair.create(Collections.EMPTY_LIST, null);
 
     @NonNull
     @Override
@@ -32,8 +32,8 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
     @Override
     public void onBindViewHolder(@NonNull AssetHolder holder, int position) {
         Context c = holder.itemView.getContext();
-        AssetDetails currentAsset = assets.first.get(position);
-        BaseCurrency baseCurrency = assets.second;
+        AssetDetails currentAsset = assetsDetails.first.get(position);
+        BaseCurrency baseCurrency = assetsDetails.second;
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getInfo());
         holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
@@ -42,20 +42,20 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
     }
 
     public Asset getAssetAtPosition(int position) {
-        return assets.first.get(position).getAsset();
+        return assetsDetails.first.get(position).getAsset();
     }
 
     @Override
     public int getItemCount() {
-        return assets.first.size();
+        return assetsDetails.first.size();
     }
 
-    public void setAssets(Pair<List<AssetDetails>, BaseCurrency> assets) {
-        this.assets = assets;
+    public void setAssetsDetails(Pair<List<AssetDetails>, BaseCurrency> assetsDetails) {
+        this.assetsDetails = assetsDetails;
         notifyDataSetChanged();
     }
 
-    class AssetHolder extends RecyclerView.ViewHolder {
+    static class AssetHolder extends RecyclerView.ViewHolder {
         TextView symbol;
         TextView additionalInfo;
         TextView quantity;
