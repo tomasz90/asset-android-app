@@ -6,11 +6,11 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.assets.storage.room.entity.Asset;
-import com.example.assets.storage.room.dao.AssetDao;
 import com.example.assets.storage.room.AssetDataBase;
-import com.example.assets.storage.room.entity.BaseCurrency;
+import com.example.assets.storage.room.dao.AssetDao;
 import com.example.assets.storage.room.dao.BaseCurrencyDao;
+import com.example.assets.storage.room.entity.Asset;
+import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.util.ApiDataProvider;
 
 import org.json.JSONObject;
@@ -21,12 +21,12 @@ import lombok.SneakyThrows;
 
 public class AssetRepository {
 
-    private Application application;
     private AssetDao assetDao;
     private BaseCurrencyDao baseCurrencyDao;
     private LiveData<List<Asset>> allAssets;
     private LiveData<BaseCurrency> baseCurrency;
     private MutableLiveData<JSONObject> rates = new MutableLiveData();
+    private Application application;
 
     private static final String INSERT = "insert";
     private static final String UPDATE = "update";

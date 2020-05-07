@@ -12,13 +12,11 @@ import org.json.JSONObject;
 
 public abstract class AbstractViewModel extends AndroidViewModel {
 
-    protected Application application;
     protected AssetRepository assetRepository;
     protected LiveData<JSONObject> rates;
 
     protected AbstractViewModel(@NonNull Application application) {
         super(application);
-        this.application = application;
         assetRepository = new AssetRepository(application);
         rates = assetRepository.getRates();
     }
