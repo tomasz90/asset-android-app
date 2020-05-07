@@ -20,6 +20,7 @@ public class ChooseBaseCurrencyActivity extends AbstractListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.choose_base_currency);
+
         setUpSimpleList(AssetConstants.ALL_CURRENCIES);
     }
 

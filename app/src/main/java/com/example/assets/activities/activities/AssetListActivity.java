@@ -11,6 +11,7 @@ import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.entity.Asset;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import lombok.SneakyThrows;
 
@@ -20,8 +21,10 @@ public class AssetListActivity extends AbstractListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
-        ArrayList<String> assets = getIntent().getStringArrayListExtra(AssetConstants.SPECIFIC_ASSETS);
-        setUpSimpleList(assets);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.asset_list_activity_title);
+
+        ArrayList<String> specificAssets = getIntent().getStringArrayListExtra(AssetConstants.SPECIFIC_ASSETS);
+        setUpSimpleList(specificAssets);
     }
 
     @SneakyThrows

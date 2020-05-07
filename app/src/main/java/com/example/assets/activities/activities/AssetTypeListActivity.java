@@ -17,7 +17,7 @@ public class AssetTypeListActivity extends AbstractListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_view_generic);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_assets_activity_title);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.asset_type_list_activity_title);
 
         setUpSimpleList(AssetConstants.ALL_ASSETS);
     }

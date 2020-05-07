@@ -38,6 +38,8 @@ public class AddAssetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.add_asset_activity_title);
+
         AddAssetViewModel addAssetViewModel = new ViewModelProvider(this).get(AddAssetViewModel.class);
 
         // Find all views

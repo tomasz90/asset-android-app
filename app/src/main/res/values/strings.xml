@@ -1,25 +1,19 @@
 <resources>
     <string name="app_name">Assets</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="noble_metals">Noble metals</string>
     <string name="crypto">Crypto</string>
     <string name="stocks">Stocks</string>
     <string name="gold">Gold</string>
     <string name="silver">Silver</string>
     <string name="platinum">Platinum</string>
-    <string name="add_assets_activity_title">Chose type of asset:</string>
-    <string name="extended_fab_content_desc">fab button</string>
-    <string name="extended_fab_label">fab button</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="add_asset">Add asset</string>
+
     <string name="main_activity_title">Your portfolio:</string>
+    <string name="asset_type_list_activity_title">Choose type of asset:</string>
+    <string name="asset_list_activity_title">Choose specific asset:</string>
+    <string name="add_asset_activity_title">Enter amount:</string>
+
+    <string name="add_asset">Add asset</string>
     <string name="details">Details: </string>
     <string name="total_value">Total value: </string>
     <string name="asset">Asset</string>
@@ -40,6 +34,5 @@
     <string name="remove_all">Remove all assets</string>
     <string name="change_base_currency">Choose base currency</string>
     <string name="choose_base_currency">Choose base currency</string>
-
 
 </resources>
