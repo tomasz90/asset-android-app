@@ -18,7 +18,7 @@ import com.example.assets.R;
 import com.example.assets.constants.AssetConstants;
 import com.example.assets.constants.Constants;
 import com.example.assets.storage.room.Asset;
-import com.example.assets.storage.viewmodel.AssetViewModel;
+import com.example.assets.storage.viewmodel.AddAssetViewModel;
 import com.example.assets.util.Utils;
 
 import lombok.SneakyThrows;
@@ -32,7 +32,7 @@ public class AddAssetActivity extends AppCompatActivity {
     private EditText editText;
     private TextView calculatedValueTextView;
     private Asset editedAsset;
-    private AssetViewModel assetViewModel;
+    private AddAssetViewModel addAssetViewModel;
     private float value;
     private char decimalSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
 
@@ -41,7 +41,7 @@ public class AddAssetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_asset);
-        assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
+        addAssetViewModel = new ViewModelProvider(this).get(AddAssetViewModel.class);
         editedAsset = (Asset) getIntent().getSerializableExtra(AssetConstants.EDITED_ASSET);
         assetType = getIntent().getStringExtra(AssetConstants.ASSET_TYPE);
 
@@ -56,7 +56,7 @@ public class AddAssetActivity extends AppCompatActivity {
 
         calculatedValueTextView = findViewById(R.id.calculated_value);
 
-        assetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
+        addAssetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
             float rate = getAssetRate(assetType, assetSymbol, pair);
             if (pair.second != null) {
                 String textToDisplay = getString(R.string.rate, assetSymbol, pair.second.getSymbol(), rate);
@@ -68,11 +68,11 @@ public class AddAssetActivity extends AppCompatActivity {
         saveButton.setOnClickListener(view -> {
             float setQuantity = Utils.toFloat(editText.getText());
             if (editedAsset == null) {
-                assetViewModel.insertOrUpdate(new Asset(assetSymbol, assetType, setQuantity, ""));
+                addAssetViewModel.upsertAsset(new Asset(assetSymbol, assetType, setQuantity, ""));
             } else {
                 Asset newAsset = editedAsset;
                 newAsset.setQuantity(setQuantity);
-                assetViewModel.update(editedAsset);
+                addAssetViewModel.updateAsset(editedAsset);
             }
             Intent intent = new Intent(AddAssetActivity.this, DoneActivity.class);
             startActivity(intent);
@@ -112,7 +112,7 @@ public class AddAssetActivity extends AppCompatActivity {
                     value = Utils.toFloat(s);
                 }
 
-                assetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
+                addAssetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
                     float rate = getAssetRate(assetType, assetSymbol, pair);
                     String textToDisplay = getString(R.string.calculated_value, value * rate, pair.second.getSymbol());
                     calculatedValueTextView.setText(textToDisplay);

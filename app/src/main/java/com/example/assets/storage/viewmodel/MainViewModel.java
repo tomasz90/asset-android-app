@@ -1,7 +1,6 @@
 package com.example.assets.storage.viewmodel;
 
 import android.app.Application;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -27,16 +26,15 @@ import lombok.SneakyThrows;
 
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
 
-public class AssetViewModel extends AndroidViewModel {
+public class MainViewModel extends AndroidViewModel {
 
     private AssetRepository assetRepository;
     private MutableLiveData<JSONObject> rates = new MutableLiveData();
     private LiveData<List<AssetDetails>> assetDetails;
-    private RatesAndBaseCurrencyLiveData ratesAndBaseCurrency;
 
     private Application application;
 
-    public AssetViewModel(@NonNull Application application) {
+    public MainViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
         assetRepository = new AssetRepository(application);
@@ -44,9 +42,8 @@ public class AssetViewModel extends AndroidViewModel {
         refreshDataFromCache(false);
 
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
-        ratesAndBaseCurrency = new RatesAndBaseCurrencyLiveData(rates, baseCurrency);
-
         LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
+
         AssetDetailsTrigger trigger = new AssetDetailsTrigger(allAssets, rates, baseCurrency);
         assetDetails = Transformations.map(trigger, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
     }
@@ -56,28 +53,12 @@ public class AssetViewModel extends AndroidViewModel {
         new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
     }
 
-    public void insertOrUpdate(Asset asset) {
-        assetRepository.upsert(asset);
+    public void deleteAsset(Asset asset) {
+        assetRepository.deleteAsset(asset);
     }
 
-    public void update(Asset asset) {
-        assetRepository.update(asset);
-    }
-
-    public void delete(Asset asset) {
-        assetRepository.delete(asset);
-    }
-
-    public void deleteAll() {
-        assetRepository.deleteAll();
-    }
-
-    public void updateBaseCurrency(BaseCurrency baseCurrency) {
-        assetRepository.updateBaseCurrency(baseCurrency);
-    }
-
-    public LiveData<Pair<JSONObject, BaseCurrency>> getRatesAndBaseCurrency() {
-        return ratesAndBaseCurrency;
+    public void deleteAllAsset() {
+        assetRepository.deleteAllAsset();
     }
 
     public LiveData<List<AssetDetails>> getAssetDetails() {
@@ -104,13 +85,6 @@ public class AssetViewModel extends AndroidViewModel {
             addSource(assets, assets1 -> setValue(Triplet.create(assets1, apiData.getValue(), base.getValue())));
             addSource(apiData, apiData1 -> setValue(Triplet.create(assets.getValue(), apiData1, base.getValue())));
             addSource(base, base1 -> setValue(Triplet.create(assets.getValue(), apiData.getValue(), base1)));
-        }
-    }
-
-    static class RatesAndBaseCurrencyLiveData extends MediatorLiveData<Pair<JSONObject, BaseCurrency>> {
-        RatesAndBaseCurrencyLiveData(LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
-            addSource(apiData, apiData1 -> setValue(Pair.create(apiData1, base.getValue())));
-            addSource(base, base1 -> setValue(Pair.create(apiData.getValue(), base1)));
         }
     }
 
