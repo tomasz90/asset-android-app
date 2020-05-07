@@ -27,7 +27,7 @@ public class ChooseBaseCurrencyActivity extends AbstractListActivity {
     public void clickItem(View v, TextView tv) {
         String baseCurrencySymbol = tv.getText().toString();
         new ChooseBaseCurrencyViewModel(getApplication()).updateBaseCurrency(new BaseCurrency(baseCurrencySymbol));
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

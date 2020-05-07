@@ -33,27 +33,28 @@ import lombok.SneakyThrows;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView totalValue;
-    private MainViewModel assetViewModel;
-
     @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setToolbar();
+        setSupportActionBar(findViewById(R.id.toolbar));
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.main_activity_title);
 
         RecyclerView recyclerView = findViewById(R.id.asset_list);
+        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
+        TextView totalValue = findViewById(R.id.total_value);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         AssetDetailsAdapter adapter = new AssetDetailsAdapter();
         recyclerView.setAdapter(adapter);
 
-        assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        MainViewModel assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         ProgressDialog loadingInfo = Dialog.displayLoading(this);
         assetViewModel.getAssetDetails().observe(this, assetsDetails -> {
                 adapter.setAssetsDetails(assetsDetails);
-                setTotalValue(assetsDetails);
+                setTotalValue(assetsDetails, totalValue);
                 loadingInfo.dismiss();
         });
 
@@ -77,31 +78,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attachToRecyclerView(recyclerView);
 
-        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
+
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AssetTypeListActivity.class);
             startActivity(intent);
         });
 
-        totalValue = findViewById(R.id.total_value);
         totalValue.setOnClickListener(v -> {
             assetViewModel.updateRates(true);
             System.out.println("from button ...............................................................................................");
         });
     }
 
-    private void setTotalValue(Pair<List<AssetDetails>, BaseCurrency> assets) {
+    private void setTotalValue(Pair<List<AssetDetails>, BaseCurrency> assets, TextView totalValue) {
         float value = 0f;
         for (AssetDetails assetDetails : assets.first) {
             value += assetDetails.getValue();
         }
         totalValue.setText(getString(R.string.total_value_text_view, value, assets.second.getSymbol()));
-    }
-
-    private void setToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.main_activity_title);
     }
 
     @Override
