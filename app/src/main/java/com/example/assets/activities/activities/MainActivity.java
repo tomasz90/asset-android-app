@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,19 +36,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set activity, toolbar, tittle
         setContentView(R.layout.activity_main);
         setSupportActionBar(findViewById(R.id.toolbar));
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.main_activity_title);
 
+        // Find all views
         RecyclerView recyclerView = findViewById(R.id.asset_list);
-        ExtendedFloatingActionButton fab = findViewById(R.id.fab);
+        ExtendedFloatingActionButton addAssetButton = findViewById(R.id.fab);
         TextView totalValue = findViewById(R.id.total_value);
 
+        // Set list
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         AssetDetailsAdapter adapter = new AssetDetailsAdapter();
         recyclerView.setAdapter(adapter);
 
+        // Populate view with data
         MainViewModel assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         ProgressDialog loadingInfo = Dialog.displayLoading(this);
         assetViewModel.getAssetDetails().observe(this, assetsDetails -> {
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 loadingInfo.dismiss();
         });
 
+        // Set swipe action
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
 
             @Override
@@ -78,12 +82,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attachToRecyclerView(recyclerView);
 
-
-        fab.setOnClickListener(view -> {
+        // Add asset, start new activity
+        addAssetButton.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AssetTypeListActivity.class);
             startActivity(intent);
         });
 
+        // Update rates
         totalValue.setOnClickListener(v -> {
             assetViewModel.updateRates(true);
             System.out.println("from button ...............................................................................................");
