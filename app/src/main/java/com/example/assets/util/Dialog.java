@@ -24,7 +24,7 @@ public class Dialog {
         return mDialog;
     }
 
-    static void displayToast(Application application, String message) {
+    public static void displayToast(Application application, String message) {
         Toast toast = Toast.makeText(application, message, Toast.LENGTH_SHORT);
 
         View view = toast.getView();
@@ -34,7 +34,7 @@ public class Dialog {
         //Gets the TextView from the Toast so it can be edited
         TextView text = view.findViewById(android.R.id.message);
         text.setTextColor(application.getColor(R.color.white));
-        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.CENTER, 0, 300);
         toast.show();
     }
 }

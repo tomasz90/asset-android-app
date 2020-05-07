@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -34,6 +33,8 @@ import lombok.SneakyThrows;
 
 public class MainActivity extends AppCompatActivity {
 
+    MainViewModel assetViewModel;
+
     @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // Populate view with data
-        MainViewModel assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         ProgressDialog loadingInfo = Dialog.displayLoading(this);
         assetViewModel.getAssetDetails().observe(this, assetsDetails -> {
             adapter.setAssetsDetails(assetsDetails);
@@ -75,14 +76,15 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Asset swipedAsset = adapter.getAssetAtPosition(viewHolder.getAdapterPosition());
                 if (direction == ItemTouchHelper.RIGHT) {
-                    AlertDialog dialog = new MaterialAlertDialogBuilder(MainActivity.this)
+                    new MaterialAlertDialogBuilder(MainActivity.this)
                             .setTitle("Do you want to remove asset?")
-                            .setPositiveButton("Yes", (dialog1, which) -> {
+                            .setPositiveButton("Yes", (dialog, which) -> {
                                 assetViewModel.deleteAsset(swipedAsset);
-                                dialog1.dismiss();
+                                dialog.dismiss();
+                                Dialog.displayToast(getApplication(), "Asset removed.");
                             })
-                            .setNegativeButton("No", (dialog1, which) -> {
-                                dialog1.dismiss();
+                            .setNegativeButton("No", (dialog, which) -> {
+                                dialog.dismiss();
                                 assetViewModel.refresh();
                             })
                             .show();
@@ -135,7 +137,17 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_remove:
-                new MainViewModel(this.getApplication()).deleteAllAsset();
+                new MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle("Do you want to remove all assets?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            assetViewModel.deleteAllAsset();
+                            dialog.dismiss();
+                            Dialog.displayToast(getApplication(), "All assets removed.");
+                        })
+                        .setNegativeButton("No", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
                 break;
             case R.id.action_change_base_currency:
                 Intent intent = new Intent(this, ChooseBaseCurrencyActivity.class);
