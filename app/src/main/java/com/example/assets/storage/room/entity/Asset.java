@@ -1,6 +1,7 @@
 package com.example.assets.storage.room.entity;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -20,6 +21,15 @@ public class Asset implements Serializable {
         this.type = type;
         this.quantity = quantity;
         this.info = info;
+    }
+
+    // Used for carrying basic info to addAssetActivity
+    @Ignore
+    public Asset(String symbol, String type) {
+        this.symbol = symbol;
+        this.type = type;
+        this.quantity = -1;
+        this.info = null;
     }
 
     public void setId(int id) {
