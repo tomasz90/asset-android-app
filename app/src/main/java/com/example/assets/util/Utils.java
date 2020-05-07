@@ -30,7 +30,7 @@ public class Utils {
         return 0f;
     }
 
-    public static boolean isAllNotNull(Object... objects) {
+    static boolean isAllNotNull(Object... objects) {
         for (Object o : objects) {
             if (o == null) {
                 return false;
