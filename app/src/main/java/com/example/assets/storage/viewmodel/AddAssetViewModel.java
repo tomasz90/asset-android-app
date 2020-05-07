@@ -4,42 +4,23 @@ import android.app.Application;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.example.assets.storage.repository.AssetRepository;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.BaseCurrency;
-import com.example.assets.util.ApiDataProvider;
 
 import org.json.JSONObject;
 
-import lombok.SneakyThrows;
+public class AddAssetViewModel extends AbstractViewModel {
 
-public class AddAssetViewModel extends AndroidViewModel {
-
-    private AssetRepository assetRepository;
-    private MutableLiveData<JSONObject> rates = new MutableLiveData();
     private RatesAndBaseCurrencyLiveData ratesAndBaseCurrency;
-
-    private Application application;
 
     public AddAssetViewModel(@NonNull Application application) {
         super(application);
-        this.application = application;
-        assetRepository = new AssetRepository(application);
-
-        refreshDataFromCache(false);
 
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         ratesAndBaseCurrency = new RatesAndBaseCurrencyLiveData(rates, baseCurrency);
-    }
-
-    @SneakyThrows
-    public void refreshDataFromCache(boolean withCleanCache) {
-        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
     }
 
     public void upsertAsset(Asset asset) {

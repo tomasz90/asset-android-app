@@ -3,17 +3,13 @@ package com.example.assets.storage.viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.example.assets.storage.repository.AssetRepository;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.room.BaseCurrency;
-import com.example.assets.util.ApiDataProvider;
 import com.example.assets.util.Utils;
 
 import org.json.JSONObject;
@@ -26,31 +22,18 @@ import lombok.SneakyThrows;
 
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
 
-public class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends AbstractViewModel {
 
-    private AssetRepository assetRepository;
-    private MutableLiveData<JSONObject> rates = new MutableLiveData();
     private LiveData<List<AssetDetails>> assetDetails;
-
-    private Application application;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        this.application = application;
-        assetRepository = new AssetRepository(application);
-
-        refreshDataFromCache(false);
 
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
 
         AssetDetailsTrigger trigger = new AssetDetailsTrigger(allAssets, rates, baseCurrency);
         assetDetails = Transformations.map(trigger, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
-    }
-
-    @SneakyThrows
-    public void refreshDataFromCache(boolean withCleanCache) {
-        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
     }
 
     public void deleteAsset(Asset asset) {
