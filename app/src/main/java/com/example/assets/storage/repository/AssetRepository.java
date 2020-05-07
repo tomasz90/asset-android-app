@@ -25,7 +25,7 @@ public class AssetRepository {
     private BaseCurrencyDao baseCurrencyDao;
     private LiveData<List<Asset>> allAssets;
     private LiveData<BaseCurrency> baseCurrency;
-    private MutableLiveData<JSONObject> rates = new MutableLiveData();
+    private MutableLiveData<JSONObject> rates = new MutableLiveData<>();
     private Application application;
 
     private static final String INSERT = "insert";

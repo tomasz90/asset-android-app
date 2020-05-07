@@ -5,13 +5,14 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.util.MultiLiveData;
-import com.example.assets.util.Triplet;
+import com.example.assets.util.Quadruplet;
 import com.example.assets.util.Utils;
 
 import org.json.JSONObject;
@@ -27,6 +28,7 @@ import static com.example.assets.constants.AssetConstants.CURRENCIES;
 public class MainViewModel extends AbstractViewModel {
 
     private LiveData<Pair<List<AssetDetails>, BaseCurrency>> assetDetails;
+    private MutableLiveData<Boolean> refreshTrigger = new MutableLiveData<>();
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -34,7 +36,7 @@ public class MainViewModel extends AbstractViewModel {
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
 
-        LiveData<Triplet<List<Asset>, JSONObject, BaseCurrency>> tripleLiveData = new MultiLiveData.Triple<>(allAssets, rates, baseCurrency);
+        LiveData<Quadruplet<List<Asset>, JSONObject, BaseCurrency, Boolean>> tripleLiveData = new MultiLiveData.Quadruple<>(allAssets, rates, baseCurrency, refreshTrigger);
         assetDetails = Transformations.map(tripleLiveData, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
     }
 
@@ -67,5 +69,9 @@ public class MainViewModel extends AbstractViewModel {
 
     public void updateRates(boolean withCleanCache) {
         assetRepository.updateRates(withCleanCache);
+    }
+
+    public void refresh() {
+        refreshTrigger.setValue(true);
     }
 }

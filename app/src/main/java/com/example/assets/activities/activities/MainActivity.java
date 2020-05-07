@@ -23,6 +23,7 @@ import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.MainViewModel;
 import com.example.assets.util.Dialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -31,6 +32,8 @@ import java.util.Objects;
 import lombok.SneakyThrows;
 
 public class MainActivity extends AppCompatActivity {
+
+    MainViewModel assetViewModel;
 
     @SneakyThrows
     @Override
@@ -53,12 +56,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // Populate view with data
-        MainViewModel assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         ProgressDialog loadingInfo = Dialog.displayLoading(this);
         assetViewModel.getAssetDetails().observe(this, assetsDetails -> {
-                adapter.setAssetsDetails(assetsDetails);
-                setTotalValue(assetsDetails, totalValue);
-                loadingInfo.dismiss();
+            adapter.setAssetsDetails(assetsDetails);
+            setTotalValue(assetsDetails, totalValue);
+            loadingInfo.dismiss();
         });
 
         // Set swipe action
@@ -73,7 +76,19 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Asset swipedAsset = adapter.getAssetAtPosition(viewHolder.getAdapterPosition());
                 if (direction == ItemTouchHelper.RIGHT) {
-                    assetViewModel.deleteAsset(swipedAsset);
+                    new MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle("Do you want to remove asset?")
+                            .setPositiveButton("Yes", (dialog, which) -> {
+                                assetViewModel.deleteAsset(swipedAsset);
+                                dialog.dismiss();
+                                Dialog.displayToast(getApplication(), "Asset removed.");
+                            })
+                            .setNegativeButton("No", (dialog, which) -> {
+                                dialog.dismiss();
+                                assetViewModel.refresh();
+                            })
+                            .show();
+
                 } else {
                     Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
                     intent.putExtra(AssetConstants.EDITED_ASSET, swipedAsset);
@@ -93,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
             assetViewModel.updateRates(true);
             System.out.println("from button ...............................................................................................");
         });
+    }
+
+    private void refreshAssetDetails() {
+
     }
 
     private void setTotalValue(Pair<List<AssetDetails>, BaseCurrency> assets, TextView totalValue) {
@@ -118,7 +137,17 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_remove:
-                new MainViewModel(this.getApplication()).deleteAllAsset();
+                new MaterialAlertDialogBuilder(MainActivity.this)
+                        .setTitle("Do you want to remove all assets?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            assetViewModel.deleteAllAsset();
+                            dialog.dismiss();
+                            Dialog.displayToast(getApplication(), "All assets removed.");
+                        })
+                        .setNegativeButton("No", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
                 break;
             case R.id.action_change_base_currency:
                 Intent intent = new Intent(this, ChooseBaseCurrencyActivity.class);
