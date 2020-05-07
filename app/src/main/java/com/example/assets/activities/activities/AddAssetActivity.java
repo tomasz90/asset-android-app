@@ -56,7 +56,7 @@ public class AddAssetActivity extends AppCompatActivity {
 
         calculatedValueTextView = findViewById(R.id.calculated_value);
 
-        assetViewModel.getRates2().observe(AddAssetActivity.this, pair -> {
+        assetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
             float rate = getAssetRate(assetType, assetSymbol, pair);
             if (pair.second != null) {
                 String textToDisplay = getString(R.string.rate, assetSymbol, pair.second.getSymbol(), rate);
@@ -112,7 +112,7 @@ public class AddAssetActivity extends AppCompatActivity {
                     value = Utils.toFloat(s);
                 }
 
-                assetViewModel.getRates2().observe(AddAssetActivity.this, pair -> {
+                assetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
                     float rate = getAssetRate(assetType, assetSymbol, pair);
                     String textToDisplay = getString(R.string.calculated_value, value * rate, pair.second.getSymbol());
                     calculatedValueTextView.setText(textToDisplay);

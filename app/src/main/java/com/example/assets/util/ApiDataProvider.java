@@ -3,7 +3,6 @@ package com.example.assets.util;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import com.example.assets.constants.AssetConstants;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -14,6 +13,11 @@ import org.json.JSONObject;
 import java.util.concurrent.TimeUnit;
 
 import lombok.SneakyThrows;
+
+import static com.example.assets.constants.AssetConstants.CRYPTOS;
+import static com.example.assets.constants.AssetConstants.CURRENCIES;
+import static com.example.assets.constants.AssetConstants.METALS;
+import static com.example.assets.constants.Constants.MESSAGE_NETWORK_MISSING;
 
 public class ApiDataProvider {
 
@@ -35,28 +39,24 @@ public class ApiDataProvider {
     }
 
     public void getData(boolean withCleanCache, DataUpdater updater) {
-        getData(withCleanCache, null, updater);
-    }
-
-    public void getData(boolean withCleanCache, String assetType, DataUpdater updater) {
         boolean isConnected = AssetServices.isConnected(application);
         if (withCleanCache) {
             if (isConnected) {
                 cache.invalidateAll();
             } else {
-                ToastManager.displayToast(application);
+                Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
                 return;
             }
         } else {
-            if (!isConnected && (cache.getIfPresent(assetType) == null)) {
-                ToastManager.displayToast(application);
+            if (!isConnected && !isCacheDataAvailable()) {
+                Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
                 return;
             }
         }
-        getAsync(updater, assetType).execute();
+        getAsync(updater).execute();
     }
 
-    private static AsyncTask<String, Void, JSONObject> getAsync(DataUpdater updater, String assetType) {
+    private static AsyncTask<String, Void, JSONObject> getAsync(DataUpdater updater) {
         return new AsyncTask<String, Void, JSONObject>() {
 
             @Override
@@ -67,13 +67,10 @@ public class ApiDataProvider {
             @SneakyThrows
             @Override
             protected JSONObject doInBackground(String... strings) {
-                if (assetType == null) {
                     return new JSONObject()
-                            .put(AssetConstants.CURRENCIES, cache.getUnchecked(AssetConstants.CURRENCIES))
-                            .put(AssetConstants.CRYPTOS, cache.getUnchecked(AssetConstants.CRYPTOS))
-                            .put(AssetConstants.METALS, cache.getUnchecked(AssetConstants.METALS));
-                }
-                return cache.getUnchecked(assetType);
+                            .put(CURRENCIES, cache.getUnchecked(CURRENCIES))
+                            .put(CRYPTOS, cache.getUnchecked(CRYPTOS))
+                            .put(METALS, cache.getUnchecked(METALS));
             }
 
             @SneakyThrows
@@ -82,6 +79,10 @@ public class ApiDataProvider {
                 updater.update(result);
             }
         };
+    }
+
+    private boolean isCacheDataAvailable() {
+        return !(cache.getIfPresent(CURRENCIES) == null && cache.getUnchecked(CRYPTOS) == null && cache.getUnchecked(CRYPTOS) == null);
     }
 
     public interface DataUpdater {

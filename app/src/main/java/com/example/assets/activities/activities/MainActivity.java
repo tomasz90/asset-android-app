@@ -21,7 +21,7 @@ import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.Asset;
 import com.example.assets.storage.room.AssetDetails;
 import com.example.assets.storage.viewmodel.AssetViewModel;
-import com.example.assets.util.ToastManager;
+import com.example.assets.util.Dialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         assetViewModel = new ViewModelProvider(this).get(AssetViewModel.class);
-        ProgressDialog loadingInfo = ToastManager.displayLoading(this);
-        assetViewModel.getAll().observe(this, assets -> {
+        ProgressDialog loadingInfo = Dialog.displayLoading(this);
+        assetViewModel.getAssetDetails().observe(this, assets -> {
             if (assets != null) {
                 adapter.setAssets(assets);
                 setTotalValue(assets);

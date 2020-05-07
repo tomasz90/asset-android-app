@@ -32,7 +32,7 @@ public class AssetViewModel extends AndroidViewModel {
     private AssetRepository assetRepository;
     private MutableLiveData<JSONObject> rates = new MutableLiveData();
     private LiveData<List<AssetDetails>> assetDetails;
-    private CustomLiveData2 rates2;
+    private RatesAndBaseCurrencyLiveData ratesAndBaseCurrency;
 
     private Application application;
 
@@ -40,13 +40,20 @@ public class AssetViewModel extends AndroidViewModel {
         super(application);
         this.application = application;
         assetRepository = new AssetRepository(application);
-        LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
-        LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
-        refreshDataFromCache(false);
-        CustomLiveData trigger = new CustomLiveData(allAssets, rates, baseCurrency);
-        rates2 = new CustomLiveData2(rates, baseCurrency);
 
-        assetDetails = Transformations.map(trigger, triplet -> getAssetDetails(triplet.first, triplet.second, triplet.third));
+        refreshDataFromCache(false);
+
+        LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
+        ratesAndBaseCurrency = new RatesAndBaseCurrencyLiveData(rates, baseCurrency);
+
+        LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
+        AssetDetailsTrigger trigger = new AssetDetailsTrigger(allAssets, rates, baseCurrency);
+        assetDetails = Transformations.map(trigger, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
+    }
+
+    @SneakyThrows
+    public void refreshDataFromCache(boolean withCleanCache) {
+        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
     }
 
     public void insertOrUpdate(Asset asset) {
@@ -65,28 +72,20 @@ public class AssetViewModel extends AndroidViewModel {
         assetRepository.deleteAll();
     }
 
-    public void setBaseCurrency(BaseCurrency baseCurrency) {
+    public void updateBaseCurrency(BaseCurrency baseCurrency) {
         assetRepository.updateBaseCurrency(baseCurrency);
     }
 
-    public LiveData<List<AssetDetails>> getAll() {
+    public LiveData<Pair<JSONObject, BaseCurrency>> getRatesAndBaseCurrency() {
+        return ratesAndBaseCurrency;
+    }
+
+    public LiveData<List<AssetDetails>> getAssetDetails() {
         return assetDetails;
     }
 
-    public LiveData<Pair<JSONObject, BaseCurrency>> getRates2() {
-        return rates2;
-    }
-    public LiveData<BaseCurrency> getBaseCurrency() {
-        return assetRepository.getBaseCurrency();
-    }
-
     @SneakyThrows
-    public void refreshDataFromCache(boolean withCleanCache) {
-        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
-    }
-
-    @SneakyThrows
-    private List<AssetDetails> getAssetDetails(List<Asset> assets, JSONObject rates, BaseCurrency baseCurrency) {
+    private List<AssetDetails> createAssetDetails(List<Asset> assets, JSONObject rates, BaseCurrency baseCurrency) {
         List<AssetDetails> assetDetails = new ArrayList<>();
         if (assets != null && rates != null && baseCurrency != null) {
             for (Asset asset : assets) {
@@ -100,16 +99,16 @@ public class AssetViewModel extends AndroidViewModel {
         return null;
     }
 
-    class CustomLiveData extends MediatorLiveData<Triplet> {
-        CustomLiveData(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
+    static class AssetDetailsTrigger extends MediatorLiveData<Triplet> {
+        AssetDetailsTrigger(LiveData<List<Asset>> assets, LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
             addSource(assets, assets1 -> setValue(Triplet.create(assets1, apiData.getValue(), base.getValue())));
             addSource(apiData, apiData1 -> setValue(Triplet.create(assets.getValue(), apiData1, base.getValue())));
             addSource(base, base1 -> setValue(Triplet.create(assets.getValue(), apiData.getValue(), base1)));
         }
     }
 
-    class CustomLiveData2 extends MediatorLiveData<Pair<JSONObject, BaseCurrency>> {
-        CustomLiveData2(LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
+    static class RatesAndBaseCurrencyLiveData extends MediatorLiveData<Pair<JSONObject, BaseCurrency>> {
+        RatesAndBaseCurrencyLiveData(LiveData<JSONObject> apiData, LiveData<BaseCurrency> base) {
             addSource(apiData, apiData1 -> setValue(Pair.create(apiData1, base.getValue())));
             addSource(base, base1 -> setValue(Pair.create(apiData.getValue(), base1)));
         }
