@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
-import com.example.assets.storage.room.Asset;
-import com.example.assets.storage.room.BaseCurrency;
+import com.example.assets.storage.room.entity.Asset;
+import com.example.assets.storage.room.entity.BaseCurrency;
 
 import org.json.JSONObject;
 

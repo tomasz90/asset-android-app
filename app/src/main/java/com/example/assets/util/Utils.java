@@ -2,7 +2,7 @@ package com.example.assets.util;
 
 import android.util.Pair;
 
-import com.example.assets.storage.room.BaseCurrency;
+import com.example.assets.storage.room.entity.BaseCurrency;
 
 import org.json.JSONObject;
 

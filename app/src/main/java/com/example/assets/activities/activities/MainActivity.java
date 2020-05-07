@@ -3,6 +3,7 @@ package com.example.assets.activities.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -18,8 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.assets.R;
 import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
 import com.example.assets.constants.AssetConstants;
-import com.example.assets.storage.room.Asset;
-import com.example.assets.storage.room.AssetDetails;
+import com.example.assets.storage.room.entity.Asset;
+import com.example.assets.storage.room.entity.AssetDetails;
+import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.MainViewModel;
 import com.example.assets.util.Dialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -91,16 +93,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setTotalValue(List<AssetDetails> assets) {
+    private void setTotalValue(Pair<List<AssetDetails>, BaseCurrency> assets) {
         float value = 0f;
-        for (AssetDetails assetDetails : assets) {
+        for (AssetDetails assetDetails : assets.first) {
             value += assetDetails.getValue();
         }
-        if (!assets.isEmpty()) {
-            totalValue.setText(getString(R.string.total_value_text_view, value, assets.get(0).getBaseCurrency().getSymbol()));
-        } else {
-            totalValue.setText(getString(R.string.total_value_text_view, value, "$"));
-        }
+        totalValue.setText(getString(R.string.total_value_text_view, value, assets.second.getSymbol()));
     }
 
     private void setToolbar() {
