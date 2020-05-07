@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -23,6 +24,7 @@ import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.MainViewModel;
 import com.example.assets.util.Dialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -56,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
         MainViewModel assetViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         ProgressDialog loadingInfo = Dialog.displayLoading(this);
         assetViewModel.getAssetDetails().observe(this, assetsDetails -> {
-                adapter.setAssetsDetails(assetsDetails);
-                setTotalValue(assetsDetails, totalValue);
-                loadingInfo.dismiss();
+            adapter.setAssetsDetails(assetsDetails);
+            setTotalValue(assetsDetails, totalValue);
+            loadingInfo.dismiss();
         });
 
         // Set swipe action
@@ -73,7 +75,18 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 Asset swipedAsset = adapter.getAssetAtPosition(viewHolder.getAdapterPosition());
                 if (direction == ItemTouchHelper.RIGHT) {
-                    assetViewModel.deleteAsset(swipedAsset);
+                    AlertDialog dialog = new MaterialAlertDialogBuilder(MainActivity.this)
+                            .setTitle("Do you want to remove asset?")
+                            .setPositiveButton("Yes", (dialog1, which) -> {
+                                assetViewModel.deleteAsset(swipedAsset);
+                                dialog1.dismiss();
+                            })
+                            .setNegativeButton("No", (dialog1, which) -> {
+                                dialog1.dismiss();
+                                assetViewModel.refresh();
+                            })
+                            .show();
+
                 } else {
                     Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
                     intent.putExtra(AssetConstants.EDITED_ASSET, swipedAsset);
@@ -93,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
             assetViewModel.updateRates(true);
             System.out.println("from button ...............................................................................................");
         });
+    }
+
+    private void refreshAssetDetails() {
+
     }
 
     private void setTotalValue(Pair<List<AssetDetails>, BaseCurrency> assets, TextView totalValue) {
