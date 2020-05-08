@@ -8,12 +8,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.assets.R;
 
+import java.util.Objects;
+
 public class DoneActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_done);
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle(null);
 
         int TIME_OUT = 2000;
         new Handler().postDelayed(() -> {
