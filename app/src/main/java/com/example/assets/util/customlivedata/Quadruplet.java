@@ -1,4 +1,4 @@
-package com.example.assets.util;
+package com.example.assets.util.customlivedata;
 
 public class Quadruplet<S, T, U, W> {
 

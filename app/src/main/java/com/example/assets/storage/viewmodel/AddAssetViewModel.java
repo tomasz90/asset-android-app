@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.BaseCurrency;
-import com.example.assets.util.MultiLiveData;
+import com.example.assets.util.customlivedata.MultiLiveData;
 
 import org.json.JSONObject;
 

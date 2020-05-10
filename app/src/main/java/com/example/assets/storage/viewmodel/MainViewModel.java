@@ -11,8 +11,8 @@ import androidx.lifecycle.Transformations;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
-import com.example.assets.util.MultiLiveData;
-import com.example.assets.util.Quadruplet;
+import com.example.assets.util.customlivedata.MultiLiveData;
+import com.example.assets.util.customlivedata.Quadruplet;
 import com.example.assets.util.Utils;
 
 import org.json.JSONObject;

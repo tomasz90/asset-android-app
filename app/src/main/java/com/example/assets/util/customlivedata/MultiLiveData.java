@@ -1,4 +1,4 @@
-package com.example.assets.util;
+package com.example.assets.util.customlivedata;
 
 import android.util.Pair;
 
@@ -6,11 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
-import static com.example.assets.util.Utils.isAllNotNull;
-
 public class MultiLiveData {
 
-    // This custom live data contains trigger to force refresh UI
+    // This custom live data contains trigger to force refresh UI. It may not be intuitive for liveData, but there are some cases:
+    // ex. user swipe asset to the right to delete it, then decline. Item is no longer visible, but is not deleted.
     public static class Quadruple<S, T, U, Boolean> extends MediatorLiveData<Quadruplet<S, T, U, Boolean>> {
         public Quadruple(@NonNull LiveData<S> live_s, @NonNull LiveData<T> live_t, @NonNull LiveData<U> live_u, @NonNull LiveData<Boolean> live_trigger) {
             addSource(live_s, s -> {
@@ -49,7 +48,6 @@ public class MultiLiveData {
         }
     }
 
-
     public static class Double<S, T> extends MediatorLiveData<Pair<S, T>> {
         public Double(@NonNull LiveData<S> live_s, @NonNull LiveData<T> live_t) {
             addSource(live_s, s -> {
@@ -68,5 +66,14 @@ public class MultiLiveData {
                 setValue(new Pair<>(s, t));
             }
         }
+    }
+
+    private static boolean isAllNotNull(Object... objects) {
+        for (Object o : objects) {
+            if (o == null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

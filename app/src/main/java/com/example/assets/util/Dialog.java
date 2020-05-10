@@ -1,5 +1,6 @@
 package com.example.assets.util;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
@@ -8,15 +9,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.assets.R;
 
 import static com.example.assets.constants.Constants.MESSAGE_LOADING;
 
 public class Dialog {
 
-    public static ProgressDialog displayLoading(AppCompatActivity activity) {
+    public static ProgressDialog displayLoading(Activity activity) {
         ProgressDialog mDialog = new ProgressDialog(activity);
         mDialog.setMessage(MESSAGE_LOADING);
         mDialog.setCancelable(false);

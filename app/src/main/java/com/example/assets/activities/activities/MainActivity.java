@@ -33,7 +33,7 @@ import lombok.SneakyThrows;
 
 public class MainActivity extends AppCompatActivity {
 
-    MainViewModel assetViewModel;
+    private MainViewModel assetViewModel;
 
     @SneakyThrows
     @Override
@@ -108,10 +108,6 @@ public class MainActivity extends AppCompatActivity {
             assetViewModel.updateRates(true);
             System.out.println("from button ...............................................................................................");
         });
-    }
-
-    private void refreshAssetDetails() {
-
     }
 
     private void setTotalValue(Pair<List<AssetDetails>, BaseCurrency> assets, TextView totalValue) {

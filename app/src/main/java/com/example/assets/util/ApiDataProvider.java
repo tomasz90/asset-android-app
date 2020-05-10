@@ -1,6 +1,9 @@
 package com.example.assets.util;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 import com.google.common.cache.CacheBuilder;
@@ -39,16 +42,15 @@ public class ApiDataProvider {
     }
 
     public void getData(boolean withCleanCache, DataUpdater updater) {
-        boolean isConnected = AssetServices.isConnected(application);
         if (withCleanCache) {
-            if (isConnected) {
+            if (isConnected()) {
                 cache.invalidateAll();
             } else {
                 Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
                 return;
             }
         } else {
-            if (!isConnected && !isCacheDataAvailable()) {
+            if (!isConnected() && !isCacheDataAvailable()) {
                 Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
                 return;
             }
@@ -87,5 +89,12 @@ public class ApiDataProvider {
 
     public interface DataUpdater {
         void update(JSONObject dataFromApi) throws JSONException;
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

@@ -39,13 +39,4 @@ public class Utils {
             editable.delete(s.length() - 1, s.length());
         }
     }
-
-    static boolean isAllNotNull(Object... objects) {
-        for (Object o : objects) {
-            if (o == null) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
