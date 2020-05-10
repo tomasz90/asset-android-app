@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.assets.R;
 
 import static com.example.assets.constants.Constants.MESSAGE_LOADING;
