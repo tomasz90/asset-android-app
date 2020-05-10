@@ -1,10 +1,5 @@
 package com.example.assets.util;
 
-import android.app.Application;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import com.example.assets.constants.AssetConstants;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -14,6 +9,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AssetServices {
+
+    public static JSONObject getRates(String assetType) throws Exception {
+        switch (assetType) {
+            case AssetConstants.CURRENCIES:
+                return filterCurrencies(getCurrencyRates());
+            case AssetConstants.CRYPTOS:
+                return filterCryptos(parseCryptos(getCryptoRates()));
+            case AssetConstants.METALS:
+                return filterMetals(getMetalRates());
+        }
+        return null;
+    }
 
     private static JSONObject getCurrencyRates() throws Exception {
         String resp = Unirest.get("https://api.exchangeratesapi.io/latest?base=USD").asString().getBody();
@@ -31,19 +38,7 @@ public class AssetServices {
         return new JSONObject(resp);
     }
 
-   public static JSONObject getRates(String assetType) throws Exception {
-        switch (assetType) {
-            case AssetConstants.CURRENCIES:
-                return filterCurrencies(getCurrencyRates());
-            case AssetConstants.CRYPTOS:
-                return filterCryptos(parseCryptos(getCryptoRates()));
-            case AssetConstants.METALS:
-                return filterMetals(getMetalRates());
-        }
-        return null;
-    }
-
-    static JSONObject filterCurrencies(JSONObject raw) throws JSONException {
+    private static JSONObject filterCurrencies(JSONObject raw) throws JSONException {
         JSONObject filtered = new JSONObject();
         for (String currency : AssetConstants.ALL_CURRENCIES) {
             filtered.put(currency, 1 / Utils.toFloat(raw.get(currency)));
@@ -51,7 +46,7 @@ public class AssetServices {
         return filtered;
     }
 
-    static JSONObject filterCryptos(JSONObject raw) throws JSONException {
+    private static JSONObject filterCryptos(JSONObject raw) throws JSONException {
         JSONObject filtered = new JSONObject();
         for (String crypto : AssetConstants.ALL_CRYPTOS) {
             filtered.put(crypto, Utils.toFloat(raw.get(crypto)));
@@ -59,7 +54,7 @@ public class AssetServices {
         return filtered;
     }
 
-    static JSONObject parseCryptos(JSONObject raw) throws JSONException {
+    private static JSONObject parseCryptos(JSONObject raw) throws JSONException {
         JSONArray data = raw.getJSONArray("data");
         JSONObject rates =  new JSONObject();
         for (int i = 0; i < data.length(); i++) {
@@ -70,7 +65,7 @@ public class AssetServices {
         return rates;
     }
 
-    static JSONObject filterMetals(JSONObject raw) throws JSONException {
+    private static JSONObject filterMetals(JSONObject raw) throws JSONException {
         JSONObject filteredRates = new JSONObject();
         for (String metal : AssetConstants.ALL_METALS) {
             filteredRates.put(metal, Utils.toFloat(raw.getJSONObject(metal)
