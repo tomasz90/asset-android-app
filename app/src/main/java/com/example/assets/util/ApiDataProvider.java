@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
+import com.example.assets.R;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -20,7 +21,6 @@ import lombok.SneakyThrows;
 import static com.example.assets.constants.AssetConstants.CRYPTOS;
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
 import static com.example.assets.constants.AssetConstants.METALS;
-import static com.example.assets.constants.Constants.MESSAGE_NETWORK_MISSING;
 
 public class ApiDataProvider {
 
@@ -46,12 +46,12 @@ public class ApiDataProvider {
             if (isConnected()) {
                 cache.invalidateAll();
             } else {
-                Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
+                Dialog.displayToast(application, R.string.network_missing);
                 return;
             }
         } else {
             if (!isConnected() && !isCacheDataAvailable()) {
-                Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
+                Dialog.displayToast(application, R.string.network_missing);
                 return;
             }
         }

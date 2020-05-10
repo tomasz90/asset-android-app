@@ -77,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 Asset swipedAsset = adapter.getAssetAtPosition(viewHolder.getAdapterPosition());
                 if (direction == ItemTouchHelper.RIGHT) {
                     new MaterialAlertDialogBuilder(MainActivity.this)
-                            .setTitle("Do you want to remove asset?")
+                            .setTitle(getString(R.string.want_to_remove_asset))
                             .setPositiveButton("Yes", (dialog, which) -> {
                                 assetViewModel.deleteAsset(swipedAsset);
                                 dialog.dismiss();
-                                Dialog.displayToast(getApplication(), "Asset removed.");
+                                Dialog.displayToast(getApplication(), R.string.asset_removed);
                             })
                             .setNegativeButton("No", (dialog, which) -> {
                                 dialog.dismiss();
@@ -145,13 +145,13 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_remove:
                 new MaterialAlertDialogBuilder(MainActivity.this)
-                        .setTitle("Do you want to remove all assets?")
-                        .setPositiveButton("Yes", (dialog, which) -> {
+                        .setTitle(getString(R.string.want_to_remove_all_assets))
+                        .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                             assetViewModel.deleteAllAsset();
                             dialog.dismiss();
-                            Dialog.displayToast(getApplication(), "All assets removed.");
+                            Dialog.displayToast(getApplication(), R.string.all_assets_removed);
                         })
-                        .setNegativeButton("No", (dialog, which) -> {
+                        .setNegativeButton(getString(R.string.no), (dialog, which) -> {
                             dialog.dismiss();
                         })
                         .show();

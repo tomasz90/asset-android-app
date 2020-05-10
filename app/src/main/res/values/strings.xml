@@ -31,8 +31,15 @@
     <string name="float_two_decimal_currency">%1$.02f %2$s</string>
     <string name="float_no_decimal_currency">%1$.0f %2$s</string>
     <string name="float_no_decimal">%1$.0f</string>
-    <string name="remove_all">Remove all assets</string>
+    <string name="remove_all_assets">Remove all assets</string>
     <string name="change_base_currency">Choose base currency</string>
     <string name="choose_base_currency">Choose base currency</string>
-
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="network_missing">Network not available :(</string>
+    <string name="loading">Loading...</string>
+    <string name="want_to_remove_all_assets">Do you want to remove all assets?</string>
+    <string name="want_to_remove_asset">Do you want to remove asset?</string>
+    <string name="all_assets_removed">All assets removed.</string>
+    <string name="asset_removed">Asset removed.</string>
 </resources>
