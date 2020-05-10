@@ -110,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        assetViewModel.refresh();
+    }
+
     private void setTotalValue(Pair<List<AssetDetails>, BaseCurrency> assets, TextView totalValue) {
         float value = 0f;
         for (AssetDetails assetDetails : assets.first) {

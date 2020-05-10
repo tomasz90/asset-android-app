@@ -13,14 +13,14 @@ import com.example.assets.storage.room.dao.BaseCurrencyDao;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.BaseCurrency;
 
-@Database(entities = {Asset.class, BaseCurrency.class}, version = 5)
+@Database(entities = {Asset.class, BaseCurrency.class}, version = 8)
 public abstract class AssetDataBase extends RoomDatabase {
     private static AssetDataBase instance;
 
     public abstract AssetDao assetDao();
     public abstract BaseCurrencyDao baseCurrencyDao();
 
-    public static synchronized AssetDataBase getInstance(Context context){
+    public static synchronized AssetDataBase getInstance(Context context) {
         if (instance == null) {
             instance = Room
                     .databaseBuilder(context.getApplicationContext(), AssetDataBase.class, "asset_database")
@@ -31,7 +31,7 @@ public abstract class AssetDataBase extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallBack = new RoomDatabase.Callback(){
+    private static RoomDatabase.Callback roomCallBack = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
