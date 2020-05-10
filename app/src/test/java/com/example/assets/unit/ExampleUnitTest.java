@@ -1,6 +1,5 @@
-package com.example.assets;
+package com.example.assets.unit;
 
-import com.example.assets.util.AssetServices;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -10,8 +9,6 @@ import org.json.JSONObject;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

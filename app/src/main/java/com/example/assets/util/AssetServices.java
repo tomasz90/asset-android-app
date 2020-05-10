@@ -17,37 +17,28 @@ public class AssetServices {
 
     private static JSONObject getCurrencyRates() throws Exception {
         String resp = Unirest.get("https://api.exchangeratesapi.io/latest?base=USD").asString().getBody();
-        System.out.println("NETWORK REQUEST ###########################################################################################");
-        return filterCurrencies(new JSONObject(resp).getJSONObject("rates"));
+        return new JSONObject(resp).getJSONObject("rates");
     }
 
     private static JSONObject getCryptoRates() throws Exception {
         String resp = Unirest.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest")
                 .header("X-CMC_PRO_API_KEY", "dfff4181-377d-4dfe-8b50-52245c63eb05").asString().getBody();
-        JSONObject rates = new JSONObject();
-        JSONArray array = new JSONObject(resp).getJSONArray("data");
-        for (int i = 0; i < array.length(); i++) {
-            String symbol = array.getJSONObject(i).getString("symbol");
-            String rate = array.getJSONObject(i).getJSONObject("quote").getJSONObject("USD").get("price").toString();
-            rates.put(symbol, rate);
-        }
-        return filterCryptos(rates);
+        return new JSONObject(resp);
     }
 
     private static JSONObject getMetalRates() throws UnirestException, JSONException {
         String resp = Unirest.get("https://www.moneymetals.com/ajax/spot-prices").asString().getBody();
-        JSONObject rates = new JSONObject(resp);
-        return filterMetals(rates);
+        return new JSONObject(resp);
     }
 
-    static JSONObject getRates(String assetType) throws Exception {
+   public static JSONObject getRates(String assetType) throws Exception {
         switch (assetType) {
             case AssetConstants.CURRENCIES:
-                return getCurrencyRates();
+                return filterCurrencies(getCurrencyRates());
             case AssetConstants.CRYPTOS:
-                return getCryptoRates();
+                return filterCryptos(parseCryptos(getCryptoRates()));
             case AssetConstants.METALS:
-                return getMetalRates();
+                return filterMetals(getMetalRates());
         }
         return null;
     }
@@ -63,26 +54,30 @@ public class AssetServices {
     static JSONObject filterCryptos(JSONObject raw) throws JSONException {
         JSONObject filtered = new JSONObject();
         for (String crypto : AssetConstants.ALL_CRYPTOS) {
-            filtered.put(crypto, raw.getString(crypto));
+            filtered.put(crypto, Utils.toFloat(raw.get(crypto)));
         }
         return filtered;
+    }
+
+    static JSONObject parseCryptos(JSONObject raw) throws JSONException {
+        JSONArray data = raw.getJSONArray("data");
+        JSONObject rates =  new JSONObject();
+        for (int i = 0; i < data.length(); i++) {
+            String symbol = data.getJSONObject(i).getString("symbol");
+            String rate = data.getJSONObject(i).getJSONObject("quote").getJSONObject("USD").get("price").toString();
+            rates.put(symbol, rate);
+        }
+        return rates;
     }
 
     static JSONObject filterMetals(JSONObject raw) throws JSONException {
         JSONObject filteredRates = new JSONObject();
         for (String metal : AssetConstants.ALL_METALS) {
-            filteredRates.put(metal, raw.getJSONObject(metal)
+            filteredRates.put(metal, Utils.toFloat(raw.getJSONObject(metal)
                     .getString("price")
                     .replace("$", "")
-                    .replace(",", ""));
+                    .replace(",", "")));
         }
         return filteredRates;
-    }
-
-    static boolean isConnected(Application activity) {
-        ConnectivityManager cm =
-                (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }
