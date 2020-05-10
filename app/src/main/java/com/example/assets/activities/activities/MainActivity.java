@@ -33,7 +33,7 @@ import lombok.SneakyThrows;
 
 public class MainActivity extends AppCompatActivity {
 
-    MainViewModel assetViewModel;
+    private MainViewModel assetViewModel;
 
     @SneakyThrows
     @Override
