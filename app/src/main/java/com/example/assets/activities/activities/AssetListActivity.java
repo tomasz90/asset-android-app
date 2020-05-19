@@ -33,7 +33,7 @@ public class AssetListActivity extends AbstractListActivity {
         String assetSymbol = tv.getText().toString();
         String assetType = getIntent().getStringExtra(AssetConstants.ASSET_TYPE);
         Intent intent = new Intent(this, AddAssetActivity.class);
-        intent.putExtra(AssetConstants.EDITED_ASSET, new Asset(assetSymbol, assetType));
+        intent.putExtra(AssetConstants.EDITED_ASSET, new Asset(assetSymbol, assetType, -1, null));
         startActivity(intent);
     }
 }

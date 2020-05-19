@@ -13,7 +13,7 @@ import com.example.assets.storage.room.dao.BaseCurrencyDao;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.BaseCurrency;
 
-@Database(entities = {Asset.class, BaseCurrency.class}, version = 8)
+@Database(entities = {Asset.class, BaseCurrency.class}, version = 1)
 public abstract class AssetDataBase extends RoomDatabase {
     private static AssetDataBase instance;
 

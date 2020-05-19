@@ -23,15 +23,6 @@ public class Asset implements Serializable {
         this.info = info;
     }
 
-    // Used for carrying basic info to addAssetActivity
-    @Ignore
-    public Asset(String symbol, String type) {
-        this.symbol = symbol;
-        this.type = type;
-        this.quantity = -1;
-        this.info = null;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
