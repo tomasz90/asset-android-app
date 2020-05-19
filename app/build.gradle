@@ -43,6 +43,10 @@ android {
         exclude 'META-INF/NOTICE.md'
         exclude 'META-INF/LICENSE.md'
     }
+
+    testOptions {
+        animationsDisabled = true
+    }
 }
 repositories {
     maven {
