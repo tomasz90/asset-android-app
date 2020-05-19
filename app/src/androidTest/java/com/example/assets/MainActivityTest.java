@@ -33,12 +33,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MainActivityTest {
 
     private Asset testAsset = new Asset("PLN", CURRENCIES, 150f, "info");
+    private BaseCurrency baseCurrency = new BaseCurrency("USD");
     private Condition.LoadingListItems listLoaded;
     private AssetDataBase dataBase;
 
@@ -50,7 +52,7 @@ public class MainActivityTest {
         Application application = mainActivityTestRule.getActivity().getApplication();
         dataBase = AssetDataBase.getInstance(application);
         dataBase.assetDao().insert(testAsset);
-        dataBase.baseCurrencyDao().update(new BaseCurrency("USD"));
+        dataBase.baseCurrencyDao().update(baseCurrency);
 
         RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
         listLoaded = new Condition.LoadingListItems(recyclerView);
@@ -177,7 +179,12 @@ public class MainActivityTest {
 
         // then
         onView(withId(R.id.total_value)).check(matches(withSubstring(newCurrency)));
+    }
 
+    @Test
+    public void should_display_some_total_value_when_have_any_asset() {
+        // then
+        onView(withId(R.id.total_value)).check(matches(not(withText("0 " + baseCurrency.getSymbol()))));
     }
 
     private void expectTestDataNotRemoved() {
