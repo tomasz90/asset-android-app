@@ -180,10 +180,6 @@ public class MainActivityTest {
 
     }
 
-    private String getString(int stringResource) {
-        return mainActivityTestRule.getActivity().getString(stringResource);
-    }
-
     private void expectTestDataNotRemoved() {
         RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
         Asset asset = ((AssetDetailsAdapter) recyclerView.getAdapter()).getAssetAtPosition(0);
@@ -197,5 +193,9 @@ public class MainActivityTest {
         RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
         int actual = Objects.requireNonNull(recyclerView.getAdapter()).getItemCount();
         assertEquals(0, actual);
+    }
+
+    private String getString(int stringResource) {
+        return mainActivityTestRule.getActivity().getString(stringResource);
     }
 }
