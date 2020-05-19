@@ -15,7 +15,6 @@ import com.example.assets.storage.room.entity.Asset;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,18 +29,17 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MainActivityTest {
 
     private Condition.LoadingListItems listLoaded;
+    private AssetDataBase dataBase;
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -49,7 +47,7 @@ public class MainActivityTest {
     @Before
     public void prepareTest() throws Exception {
         Application application = mainActivityActivityTestRule.getActivity().getApplication();
-        AssetDataBase dataBase = AssetDataBase.getInstance(application);
+        dataBase = AssetDataBase.getInstance(application);
         Asset testAsset = new Asset("PLN", CURRENCIES, 150f, "info");
         dataBase.assetDao().insert(testAsset);
 
@@ -61,7 +59,7 @@ public class MainActivityTest {
     @After
     public void removeTestData() {
         Application application = mainActivityActivityTestRule.getActivity().getApplication();
-        AssetDataBase dataBase = AssetDataBase.getInstance(application);
+        dataBase = AssetDataBase.getInstance(application);
         dataBase.assetDao().deleteAll();
     }
 
@@ -69,8 +67,10 @@ public class MainActivityTest {
     public void should_open_asset_type_list_when_clicking_add_asset_button() {
         // given
         onView(withId(R.id.fab))
+
         // when
         .perform(click());
+
         // then
         onView(withId(R.id.generic_list))
         .check(matches(isDisplayed()));
@@ -130,21 +130,20 @@ public class MainActivityTest {
     }
 
     @Test
-    @Ignore
     public void should_not_be_able_to_click_remove_assets_when_no_assets() {
         // given
+        dataBase.assetDao().deleteAll();
         openActionBarOverflowOrOptionsMenu(mainActivityActivityTestRule.getActivity());
 
         // when
         onView(withText(getString(R.string.remove_all_assets)))
+                .perform(click())
 
         // then
-        .check(matches(not(isEnabled())));
+        .check(matches(isDisplayed()));
     }
 
     private String getString(int stringResource) {
         return mainActivityActivityTestRule.getActivity().getString(stringResource);
     }
-
-
 }
