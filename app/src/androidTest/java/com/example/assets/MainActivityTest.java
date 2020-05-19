@@ -30,6 +30,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
 import static org.hamcrest.Matchers.equalTo;
@@ -42,23 +43,23 @@ public class MainActivityTest {
     private AssetDataBase dataBase;
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void prepareTest() throws Exception {
-        Application application = mainActivityActivityTestRule.getActivity().getApplication();
+        Application application = mainActivityTestRule.getActivity().getApplication();
         dataBase = AssetDataBase.getInstance(application);
         Asset testAsset = new Asset("PLN", CURRENCIES, 150f, "info");
         dataBase.assetDao().insert(testAsset);
 
-        RecyclerView recyclerView = mainActivityActivityTestRule.getActivity().findViewById(R.id.asset_list);
+        RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
         listLoaded = new Condition.LoadingListItems(recyclerView);
         ConditionWatcher.waitForCondition(listLoaded);
     }
 
     @After
     public void removeTestData() {
-        Application application = mainActivityActivityTestRule.getActivity().getApplication();
+        Application application = mainActivityTestRule.getActivity().getApplication();
         dataBase = AssetDataBase.getInstance(application);
         dataBase.assetDao().deleteAll();
     }
@@ -79,8 +80,8 @@ public class MainActivityTest {
     @Test
     public void should_see_empty_list_when_remove_all_assets_was_clicked() {
         // given
-        RecyclerView recyclerView = mainActivityActivityTestRule.getActivity().findViewById(R.id.asset_list);
-        openActionBarOverflowOrOptionsMenu(mainActivityActivityTestRule.getActivity());
+        RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
+        openActionBarOverflowOrOptionsMenu(mainActivityTestRule.getActivity());
 
         // when
         onView(withText(getString(R.string.remove_all_assets))).perform(click());
@@ -102,7 +103,7 @@ public class MainActivityTest {
 
         // then
         int expected = 0;
-        RecyclerView recyclerView = mainActivityActivityTestRule.getActivity().findViewById(R.id.asset_list);
+        RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
         int actual = Objects.requireNonNull(recyclerView.getAdapter()).getItemCount();
         assertThat(actual, equalTo(expected));
     }
@@ -122,7 +123,7 @@ public class MainActivityTest {
 
         // then
         ConditionWatcher.waitForCondition(new Condition.LoadingMainActivity());
-        RecyclerView recyclerView = mainActivityActivityTestRule.getActivity().findViewById(R.id.asset_list);
+        RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
         ConditionWatcher.waitForCondition(listLoaded);
         int actualQuote = (int)((AssetDetailsAdapter) recyclerView.getAdapter()).getAssetAtPosition(0).getQuantity();
         assertEquals(Integer.parseInt(expectedQuote), actualQuote);
@@ -133,7 +134,7 @@ public class MainActivityTest {
     public void should_not_be_able_to_click_remove_assets_when_no_assets() {
         // given
         dataBase.assetDao().deleteAll();
-        openActionBarOverflowOrOptionsMenu(mainActivityActivityTestRule.getActivity());
+        openActionBarOverflowOrOptionsMenu(mainActivityTestRule.getActivity());
 
         // when
         onView(withText(getString(R.string.remove_all_assets)))
@@ -143,7 +144,24 @@ public class MainActivityTest {
         .check(matches(isDisplayed()));
     }
 
+    @Test
+    public void should_displayed_different_currency_than_usd_when_was_changed() {
+        // given
+        String newCurrency = "EUR";
+        openActionBarOverflowOrOptionsMenu(mainActivityTestRule.getActivity());
+
+        // when
+        onView(withText(getString(R.string.choose_base_currency)))
+                .perform(click());
+        onView(withText(newCurrency))
+                .perform(click());
+
+        // then
+        onView(withId(R.id.total_value)).check(matches(withSubstring(newCurrency)));
+
+    }
+
     private String getString(int stringResource) {
-        return mainActivityActivityTestRule.getActivity().getString(stringResource);
+        return mainActivityTestRule.getActivity().getString(stringResource);
     }
 }
