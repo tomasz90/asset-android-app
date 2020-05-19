@@ -39,6 +39,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MainActivityTest {
 
+    private Asset testAsset = new Asset("PLN", CURRENCIES, 150f, "info");
     private Condition.LoadingListItems listLoaded;
     private AssetDataBase dataBase;
 
@@ -49,7 +50,6 @@ public class MainActivityTest {
     public void prepareTest() throws Exception {
         Application application = mainActivityTestRule.getActivity().getApplication();
         dataBase = AssetDataBase.getInstance(application);
-        Asset testAsset = new Asset("PLN", CURRENCIES, 150f, "info");
         dataBase.assetDao().insert(testAsset);
 
         RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
@@ -97,7 +97,7 @@ public class MainActivityTest {
     @Test
     public void should_not_see_asset_when_remove_it_by_swiping_right() throws Exception {
         // when
-        onView(withText("PLN")).perform(ViewActions.swipeRight());
+        onView(withText(testAsset.getSymbol())).perform(ViewActions.swipeRight());
         onView(withText(getString(R.string.want_to_remove_asset))).check(matches(isDisplayed()));
         onView(withText(getString(R.string.yes))).perform(click());
 
@@ -109,12 +109,28 @@ public class MainActivityTest {
     }
 
     @Test
+    public void should_see_asset_when_not_confirming_removal()  {
+        // when
+        onView(withText(testAsset.getSymbol())).perform(ViewActions.swipeRight());
+        onView(withText(getString(R.string.want_to_remove_asset))).check(matches(isDisplayed()));
+        onView(withText(getString(R.string.no))).perform(click());
+
+        // then
+        RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
+        Asset asset = ((AssetDetailsAdapter) recyclerView.getAdapter()).getAssetAtPosition(0);
+        String symbol = asset.getSymbol();
+        int quantity = (int) asset.getQuantity();
+        assertEquals(testAsset.getSymbol(), symbol);
+        assertEquals((int) testAsset.getQuantity(), quantity);
+    }
+
+    @Test
     public void should_asset_has_new_value_when_asset_was_edited() throws Exception {
         // given
         String expectedQuote = "1234";
 
         // when
-        onView(withText("PLN")).perform(ViewActions.swipeLeft());
+        onView(withText(testAsset.getSymbol())).perform(ViewActions.swipeLeft());
         onView(withId(R.id.amount_input))
                 .perform(clearText())
                 .perform(typeText(expectedQuote));
