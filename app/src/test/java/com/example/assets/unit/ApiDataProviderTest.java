@@ -3,6 +3,7 @@ package com.example.assets.unit;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import com.example.assets.R;
 import com.example.assets.util.ApiDataProvider;
 import com.example.assets.util.Dialog;
 import com.google.common.cache.LoadingCache;
@@ -15,7 +16,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import static com.example.assets.constants.Constants.MESSAGE_NETWORK_MISSING;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -51,7 +51,7 @@ public class ApiDataProviderTest {
         mockStatic(Dialog.class);
         apiDataProvider = spy(new ApiDataProvider(application));
         doReturn(task).when(ApiDataProvider.class, "getAsync", updater);
-        doNothing().when(Dialog.class, "displayToast", application, MESSAGE_NETWORK_MISSING);
+        doNothing().when(Dialog.class, "displayToast", application, R.string.network_missing);
         Whitebox.setInternalState(ApiDataProvider.class, "cache", cache);
     }
 
@@ -84,7 +84,7 @@ public class ApiDataProviderTest {
 
         // then
         verify(cache, times(0)).invalidateAll();
-        verifyStatic(times(1)); Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
+        verifyStatic(times(1)); Dialog.displayToast(application, R.string.network_missing);
         verifyPrivate(ApiDataProvider.class, times(0)).invoke("getAsync", updater);
     }
 
@@ -103,7 +103,7 @@ public class ApiDataProviderTest {
 
         // then
         verify(cache, times(0)).invalidateAll();
-        verifyStatic(times(1)); Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
+        verifyStatic(times(1)); Dialog.displayToast(application, R.string.network_missing);
         verifyPrivate(ApiDataProvider.class, times(0)).invoke("getAsync", updater);
     }
 
@@ -122,7 +122,7 @@ public class ApiDataProviderTest {
 
         // then
         verify(cache, times(0)).invalidateAll();
-        verifyStatic(times(0)); Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
+        verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
         verifyPrivate(ApiDataProvider.class, times(1)).invoke("getAsync", updater);
     }
 
@@ -141,7 +141,7 @@ public class ApiDataProviderTest {
 
         // then
         verify(cache, times(0)).invalidateAll();
-        verifyStatic(times(0)); Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
+        verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
         verifyPrivate(ApiDataProvider.class, times(1)).invoke("getAsync", updater);
     }
 
@@ -160,7 +160,7 @@ public class ApiDataProviderTest {
 
         // then
         verify(cache, times(0)).invalidateAll();
-        verifyStatic(times(0)); Dialog.displayToast(application, MESSAGE_NETWORK_MISSING);
+        verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
         verifyPrivate(ApiDataProvider.class, times(1)).invoke("getAsync", updater);
     }
 }
