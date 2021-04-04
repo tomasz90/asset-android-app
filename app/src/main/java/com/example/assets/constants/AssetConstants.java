@@ -26,7 +26,14 @@ public class AssetConstants {
     private static final String ETH = "ETH";
     private static final String LTC = "LTC";
     private static final String XRP = "XRP";
-    private static final String NEO = "NEO";
+    private static final String ADA = "ADA";
+    private static final String DOT = "DOT";
+    private static final String LINK = "LINK";
+    private static final String MATIC = "MATIC";
+    private static final String AVAX = "AVAX";
+    private static final String ATOM = "ATOM";
+    private static final String UTK = "UTK";
+    private static final String REEF = "REEF";
 
     private static final String GOLD = "Gold";
     private static final String SILVER = "Silver";
@@ -38,7 +45,7 @@ public class AssetConstants {
     public static final String METALS = "Metals";
 
     public static final ArrayList<String> ALL_CURRENCIES = new ArrayList<>(Arrays.asList(EUR, USD, CHF, JPY, GBP, PLN, NOK, SEK, DDK));
-    public static final ArrayList<String> ALL_CRYPTOS = new ArrayList<>(Arrays.asList(BTC, ETH, LTC, XRP, NEO));
+    public static final ArrayList<String> ALL_CRYPTOS = new ArrayList<>(Arrays.asList(BTC, ETH, LTC, XRP, ADA, DOT, LINK, MATIC, AVAX, ATOM, UTK, REEF));
     public static final ArrayList<String> ALL_METALS = new ArrayList<>(Arrays.asList(GOLD, SILVER, PLATINUM, PALLADIUM));
 
     public static final List<String> ALL_ASSETS = Arrays.asList(CURRENCIES, CRYPTOS, METALS);

@@ -28,7 +28,7 @@ public class AssetServices {
     }
 
     private static JSONObject getCryptoRates() throws Exception {
-        String resp = Unirest.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest")
+        String resp = Unirest.get("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=400")
                 .header("X-CMC_PRO_API_KEY", "dfff4181-377d-4dfe-8b50-52245c63eb05").asString().getBody();
         return new JSONObject(resp);
     }
