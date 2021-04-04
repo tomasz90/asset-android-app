@@ -23,7 +23,7 @@ public class AssetServices {
     }
 
     private static JSONObject getCurrencyRates() throws Exception {
-        String resp = Unirest.get("https://api.exchangeratesapi.io/latest?base=USD").asString().getBody();
+        String resp = Unirest.get("https://api.exchangerate.host/latest?base=USD").asString().getBody();
         return new JSONObject(resp).getJSONObject("rates");
     }
 
