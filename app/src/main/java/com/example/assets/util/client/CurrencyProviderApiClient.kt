@@ -17,7 +17,7 @@ interface CurrencyProviderApiClient {
 }
 
 
-class CurrencyRatesResponse(@JsonProperty("rates") val rates: Map<String, Float>) {
+class CurrencyRatesResponse(@JsonProperty("rates") val rates: Map<String, Float>) : RatesResponse {
 
-    fun toRates() : CurrencyRates = CurrencyRates(rates.map { Rate(it.key, it.value) })
+    override fun toRates() : CurrencyRates = CurrencyRates(rates.map { Rate(it.key, it.value) })
 }

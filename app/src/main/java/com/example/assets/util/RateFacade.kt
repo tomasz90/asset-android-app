@@ -3,7 +3,9 @@ package com.example.assets.util
 import com.example.assets.util.client.CryptoProviderApiClient
 import com.example.assets.util.client.CurrencyProviderApiClient
 import com.example.assets.util.client.MetalsProviderApiClient
+import com.example.assets.util.client.RatesResponse
 import com.fasterxml.jackson.databind.*
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
@@ -35,28 +37,24 @@ class RateFacade {
             .build()
             .create(MetalsProviderApiClient::class.java)
 
-    fun getCurrencies(): CurrencyRates {
-        val response = currencyProviderApiClient.getRates().execute()
-        if (response.isSuccessful) {
-            return response.body()!!.toRates()
-        } else {
-            throw Exception() //todo handle this
-        }
+    fun getCurrencies(): Rates {
+        val response = currencyProviderApiClient.getRates().execute() as Response<RatesResponse>
+        return response.handle()
     }
 
-    fun getCryptos(): CryptoRates {
-        val response = cryptoProviderApiClient.getRates().execute()
-        if (response.isSuccessful) {
-            return response.body()!!.toRates()
-        } else {
-            throw Exception() //todo handle this
-        }
+    fun getCryptos(): Rates {
+        val response = cryptoProviderApiClient.getRates().execute() as Response<RatesResponse>
+        return response.handle()
     }
 
-    fun getMetals(): MetalRates {
-        val response = metalProviderApiClient.getRates().execute()
-        if (response.isSuccessful) {
-            return response.body()!!.toRates()
+    fun getMetals(): Rates {
+        val response = metalProviderApiClient.getRates().execute() as Response<RatesResponse>
+        return response.handle()
+    }
+
+    private fun Response<RatesResponse>.handle(): Rates {
+        if (this.isSuccessful) {
+            return this.body()!!.toRates()
         } else {
             throw Exception() //todo handle this
         }

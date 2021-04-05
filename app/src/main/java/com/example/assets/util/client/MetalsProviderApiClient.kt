@@ -19,9 +19,9 @@ class MetalRatesResponse(@JsonProperty("Gold") val gold: MetalData,
                          @JsonProperty("Silver") val silver: MetalData,
                          @JsonProperty("Platinum") val platinum: MetalData,
                          @JsonProperty("Palladium") val palladium: MetalData,
-                         @JsonProperty("Rhodium") val rhodium: MetalData) {
+                         @JsonProperty("Rhodium") val rhodium: MetalData): RatesResponse {
 
-    fun toRates(): MetalRates {
+    override fun toRates(): MetalRates {
         val rates = this::class.java.declaredFields
                 .map { Rate(it.name, getPrice(it)) }
         return MetalRates(rates)

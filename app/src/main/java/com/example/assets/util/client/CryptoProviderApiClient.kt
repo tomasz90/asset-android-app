@@ -15,9 +15,9 @@ interface CryptoProviderApiClient {
             : Call<CryptoRatesResponse>
 }
 
-class CryptoRatesResponse(@JsonProperty("data") val data: List<CryptoData>) {
+class CryptoRatesResponse(@JsonProperty("data") val data: List<CryptoData>): RatesResponse {
 
-    fun toRates(): CryptoRates =
+    override fun toRates(): CryptoRates =
             CryptoRates(data.map { data -> Rate(data.symbol, data.quote.usd.price) })
 
 }
