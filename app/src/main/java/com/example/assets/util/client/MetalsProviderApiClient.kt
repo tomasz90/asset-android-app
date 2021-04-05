@@ -7,8 +7,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 import java.lang.reflect.Field
 
-
-
 interface MetalsProviderApiClient {
 
     @GET("ajax/spot-prices")
@@ -22,8 +20,7 @@ class MetalRatesResponse(@JsonProperty("Gold") val gold: MetalData,
                          @JsonProperty("Rhodium") val rhodium: MetalData): RatesResponse {
 
     override fun toRates(): MetalRates {
-        val rates = this::class.java.declaredFields
-                .map { Rate(it.name, getPrice(it)) }
+        val rates = this::class.java.declaredFields.map { Rate(it.name, getPrice(it)) }
         return MetalRates(rates)
     }
 
