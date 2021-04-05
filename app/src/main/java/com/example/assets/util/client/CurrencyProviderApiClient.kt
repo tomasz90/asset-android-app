@@ -10,8 +10,7 @@ import retrofit2.http.Query
 interface CurrencyProviderApiClient {
 
     @GET("latest")
-    fun getRates(@Query("base") base: String = "USD")
-    : Call<CurrencyRatesResponse>
+    fun getRates(@Query("base") base: String = "USD"): Call<CurrencyRatesResponse>
 }
 
 class CurrencyRatesResponse(@JsonProperty("rates") val rates: Map<String, Float>) : RatesResponse {

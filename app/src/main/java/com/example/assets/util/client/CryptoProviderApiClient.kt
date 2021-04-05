@@ -11,8 +11,7 @@ interface CryptoProviderApiClient {
 
     @Headers("X-CMC_PRO_API_KEY: dfff4181-377d-4dfe-8b50-52245c63eb05")
     @GET("v1/cryptocurrency/listings/latest?limit=400")
-    fun getRates()
-            : Call<CryptoRatesResponse>
+    fun getRates(): Call<CryptoRatesResponse>
 }
 
 class CryptoRatesResponse(@JsonProperty("data") val data: List<CryptoData>): RatesResponse {
