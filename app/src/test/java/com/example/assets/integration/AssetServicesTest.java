@@ -1,12 +1,14 @@
 package com.example.assets.integration;
 
 import com.example.assets.util.AssetServices;
+import com.example.assets.util.RateFacade;
 import com.example.assets.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +40,14 @@ public class AssetServicesTest {
     @Test
     public void should_return_metal_rates() throws Exception {
         shouldReturnRates(METALS, ALL_METALS);
+    }
+
+    @Test
+    public void should_use_retrofit() {
+
+        RateFacade facade = new RateFacade();
+
+        facade.getMetals();
     }
 
     private void shouldReturnRates(String assetsName, List<String> assetsList) throws Exception {
