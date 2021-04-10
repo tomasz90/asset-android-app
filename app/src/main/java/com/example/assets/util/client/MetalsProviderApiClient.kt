@@ -13,11 +13,11 @@ interface MetalsProviderApiClient {
     fun getRates(): Call<MetalRatesResponse>
 }
 
-class MetalRatesResponse(@JsonProperty("Gold") val gold: MetalData,
-                         @JsonProperty("Silver") val silver: MetalData,
-                         @JsonProperty("Platinum") val platinum: MetalData,
-                         @JsonProperty("Palladium") val palladium: MetalData,
-                         @JsonProperty("Rhodium") val rhodium: MetalData): RatesResponse {
+class MetalRatesResponse(@JsonProperty("Gold") val Gold: MetalData,
+                         @JsonProperty("Silver") val Silver: MetalData,
+                         @JsonProperty("Platinum") val Platinum: MetalData,
+                         @JsonProperty("Palladium") val Palladium: MetalData,
+                         @JsonProperty("Rhodium") val Rhodium: MetalData): RatesResponse {
 
     override fun toRates(): MetalRates {
         val rates = this::class.java.declaredFields.map { Rate(it.name, getPrice(it)) }

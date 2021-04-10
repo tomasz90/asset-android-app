@@ -34,13 +34,14 @@ public class MainViewModel extends AbstractViewModel {
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+        updateRates(false);
         this.application = application;
 
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
 
-        LiveData<Quadruplet<List<Asset>, JSONObject, BaseCurrency, Boolean>> tripleLiveData = new MultiLiveData.Quadruple<>(allAssets, rates, baseCurrency, refreshTrigger);
-        assetDetails = Transformations.map(tripleLiveData, triplet -> createAssetDetails(triplet.first, triplet.second, triplet.third));
+        LiveData<Quadruplet<List<Asset>, JSONObject, BaseCurrency, Boolean>> quadrupleLiveData = new MultiLiveData.Quadruple<>(allAssets, rates, baseCurrency, refreshTrigger);
+        assetDetails = Transformations.map(quadrupleLiveData, quadruplet -> createAssetDetails(quadruplet.first, quadruplet.second, quadruplet.third));
     }
 
     public void deleteAsset(Asset asset) {
@@ -71,7 +72,7 @@ public class MainViewModel extends AbstractViewModel {
     }
 
     public void updateRates(boolean withCleanCache) {
-        assetRepository.updateRates(withCleanCache);
+        new ApiDataProvider(application).getData(withCleanCache, rates::setValue);
     }
 
     public void refresh() {

@@ -47,7 +47,7 @@ public class AssetServicesTest {
 
         RateFacade facade = new RateFacade();
 
-        facade.getCryptos().getRates().forEach(x->System.out.println(x.getSymbol()));
+        facade.getRates().forEach(x->System.out.println(x.getSymbol() + " " + x.getValue()));
     }
 
     private void shouldReturnRates(String assetsName, List<String> assetsList) throws Exception {

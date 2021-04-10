@@ -25,8 +25,6 @@ public class AssetRepository {
     private BaseCurrencyDao baseCurrencyDao;
     private LiveData<List<Asset>> allAssets;
     private LiveData<BaseCurrency> baseCurrency;
-    private MutableLiveData<JSONObject> rates = new MutableLiveData<>();
-    private Application application;
 
     private static final String INSERT = "insert";
     private static final String UPDATE = "update";
@@ -35,8 +33,6 @@ public class AssetRepository {
     private static final String DELETE_ALL = "delete_all";
 
     public AssetRepository(Application application) {
-        this.application = application;
-        updateRates(false);
         AssetDataBase dataBase = AssetDataBase.getInstance(application);
         assetDao = dataBase.assetDao();
         baseCurrencyDao = dataBase.baseCurrencyDao();
@@ -70,10 +66,6 @@ public class AssetRepository {
 
     public void deleteAllAsset() {
         asyncAssetQuery(DELETE_ALL, assetDao).execute();
-    }
-
-    public LiveData<JSONObject> getRates() {
-        return rates;
     }
 
     private static AsyncTask<Asset, Void, Void> asyncAssetQuery(String query, AssetDao assetDao) {
@@ -112,10 +104,5 @@ public class AssetRepository {
                 return null;
             }
         };
-    }
-
-    @SneakyThrows
-    public void updateRates(boolean withCleanCache) {
-        new ApiDataProvider(application).getData(withCleanCache, dataFromApi -> rates.setValue(dataFromApi));
     }
 }
