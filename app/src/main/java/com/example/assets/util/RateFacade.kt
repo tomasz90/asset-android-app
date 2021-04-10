@@ -52,9 +52,22 @@ class RateFacade {
         return response.handle()
     }
 
+//    fun getRates(type: Rates): List<Rate> {
+//        return when (type) {
+//            CryptoRates::class -> getCryptos().rates
+//            CurrencyRates::class -> getCurrencies().rates
+//            MetalRates::class -> getMetals().rates
+//            else -> throw Exception() //todo handle this
+//        }
+//    }
+
+    fun getRates(): List<Rate> {
+        return getCryptos().rates + getCurrencies().rates + getMetals().rates
+    }
+
     private fun Response<RatesResponse>.handle(): Rates {
         if (this.isSuccessful) {
-            return this.body()!!.toRates()
+            return this.body()!!.toRates().filter()
         } else {
             throw Exception() //todo handle this
         }

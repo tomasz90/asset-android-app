@@ -7,14 +7,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 import com.example.assets.R;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.concurrent.TimeUnit;
 
 import lombok.SneakyThrows;
 
@@ -24,33 +18,22 @@ import static com.example.assets.constants.AssetConstants.METALS;
 
 public class ApiDataProvider {
 
-    private Application application;
-
-    private static CacheLoader<String, JSONObject> loader = new CacheLoader<String, JSONObject>() {
-        @Override
-        public JSONObject load(String assetType) throws Exception {
-            return AssetServices.getRates(assetType);
-        }
-    };
-
-    private static LoadingCache<String, JSONObject> cache = CacheBuilder.newBuilder()
-            .expireAfterWrite(10, TimeUnit.MINUTES)
-            .build(loader);
+    private final Application application;
+    private static JSONObject jsonObject;
 
     public ApiDataProvider(Application application) {
         this.application = application;
     }
 
+    public interface DataUpdater {
+        void update(JSONObject apiRates);
+    }
+
     public void getData(boolean withCleanCache, DataUpdater updater) {
         if (withCleanCache) {
             if (isConnected()) {
-                cache.invalidateAll();
+                jsonObject = null;
             } else {
-                Dialog.displayToast(application, R.string.network_missing);
-                return;
-            }
-        } else {
-            if (!isConnected() && !isCacheDataAvailable()) {
                 Dialog.displayToast(application, R.string.network_missing);
                 return;
             }
@@ -69,10 +52,13 @@ public class ApiDataProvider {
             @SneakyThrows
             @Override
             protected JSONObject doInBackground(String... strings) {
-                    return new JSONObject()
-                            .put(CURRENCIES, cache.getUnchecked(CURRENCIES))
-                            .put(CRYPTOS, cache.getUnchecked(CRYPTOS))
-                            .put(METALS, cache.getUnchecked(METALS));
+                if (jsonObject == null) {
+                    jsonObject = new JSONObject()
+                            .put(CURRENCIES, AssetServices.getRates(CURRENCIES))
+                            .put(CRYPTOS, AssetServices.getRates(CRYPTOS))
+                            .put(METALS, AssetServices.getRates(METALS));
+                }
+                return jsonObject;
             }
 
             @SneakyThrows
@@ -81,14 +67,6 @@ public class ApiDataProvider {
                 updater.update(result);
             }
         };
-    }
-
-    private boolean isCacheDataAvailable() {
-        return !(cache.getIfPresent(CURRENCIES) == null && cache.getUnchecked(CRYPTOS) == null && cache.getUnchecked(CRYPTOS) == null);
-    }
-
-    public interface DataUpdater {
-        void update(JSONObject dataFromApi) throws JSONException;
     }
 
     private boolean isConnected() {

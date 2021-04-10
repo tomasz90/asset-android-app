@@ -42,7 +42,6 @@ public class AssetRepository {
         baseCurrencyDao = dataBase.baseCurrencyDao();
         allAssets = assetDao.getAll();
         baseCurrency = baseCurrencyDao.get();
-
     }
 
     public LiveData<BaseCurrency> getBaseCurrency() {

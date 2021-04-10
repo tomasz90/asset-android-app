@@ -11,6 +11,7 @@ import androidx.lifecycle.Transformations;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
+import com.example.assets.util.ApiDataProvider;
 import com.example.assets.util.customlivedata.MultiLiveData;
 import com.example.assets.util.customlivedata.Quadruplet;
 import com.example.assets.util.Utils;
@@ -29,9 +30,11 @@ public class MainViewModel extends AbstractViewModel {
 
     private LiveData<Pair<List<AssetDetails>, BaseCurrency>> assetDetails;
     private MutableLiveData<Boolean> refreshTrigger = new MutableLiveData<>();
+    private Application application;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+        this.application = application;
 
         LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
         LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
