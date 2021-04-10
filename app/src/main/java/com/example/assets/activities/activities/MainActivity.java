@@ -116,12 +116,12 @@ public class MainActivity extends AppCompatActivity {
         assetViewModel.refresh();
     }
 
-    private void setTotalValue(Pair<List<AssetDetails>, BaseCurrency> assets, TextView totalValue) {
+    private void setTotalValue(List<AssetDetails> assets, TextView totalValue) {
         float value = 0f;
-        for (AssetDetails assetDetails : assets.first) {
+        for (AssetDetails assetDetails : assets) {
             value += assetDetails.getValue();
         }
-        totalValue.setText(getString(R.string.total_value_text_view, value, assets.second.getSymbol()));
+        totalValue.setText(getString(R.string.total_value_text_view, value, assets.get(0).getBaseCurrency()));
     }
 
     @Override
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem removeItem = menu.getItem(0);
         assetViewModel.getAssetDetails().observe(this, assetsDetails -> {
-            boolean hasAnyItem = !assetsDetails.first.isEmpty();
+            boolean hasAnyItem = !assetsDetails.isEmpty();
             removeItem.setEnabled(hasAnyItem);
         });
         return true;

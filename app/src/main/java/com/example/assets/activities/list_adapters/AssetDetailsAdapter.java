@@ -20,9 +20,9 @@ import java.util.List;
 
 public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapter.AssetHolder> {
 
-    private Pair<List<AssetDetails>, BaseCurrency> assetsDetails = Pair.create(new ArrayList<>(), null);
+    private List<AssetDetails> assetsDetails = new ArrayList<>();
 
-    public void setAssetsDetails(Pair<List<AssetDetails>, BaseCurrency> assetsDetails) {
+    public void setAssetsDetails(List<AssetDetails> assetsDetails) {
         this.assetsDetails = assetsDetails;
         notifyDataSetChanged();
     }
@@ -37,22 +37,21 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
     @Override
     public void onBindViewHolder(@NonNull AssetHolder holder, int position) {
         Context c = holder.itemView.getContext();
-        AssetDetails currentAsset = assetsDetails.first.get(position);
-        BaseCurrency baseCurrency = assetsDetails.second;
+        AssetDetails currentAsset = assetsDetails.get(position);
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getInfo());
         holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
-        holder.rate.setText(c.getString(R.string.float_two_decimal_currency, currentAsset.getRate(), baseCurrency.getSymbol()));
-        holder.value.setText(c.getString(R.string.float_no_decimal_currency, currentAsset.getValue(), baseCurrency.getSymbol()));
+        holder.rate.setText(c.getString(R.string.float_two_decimal_currency, currentAsset.getRate(), currentAsset.getBaseCurrency()));
+        holder.value.setText(c.getString(R.string.float_no_decimal_currency, currentAsset.getValue(), currentAsset.getBaseCurrency()));
     }
 
     @Override
     public int getItemCount() {
-        return assetsDetails.first.size();
+        return assetsDetails.size();
     }
 
     public Asset getAssetAtPosition(int position) {
-        return assetsDetails.first.get(position).getAsset();
+        return assetsDetails.get(position).getAsset();
     }
 
     static class AssetHolder extends RecyclerView.ViewHolder {

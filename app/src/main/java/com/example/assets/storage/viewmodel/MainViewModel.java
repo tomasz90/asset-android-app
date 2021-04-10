@@ -13,6 +13,7 @@ import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.util.ApiDataProvider;
 import com.example.assets.util.customlivedata.MultiLiveData;
+import com.example.assets.util.customlivedata.MultiLiveData.Quadruple;
 import com.example.assets.util.customlivedata.Quadruplet;
 import com.example.assets.util.Utils;
 
@@ -24,24 +25,23 @@ import java.util.List;
 
 import lombok.SneakyThrows;
 
+import static androidx.lifecycle.Transformations.map;
 import static com.example.assets.constants.AssetConstants.CURRENCIES;
 
 public class MainViewModel extends AbstractViewModel {
 
-    private LiveData<Pair<List<AssetDetails>, BaseCurrency>> assetDetails;
+    private LiveData<List<AssetDetails>> assetDetails;
     private MutableLiveData<Boolean> refreshTrigger = new MutableLiveData<>();
     private Application application;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        updateRates(false);
         this.application = application;
+        updateRates(false);
 
-        LiveData<BaseCurrency> baseCurrency = assetRepository.getBaseCurrency();
-        LiveData<List<Asset>> allAssets = assetRepository.getAllAssets();
-
-        LiveData<Quadruplet<List<Asset>, JSONObject, BaseCurrency, Boolean>> quadrupleLiveData = new MultiLiveData.Quadruple<>(allAssets, rates, baseCurrency, refreshTrigger);
-        assetDetails = Transformations.map(quadrupleLiveData, quadruplet -> createAssetDetails(quadruplet.first, quadruplet.second, quadruplet.third));
+        LiveData<Quadruplet<List<Asset>, BaseCurrency, JSONObject, Boolean>> quadrupleLiveData =
+                new Quadruple<>(assetRepository.getAllAssets(), assetRepository.getBaseCurrency(), rates, refreshTrigger);
+        assetDetails = map(quadrupleLiveData, quadruplet -> createAssetDetails(quadruplet.first, quadruplet.second, quadruplet.third));
     }
 
     public void deleteAsset(Asset asset) {
@@ -52,23 +52,8 @@ public class MainViewModel extends AbstractViewModel {
         assetRepository.deleteAllAsset();
     }
 
-    public LiveData<Pair<List<AssetDetails>, BaseCurrency>> getAssetDetails() {
+    public LiveData<List<AssetDetails>> getAssetDetails() {
         return assetDetails;
-    }
-
-    @SneakyThrows
-    private Pair<List<AssetDetails>, BaseCurrency> createAssetDetails(List<Asset> assets, JSONObject rates, BaseCurrency baseCurrency) {
-        List<AssetDetails> assetDetails = new ArrayList<>();
-        if (assets != null && rates != null && baseCurrency != null) {
-            for (Asset asset : assets) {
-                float baseCurrencyRate = 1 / Utils.toFloat(rates.getJSONObject(CURRENCIES).getString(baseCurrency.getSymbol()));
-                float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrencyRate;
-                assetDetails.add(new AssetDetails(asset, rate));
-            }
-            assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
-            return new Pair<>(assetDetails, baseCurrency);
-        }
-        return null;
     }
 
     public void updateRates(boolean withCleanCache) {
@@ -77,5 +62,20 @@ public class MainViewModel extends AbstractViewModel {
 
     public void refresh() {
         refreshTrigger.setValue(true);
+    }
+
+    @SneakyThrows
+    private List<AssetDetails> createAssetDetails(List<Asset> assets, BaseCurrency baseCurrency, JSONObject rates) {
+        List<AssetDetails> assetDetails = new ArrayList<>();
+        if (assets != null && rates != null && baseCurrency != null) {
+            for (Asset asset : assets) {
+                float baseCurrencyRate = 1 / Utils.toFloat(rates.getJSONObject(CURRENCIES).getString(baseCurrency.getSymbol()));
+                float rate = Utils.toFloat(rates.getJSONObject(asset.getType()).getString(asset.getSymbol())) * baseCurrencyRate;
+                assetDetails.add(new AssetDetails(asset, baseCurrency, rate));
+            }
+            assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
+            return assetDetails;
+        }
+        return null;
     }
 }
