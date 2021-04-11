@@ -8,15 +8,9 @@ import android.os.AsyncTask;
 
 import com.example.assets.R;
 
-import org.json.JSONObject;
-
 import java.util.Map;
 
 import lombok.SneakyThrows;
-
-import static com.example.assets.constants.AssetConstants.CRYPTOS;
-import static com.example.assets.constants.AssetConstants.CURRENCIES;
-import static com.example.assets.constants.AssetConstants.METALS;
 
 public class ApiDataProvider {
 

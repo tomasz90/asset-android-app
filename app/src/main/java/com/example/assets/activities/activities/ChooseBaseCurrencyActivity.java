@@ -6,10 +6,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.assets.R;
-import com.example.assets.activities.abstract_.AbstractListActivity;
-import com.example.assets.constants.AssetConstants;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.ChooseBaseCurrencyViewModel;
+import com.example.assets.util.client.Currencies;
 
 import java.util.Objects;
 
@@ -21,7 +20,7 @@ public class ChooseBaseCurrencyActivity extends AbstractListActivity {
         setContentView(R.layout.recycler_view_generic);
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.choose_base_currency);
 
-        setUpSimpleList(AssetConstants.ALL_CURRENCIES);
+        setUpSimpleList(Currencies.values());
     }
 
     @Override

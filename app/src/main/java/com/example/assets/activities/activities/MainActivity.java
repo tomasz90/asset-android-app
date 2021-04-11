@@ -3,7 +3,6 @@ package com.example.assets.activities.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -17,10 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
 import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
-import com.example.assets.constants.AssetConstants;
+import com.example.assets.util.Constants;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
-import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.MainViewModel;
 import com.example.assets.util.Dialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     Intent intent = new Intent(MainActivity.this, AddAssetActivity.class);
-                    intent.putExtra(AssetConstants.EDITED_ASSET, swipedAsset);
+                    intent.putExtra(Constants.EDITED_ASSET, swipedAsset);
                     startActivity(intent);
                 }
             }

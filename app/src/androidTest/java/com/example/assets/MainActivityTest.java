@@ -32,14 +32,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.assets.constants.AssetConstants.CURRENCIES;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class MainActivityTest {
 
-    private Asset testAsset = new Asset("PLN", CURRENCIES, 150f, "info");
+    private Asset testAsset = new Asset("PLN", "CURRENCIES", 150f, "info");
     private BaseCurrency baseCurrency = new BaseCurrency("USD");
     private Condition.LoadingListItems listLoaded;
     private AssetDataBase dataBase;

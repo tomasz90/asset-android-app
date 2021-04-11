@@ -10,8 +10,8 @@ import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.util.ApiDataProvider;
-import com.example.assets.util.customlivedata.MultiLiveData.Quadruple;
-import com.example.assets.util.customlivedata.Quadruplet;
+import com.example.assets.util.custom_livedata.MultiLiveData.Quadruple;
+import com.example.assets.util.custom_livedata.Quadruplet;
 
 import java.util.ArrayList;
 import java.util.Comparator;

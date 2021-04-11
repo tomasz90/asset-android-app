@@ -5,13 +5,9 @@ import android.util.Pair;
 
 import com.example.assets.storage.room.entity.BaseCurrency;
 
-import org.json.JSONObject;
-
 import java.util.Map;
 
 import lombok.SneakyThrows;
-
-import static com.example.assets.constants.AssetConstants.CURRENCIES;
 
 public class Utils {
 

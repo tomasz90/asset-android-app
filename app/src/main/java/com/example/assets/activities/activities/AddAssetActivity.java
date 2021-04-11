@@ -15,11 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.assets.R;
-import com.example.assets.constants.AssetConstants;
-import com.example.assets.constants.Constants;
+import com.example.assets.util.Constants;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.viewmodel.AddAssetViewModel;
-import com.example.assets.util.Utils;
 
 import java.util.Objects;
 
@@ -50,7 +48,7 @@ public class AddAssetActivity extends AppCompatActivity {
         ImageView closeButton = findViewById(R.id.xbutton);
 
         // Get data intent from previous activity
-        Asset asset = (Asset) getIntent().getSerializableExtra(AssetConstants.EDITED_ASSET);
+        Asset asset = (Asset) getIntent().getSerializableExtra(Constants.EDITED_ASSET);
         String assetType = Objects.requireNonNull(asset).getType();
         String assetSymbol = asset.getSymbol();
 

@@ -1,4 +1,4 @@
-package com.example.assets.util.customlivedata;
+package com.example.assets.util.custom_livedata;
 
 import android.util.Pair;
 
