@@ -12,7 +12,7 @@ import lombok.SneakyThrows;
 public class Utils {
 
     @SneakyThrows
-    public static float getAssetRate(String type, String symbol, Pair<Map<String, Float>, BaseCurrency> pair) {
+    public static float getAssetRate(String symbol, Pair<Map<String, Float>, BaseCurrency> pair) {
         if (pair.first != null && pair.second != null) {
             float rate = pair.first.get(symbol);
             float baseCurrencyRate = 1 /pair.first.get(pair.second.getSymbol());
