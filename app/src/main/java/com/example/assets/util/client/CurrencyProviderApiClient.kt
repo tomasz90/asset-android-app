@@ -13,8 +13,9 @@ interface CurrencyProviderApiClient {
 
 class CurrencyRatesResponse(@JsonProperty("rates") val rates: Map<String, Float>) : RatesResponse {
 
-    override fun toRates() : Map<String, Float> =
-            rates.filter { it -> Currencies.values().map { it.toString() }.contains(it.key) }
+    override fun toRates(): Map<String, Float> =
+            rates.mapValues { 1 / it.value }
+                    .filter { it -> Currencies.values().map { it.toString() }.contains(it.key) }
 }
 
 enum class Currencies { EUR, USD, CHF, JPY, GBP, PLN, NOK, SEK, DKK }

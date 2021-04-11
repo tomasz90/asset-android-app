@@ -86,7 +86,7 @@ public class AddAssetActivity extends AppCompatActivity {
                     saveButton.setEnabled(false);
                 } else {
                     doNotAllowToEnterInvalidQuantity(s, decimalSeparator);
-                    value = Utils.toFloat(s);
+                    value = toFloat(s);
                 }
 
                 addAssetViewModel.getRatesAndBaseCurrency().observe(AddAssetActivity.this, pair -> {
@@ -99,7 +99,7 @@ public class AddAssetActivity extends AppCompatActivity {
 
         // Save asset -> insert new asset OR increment asset value when exists OR update asset value when edit
         saveButton.setOnClickListener(view -> {
-            float quantity = Utils.toFloat(editText.getText());
+            float quantity = toFloat(editText.getText());
             if (isAssetEdited(asset)) {
                 asset.setQuantity(quantity);
                 addAssetViewModel.updateAsset(asset);
@@ -126,5 +126,13 @@ public class AddAssetActivity extends AppCompatActivity {
 
     private boolean isAssetEdited(Asset asset) {
         return Objects.requireNonNull(asset).getQuantity() > 0;
+    }
+
+    private float toFloat(Object o) {
+        String s = o.toString();
+        if (!s.isEmpty()) {
+            return Float.parseFloat(o.toString().replace(",", "."));
+        }
+        return 0f;
     }
 }

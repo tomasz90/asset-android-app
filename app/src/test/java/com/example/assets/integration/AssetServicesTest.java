@@ -1,6 +1,5 @@
 package com.example.assets.integration;
 
-import com.example.assets.util.AssetServices;
 import com.example.assets.util.RateFacade;
 import com.example.assets.util.Utils;
 
@@ -8,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

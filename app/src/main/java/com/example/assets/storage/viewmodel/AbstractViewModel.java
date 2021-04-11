@@ -10,10 +10,12 @@ import com.example.assets.storage.repository.AssetRepository;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public abstract class AbstractViewModel extends AndroidViewModel {
 
     protected AssetRepository assetRepository;
-    protected MutableLiveData<JSONObject> rates = new MutableLiveData<>();
+    protected MutableLiveData<Map<String, Float>> rates = new MutableLiveData<>();
 
     protected AbstractViewModel(@NonNull Application application) {
         super(application);

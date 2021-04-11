@@ -10,6 +10,8 @@ import com.example.assets.R;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import lombok.SneakyThrows;
 
 import static com.example.assets.constants.AssetConstants.CRYPTOS;
@@ -19,20 +21,20 @@ import static com.example.assets.constants.AssetConstants.METALS;
 public class ApiDataProvider {
 
     private final Application application;
-    private static JSONObject jsonObject;
+    private static Map<String, Float> rates;
 
     public ApiDataProvider(Application application) {
         this.application = application;
     }
 
     public interface DataUpdater {
-        void update(JSONObject apiRates);
+        void update(Map<String, Float> apiRates);
     }
 
     public void getData(boolean withCleanCache, DataUpdater updater) {
         if (withCleanCache) {
             if (isConnected()) {
-                jsonObject = null;
+                rates = null;
             } else {
                 Dialog.displayToast(application, R.string.network_missing);
                 return;
@@ -41,8 +43,8 @@ public class ApiDataProvider {
         getAsync(updater).execute();
     }
 
-    private static AsyncTask<String, Void, JSONObject> getAsync(DataUpdater updater) {
-        return new AsyncTask<String, Void, JSONObject>() {
+    private static AsyncTask<String, Void, Map<String, Float>> getAsync(DataUpdater updater) {
+        return new AsyncTask<String, Void, Map<String, Float>>() {
 
             @Override
             protected void onPreExecute() {
@@ -51,19 +53,16 @@ public class ApiDataProvider {
 
             @SneakyThrows
             @Override
-            protected JSONObject doInBackground(String... strings) {
-                if (jsonObject == null) {
-                    jsonObject = new JSONObject()
-                            .put(CURRENCIES, AssetServices.getRates(CURRENCIES))
-                            .put(CRYPTOS, AssetServices.getRates(CRYPTOS))
-                            .put(METALS, AssetServices.getRates(METALS));
+            protected Map<String, Float> doInBackground(String... strings) {
+                if (rates == null) {
+                    rates = new RateFacade().getRates();
                 }
-                return jsonObject;
+                return rates;
             }
 
             @SneakyThrows
             @Override
-            protected void onPostExecute(JSONObject result) {
+            protected void onPostExecute(Map<String, Float> result) {
                 updater.update(result);
             }
         };

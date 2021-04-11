@@ -12,9 +12,11 @@ import com.example.assets.util.customlivedata.MultiLiveData;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class AddAssetViewModel extends AbstractViewModel {
 
-    private LiveData<Pair<JSONObject, BaseCurrency>> ratesAndBaseCurrency;
+    private LiveData<Pair<Map<String, Float>, BaseCurrency>> ratesAndBaseCurrency;
 
     public AddAssetViewModel(@NonNull Application application) {
         super(application);
@@ -31,7 +33,7 @@ public class AddAssetViewModel extends AbstractViewModel {
         assetRepository.updateAsset(asset);
     }
 
-    public LiveData<Pair<JSONObject, BaseCurrency>> getRatesAndBaseCurrency() {
+    public LiveData<Pair<Map<String, Float>, BaseCurrency>> getRatesAndBaseCurrency() {
         return ratesAndBaseCurrency;
     }
 }
