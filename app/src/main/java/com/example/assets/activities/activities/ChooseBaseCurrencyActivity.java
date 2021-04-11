@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.example.assets.R;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.ChooseBaseCurrencyViewModel;
-import com.example.assets.util.client.Currencies;
+import com.example.assets.api.client.Currencies;
 
 import java.util.Objects;
 

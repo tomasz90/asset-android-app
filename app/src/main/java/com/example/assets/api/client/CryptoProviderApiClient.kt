@@ -1,4 +1,4 @@
-package com.example.assets.util.client
+package com.example.assets.api.client
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import retrofit2.Call

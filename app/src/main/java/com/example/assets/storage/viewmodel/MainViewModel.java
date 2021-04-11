@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
-import com.example.assets.util.ApiDataProvider;
+import com.example.assets.api.DataProvider;
 import com.example.assets.util.custom_livedata.MultiLiveData.Quadruple;
 import com.example.assets.util.custom_livedata.Quadruplet;
 
@@ -51,7 +51,7 @@ public class MainViewModel extends AbstractViewModel {
     }
 
     public void updateRates(boolean withCleanCache) {
-        new ApiDataProvider(application).getData(withCleanCache, rates::setValue);
+        new DataProvider(application).getData(withCleanCache, rates::setValue);
     }
 
     public void refresh() {

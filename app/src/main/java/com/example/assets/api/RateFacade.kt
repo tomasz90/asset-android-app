@@ -1,9 +1,9 @@
-package com.example.assets.util
+package com.example.assets.api
 
-import com.example.assets.util.client.CryptoProviderApiClient
-import com.example.assets.util.client.CurrencyProviderApiClient
-import com.example.assets.util.client.MetalsProviderApiClient
-import com.example.assets.util.client.RatesResponse
+import com.example.assets.api.client.CryptoProviderApiClient
+import com.example.assets.api.client.CurrencyProviderApiClient
+import com.example.assets.api.client.MetalsProviderApiClient
+import com.example.assets.api.client.RatesResponse
 import com.fasterxml.jackson.databind.*
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -37,23 +37,23 @@ class RateFacade {
             .build()
             .create(MetalsProviderApiClient::class.java)
 
-    fun getCurrencies(): Map<String, Float> {
+    fun getRates(): Map<String, Float> {
+        return getCryptos() + getCurrencies() + getMetals()
+    }
+
+    private fun getCurrencies(): Map<String, Float> {
         val response = currencyProviderApiClient.getRates().execute() as Response<RatesResponse>
         return response.handle()
     }
 
-    fun getCryptos(): Map<String, Float> {
+    private fun getCryptos(): Map<String, Float> {
         val response = cryptoProviderApiClient.getRates().execute() as Response<RatesResponse>
         return response.handle()
     }
 
-    fun getMetals(): Map<String, Float> {
+    private fun getMetals(): Map<String, Float> {
         val response = metalProviderApiClient.getRates().execute() as Response<RatesResponse>
         return response.handle()
-    }
-
-    fun getRates(): Map<String, Float> {
-        return getCryptos() + getCurrencies() + getMetals()
     }
 
     private fun Response<RatesResponse>.handle(): Map<String, Float> {

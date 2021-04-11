@@ -1,4 +1,4 @@
-package com.example.assets.util;
+package com.example.assets.api;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,17 +7,18 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
 import com.example.assets.R;
+import com.example.assets.util.Dialog;
 
 import java.util.Map;
 
 import lombok.SneakyThrows;
 
-public class ApiDataProvider {
+public class DataProvider {
 
     private final Application application;
     private static Map<String, Float> rates;
 
-    public ApiDataProvider(Application application) {
+    public DataProvider(Application application) {
         this.application = application;
     }
 

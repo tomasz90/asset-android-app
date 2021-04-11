@@ -1,4 +1,4 @@
-package com.example.assets.util.client
+package com.example.assets.api.client
 
 interface RatesResponse {
 

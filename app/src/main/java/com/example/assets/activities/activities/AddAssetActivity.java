@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.util.Pair;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,16 +16,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.assets.R;
-import com.example.assets.util.Constants;
 import com.example.assets.storage.room.entity.Asset;
+import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.AddAssetViewModel;
+import com.example.assets.util.Constants;
 
+import java.util.Map;
 import java.util.Objects;
 
 import lombok.SneakyThrows;
-
-import static com.example.assets.util.Utils.doNotAllowToEnterInvalidQuantity;
-import static com.example.assets.util.Utils.getAssetRate;
 
 public class AddAssetActivity extends AppCompatActivity {
 
@@ -132,5 +132,24 @@ public class AddAssetActivity extends AppCompatActivity {
             return Float.parseFloat(o.toString().replace(",", "."));
         }
         return 0f;
+    }
+
+    @SneakyThrows
+    private float getAssetRate(String symbol, Pair<Map<String, Float>, BaseCurrency> pair) {
+        if (pair.first != null && pair.second != null) {
+            float rate = pair.first.get(symbol);
+            float baseCurrencyRate = 1 / pair.first.get(pair.second.getSymbol());
+            return rate * baseCurrencyRate;
+        }
+        return 0f;
+    }
+
+    private void doNotAllowToEnterInvalidQuantity(Editable editable, char decimalSeparator) {
+        String s = editable.toString();
+        boolean isMoreThenOneSeparator = s.chars().filter(ch -> ch == decimalSeparator).count() > 1;
+        boolean isSeparatorFirst = s.startsWith(String.valueOf(decimalSeparator));
+        if (isMoreThenOneSeparator || isSeparatorFirst) {
+            editable.delete(s.length() - 1, s.length());
+        }
     }
 }

@@ -4,7 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.example.assets.R;
-import com.example.assets.util.ApiDataProvider;
+import com.example.assets.api.DataProvider;
 import com.example.assets.util.Dialog;
 import com.google.common.cache.LoadingCache;
 
@@ -27,10 +27,10 @@ import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ApiDataProvider.class, AsyncTask.class, Dialog.class})
-public class ApiDataProviderTest {
+@PrepareForTest({DataProvider.class, AsyncTask.class, Dialog.class})
+public class DataProviderTest {
 
-    private static ApiDataProvider apiDataProvider;
+    private static DataProvider dataProvider;
 
     @Mock
     private static Application application;
@@ -42,17 +42,17 @@ public class ApiDataProviderTest {
     private LoadingCache cache;
 
     @Mock
-    private ApiDataProvider.DataUpdater updater;
+    private DataProvider.DataUpdater updater;
 
     @Before
     public void beforeTest() throws Exception {
         // given
-        mockStatic(ApiDataProvider.class);
+        mockStatic(DataProvider.class);
         mockStatic(Dialog.class);
-        apiDataProvider = spy(new ApiDataProvider(application));
-        doReturn(task).when(ApiDataProvider.class, "getAsync", updater);
+        dataProvider = spy(new DataProvider(application));
+        doReturn(task).when(DataProvider.class, "getAsync", updater);
         doNothing().when(Dialog.class, "displayToast", application, R.string.network_missing);
-        Whitebox.setInternalState(ApiDataProvider.class, "cache", cache);
+        Whitebox.setInternalState(DataProvider.class, "cache", cache);
     }
 
     @Test
@@ -61,14 +61,14 @@ public class ApiDataProviderTest {
         boolean forceCleanCache = true;
         boolean connectionAvailable = true;
 
-        doReturn(connectionAvailable).when(apiDataProvider, "isConnected");
+        doReturn(connectionAvailable).when(dataProvider, "isConnected");
 
         // when
-        apiDataProvider.getData(forceCleanCache, updater);
+        dataProvider.getData(forceCleanCache, updater);
 
         // then
         verify(cache, only()).invalidateAll();
-        verifyPrivate(ApiDataProvider.class, times(1)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater);
     }
 
     @Test
@@ -77,15 +77,15 @@ public class ApiDataProviderTest {
         boolean forceCleanCache = true;
         boolean connectionAvailable = false;
 
-        doReturn(connectionAvailable).when(apiDataProvider, "isConnected");
+        doReturn(connectionAvailable).when(dataProvider, "isConnected");
 
         // when
-        apiDataProvider.getData(forceCleanCache, updater);
+        dataProvider.getData(forceCleanCache, updater);
 
         // then
         verify(cache, times(0)).invalidateAll();
         verifyStatic(times(1)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(ApiDataProvider.class, times(0)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(0)).invoke("getAsync", updater);
     }
 
     @Test
@@ -95,16 +95,16 @@ public class ApiDataProviderTest {
         boolean isCacheDataAvailable = false;
         boolean connectionAvailable = false;
 
-        doReturn(connectionAvailable).when(apiDataProvider, "isConnected");
-        doReturn(isCacheDataAvailable).when(apiDataProvider, "isCacheDataAvailable");
+        doReturn(connectionAvailable).when(dataProvider, "isConnected");
+        doReturn(isCacheDataAvailable).when(dataProvider, "isCacheDataAvailable");
 
         // when
-        apiDataProvider.getData(forceCleanCache, updater);
+        dataProvider.getData(forceCleanCache, updater);
 
         // then
         verify(cache, times(0)).invalidateAll();
         verifyStatic(times(1)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(ApiDataProvider.class, times(0)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(0)).invoke("getAsync", updater);
     }
 
     @Test
@@ -114,16 +114,16 @@ public class ApiDataProviderTest {
         boolean isCacheDataAvailable = true;
         boolean connectionAvailable = false;
 
-        doReturn(connectionAvailable).when(apiDataProvider, "isConnected");
-        doReturn(isCacheDataAvailable).when(apiDataProvider, "isCacheDataAvailable");
+        doReturn(connectionAvailable).when(dataProvider, "isConnected");
+        doReturn(isCacheDataAvailable).when(dataProvider, "isCacheDataAvailable");
 
         // when
-        apiDataProvider.getData(forceCleanCache, updater);
+        dataProvider.getData(forceCleanCache, updater);
 
         // then
         verify(cache, times(0)).invalidateAll();
         verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(ApiDataProvider.class, times(1)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater);
     }
 
     @Test
@@ -133,16 +133,16 @@ public class ApiDataProviderTest {
         boolean isCacheDataAvailable = true;
         boolean connectionAvailable = true;
 
-        doReturn(connectionAvailable).when(apiDataProvider, "isConnected");
-        doReturn(isCacheDataAvailable).when(apiDataProvider, "isCacheDataAvailable");
+        doReturn(connectionAvailable).when(dataProvider, "isConnected");
+        doReturn(isCacheDataAvailable).when(dataProvider, "isCacheDataAvailable");
 
         // when
-        apiDataProvider.getData(forceCleanCache, updater);
+        dataProvider.getData(forceCleanCache, updater);
 
         // then
         verify(cache, times(0)).invalidateAll();
         verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(ApiDataProvider.class, times(1)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater);
     }
 
     @Test
@@ -152,15 +152,15 @@ public class ApiDataProviderTest {
         boolean isCacheDataAvailable = false;
         boolean connectionAvailable = true;
 
-        doReturn(connectionAvailable).when(apiDataProvider, "isConnected");
-        doReturn(isCacheDataAvailable).when(apiDataProvider, "isCacheDataAvailable");
+        doReturn(connectionAvailable).when(dataProvider, "isConnected");
+        doReturn(isCacheDataAvailable).when(dataProvider, "isCacheDataAvailable");
 
         // when
-        apiDataProvider.getData(forceCleanCache, updater);
+        dataProvider.getData(forceCleanCache, updater);
 
         // then
         verify(cache, times(0)).invalidateAll();
         verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(ApiDataProvider.class, times(1)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater);
     }
 }

@@ -1,14 +1,13 @@
 package com.example.assets.util;
 
 import com.example.assets.activities.activities.AssetTypeListActivity;
-import com.example.assets.util.client.Cryptos;
-import com.example.assets.util.client.Currencies;
-import com.example.assets.util.client.Metals;
+import com.example.assets.api.client.Cryptos;
+import com.example.assets.api.client.Currencies;
+import com.example.assets.api.client.Metals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 

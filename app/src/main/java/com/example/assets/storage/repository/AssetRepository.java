@@ -4,20 +4,14 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.assets.storage.room.AssetDataBase;
 import com.example.assets.storage.room.dao.AssetDao;
 import com.example.assets.storage.room.dao.BaseCurrencyDao;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.BaseCurrency;
-import com.example.assets.util.ApiDataProvider;
-
-import org.json.JSONObject;
 
 import java.util.List;
-
-import lombok.SneakyThrows;
 
 public class AssetRepository {
 

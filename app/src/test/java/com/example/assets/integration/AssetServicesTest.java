@@ -1,7 +1,6 @@
 package com.example.assets.integration;
 
-import com.example.assets.util.RateFacade;
-import com.example.assets.util.Utils;
+import com.example.assets.api.RateFacade;
 
 import org.json.JSONException;
 import org.json.JSONObject;
