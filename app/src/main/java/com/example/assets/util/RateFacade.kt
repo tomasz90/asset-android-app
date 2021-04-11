@@ -37,37 +37,28 @@ class RateFacade {
             .build()
             .create(MetalsProviderApiClient::class.java)
 
-    fun getCurrencies(): Rates {
+    fun getCurrencies(): Map<String, Float> {
         val response = currencyProviderApiClient.getRates().execute() as Response<RatesResponse>
         return response.handle()
     }
 
-    fun getCryptos(): Rates {
+    fun getCryptos(): Map<String, Float> {
         val response = cryptoProviderApiClient.getRates().execute() as Response<RatesResponse>
         return response.handle()
     }
 
-    fun getMetals(): Rates {
+    fun getMetals(): Map<String, Float> {
         val response = metalProviderApiClient.getRates().execute() as Response<RatesResponse>
         return response.handle()
     }
 
-//    fun getRates(type: Rates): List<Rate> {
-//        return when (type) {
-//            CryptoRates::class -> getCryptos().rates
-//            CurrencyRates::class -> getCurrencies().rates
-//            MetalRates::class -> getMetals().rates
-//            else -> throw Exception() //todo handle this
-//        }
-//    }
-
-    fun getRates(): List<Rate> {
-        return getCryptos().rates + getCurrencies().rates + getMetals().rates
+    fun getRates(): Map<String, Float> {
+        return getCryptos() + getCurrencies() + getMetals()
     }
 
-    private fun Response<RatesResponse>.handle(): Rates {
+    private fun Response<RatesResponse>.handle(): Map<String, Float> {
         if (this.isSuccessful) {
-            return this.body()!!.toRates().filter()
+            return this.body()!!.toRates()
         } else {
             throw Exception() //todo handle this
         }

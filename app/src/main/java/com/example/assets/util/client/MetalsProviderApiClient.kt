@@ -1,7 +1,5 @@
 package com.example.assets.util.client
 
-import com.example.assets.util.MetalRates
-import com.example.assets.util.Rate
 import com.fasterxml.jackson.annotation.JsonProperty
 import retrofit2.Call
 import retrofit2.http.GET
@@ -19,9 +17,11 @@ class MetalRatesResponse(@JsonProperty("Gold") val Gold: MetalData,
                          @JsonProperty("Palladium") val Palladium: MetalData,
                          @JsonProperty("Rhodium") val Rhodium: MetalData): RatesResponse {
 
-    override fun toRates(): MetalRates {
-        val rates = this::class.java.declaredFields.map { Rate(it.name, getPrice(it)) }
-        return MetalRates(rates)
+    override fun toRates(): Map<String, Float> {
+        return this::class.java.declaredFields
+                .map { it.name to getPrice(it) }
+                .toMap()
+                .filter { it -> Metals.values().map { it.toString() }.contains(it.key) }
     }
 
     private fun getPrice(field: Field) = (field.get(this) as MetalData)
@@ -32,3 +32,5 @@ class MetalRatesResponse(@JsonProperty("Gold") val Gold: MetalData,
 }
 
 class MetalData(@JsonProperty("price") val price: String)
+
+enum class Metals { Gold, Silver, Platinum, Palladium, Rhodium }

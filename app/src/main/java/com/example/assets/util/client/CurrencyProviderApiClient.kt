@@ -1,7 +1,5 @@
 package com.example.assets.util.client
 
-import com.example.assets.util.CurrencyRates
-import com.example.assets.util.Rate
 import com.fasterxml.jackson.annotation.JsonProperty
 import retrofit2.Call
 import retrofit2.http.GET
@@ -15,5 +13,8 @@ interface CurrencyProviderApiClient {
 
 class CurrencyRatesResponse(@JsonProperty("rates") val rates: Map<String, Float>) : RatesResponse {
 
-    override fun toRates() : CurrencyRates = CurrencyRates(rates.map { Rate(it.key, it.value) })
+    override fun toRates() : Map<String, Float> =
+            rates.filter { it -> Currencies.values().map { it.toString() }.contains(it.key) }
 }
+
+enum class Currencies { EUR, USD, CHF, JPY, GBP, PLN, NOK, SEK, DKK }

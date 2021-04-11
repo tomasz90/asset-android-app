@@ -1,7 +1,5 @@
 package com.example.assets.util.client
 
-import com.example.assets.util.CryptoRates
-import com.example.assets.util.Rate
 import com.fasterxml.jackson.annotation.JsonProperty
 import retrofit2.Call
 import retrofit2.http.GET
@@ -17,8 +15,10 @@ interface CryptoProviderApiClient {
 
 class CryptoRatesResponse(@JsonProperty("data") val data: List<CryptoData>): RatesResponse {
 
-    override fun toRates(): CryptoRates =
-            CryptoRates(data.map { Rate(it.symbol, it.quote.usd.price) })
+    override fun toRates(): Map<String, Float> =
+            data.map { it.symbol to it.quote.usd.price }
+                    .toMap()
+                    .filter { it -> Cryptos.values().map { it.toString() }.contains(it.key) }
 
 }
 
@@ -28,3 +28,5 @@ class CryptoData(@JsonProperty("symbol") val symbol: String,
 class Quote(@JsonProperty("USD") val usd: USD)
 
 class USD(@JsonProperty("price") val price: Float)
+
+enum class Cryptos { BTC, ETH, LTC, XRP, ADA, DOT, LINK, MATIC, AVAX, ATOM, UTK, REEF }
