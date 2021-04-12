@@ -15,6 +15,7 @@ import com.example.assets.storage.room.entity.BaseCurrency;
 
 @Database(entities = {Asset.class, BaseCurrency.class}, version = 1)
 public abstract class AssetDataBase extends RoomDatabase {
+
     private static AssetDataBase instance;
 
     public abstract AssetDao assetDao();

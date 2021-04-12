@@ -65,7 +65,7 @@ public class MainViewModel extends AbstractViewModel {
                 .collect(toList());
     }
 
-    boolean isAnyObjectNull(Object... objects) {
+    private boolean isAnyObjectNull(Object... objects) {
         return Arrays.stream(objects).anyMatch(Objects::isNull);
     }
 }

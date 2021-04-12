@@ -15,9 +15,9 @@ import java.util.Map;
 
 public abstract class AbstractViewModel extends AndroidViewModel {
 
+    protected Application application;
     protected AssetRepository assetRepository;
     protected MutableLiveData<Map<String, Float>> rates = new MutableLiveData<>();
-    protected Application application;
 
     protected AbstractViewModel(@NonNull Application application) {
         super(application);

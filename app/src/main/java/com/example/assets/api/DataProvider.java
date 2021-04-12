@@ -14,14 +14,14 @@ import java.util.Map;
 
 public class DataProvider {
 
+    private Application application;
+    private RateFacade rateFacade;
+    private static Map<String, Float> rates = new HashMap<>();
+
     public DataProvider(Application application, RateFacade rateFacade) {
         this.application = application;
         this.rateFacade = rateFacade;
     }
-
-    private final Application application;
-    private final RateFacade rateFacade;
-    private static Map<String, Float> rates = new HashMap<>();
 
     public interface DataUpdater {
         void update(Map<String, Float> apiRates);

@@ -1,13 +1,6 @@
 <resources>
     <string name="app_name">Assets</string>
 
-    <string name="noble_metals">Noble metals</string>
-    <string name="crypto">Crypto</string>
-    <string name="stocks">Stocks</string>
-    <string name="gold">Gold</string>
-    <string name="silver">Silver</string>
-    <string name="platinum">Platinum</string>
-
     <string name="main_activity_title">Your portfolio:</string>
     <string name="asset_type_list_activity_title">Choose type of asset:</string>
     <string name="asset_list_activity_title">Choose specific asset:</string>
