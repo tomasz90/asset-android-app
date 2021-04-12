@@ -24,14 +24,11 @@ import com.example.assets.util.Constants;
 import java.util.Map;
 import java.util.Objects;
 
-import lombok.SneakyThrows;
-
 public class AddAssetActivity extends AppCompatActivity {
 
     private float value;
     private char decimalSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
 
-    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +113,8 @@ public class AddAssetActivity extends AppCompatActivity {
     }
 
     private void prepareEditText(EditText editText, Asset asset) {
-        editText.setKeyListener(DigitsKeyListener.getInstance(Constants.DIGITS + decimalSeparator));
+        String digits = "0123456789";
+        editText.setKeyListener(DigitsKeyListener.getInstance(digits + decimalSeparator));
         if (isAssetEdited(asset)) {
             editText.setText(getString(R.string.float_two_decimal, asset.getQuantity()));
         }
@@ -134,7 +132,6 @@ public class AddAssetActivity extends AppCompatActivity {
         return 0f;
     }
 
-    @SneakyThrows
     private float getAssetRate(String symbol, Pair<Map<String, Float>, BaseCurrency> pair) {
         if (pair.first != null && pair.second != null) {
             float rate = pair.first.get(symbol);

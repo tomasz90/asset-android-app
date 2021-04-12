@@ -6,13 +6,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.assets.R;
-import com.example.assets.util.Constants;
 import com.example.assets.storage.room.entity.Asset;
+import com.example.assets.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import lombok.SneakyThrows;
 
 public class AssetListActivity extends AbstractListActivity {
 
@@ -26,7 +24,6 @@ public class AssetListActivity extends AbstractListActivity {
         setUpSimpleList(specificAssets.toArray());
     }
 
-    @SneakyThrows
     @Override
     public void clickItem(View v, TextView tv) {
         String assetSymbol = tv.getText().toString();

@@ -27,13 +27,10 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import java.util.List;
 import java.util.Objects;
 
-import lombok.SneakyThrows;
-
 public class MainActivity extends AppCompatActivity {
 
     private MainViewModel assetViewModel;
 
-    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

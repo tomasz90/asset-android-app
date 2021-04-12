@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import lombok.SneakyThrows;
-
 import static androidx.lifecycle.Transformations.map;
 import static java.util.Comparator.comparingDouble;
 import static java.util.stream.Collectors.toList;
@@ -52,7 +50,6 @@ public class MainViewModel extends AbstractViewModel {
         refreshTrigger.setValue(true);
     }
 
-    @SneakyThrows
     private List<AssetDetails> createAssetDetails(List<Asset> assets, BaseCurrency baseCurrency, Map<String, Float> rates) {
         if (isAnyObjectNull(assets, rates, baseCurrency)) {
             return null;

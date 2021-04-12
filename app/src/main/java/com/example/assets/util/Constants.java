@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 public class Constants {
 
-    public static final String DIGITS = "0123456789";
     public static final String ASSET_TYPE = "assetType";
     public static final String SPECIFIC_ASSETS = "specificAssets";
     public static final String EDITED_ASSET = "editedAsset";

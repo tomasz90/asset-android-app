@@ -11,8 +11,6 @@ import com.example.assets.util.Dialog;
 
 import java.util.Map;
 
-import lombok.SneakyThrows;
-
 public class DataProvider {
 
     public DataProvider(Application application, RateFacade rateFacade) {
@@ -49,7 +47,6 @@ public class DataProvider {
                 super.onPreExecute();
             }
 
-            @SneakyThrows
             @Override
             protected Map<String, Float> doInBackground(String... strings) {
                 if (rates == null) {
@@ -58,7 +55,6 @@ public class DataProvider {
                 return rates;
             }
 
-            @SneakyThrows
             @Override
             protected void onPostExecute(Map<String, Float> result) {
                 updater.update(result);
