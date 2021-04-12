@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static androidx.lifecycle.Transformations.map;
+import static java.util.Collections.emptyList;
 import static java.util.Comparator.comparingDouble;
 import static java.util.stream.Collectors.toList;
 
@@ -52,7 +53,7 @@ public class MainViewModel extends AbstractViewModel {
 
     private List<AssetDetails> createAssetDetails(List<Asset> assets, BaseCurrency baseCurrency, Map<String, Float> rates) {
         if (isAnyObjectNull(assets, rates, baseCurrency)) {
-            return null;
+            return emptyList();
         }
         return assets.stream()
                 .map(asset -> {

@@ -6,16 +6,19 @@ import android.os.AsyncTask;
 import com.example.assets.AppContainer;
 import com.example.assets.R;
 import com.example.assets.api.DataProvider;
+import com.example.assets.api.RateFacade;
 import com.example.assets.util.Dialog;
-import com.google.common.cache.LoadingCache;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
+
+import java.util.Map;
 
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.times;
@@ -27,11 +30,13 @@ import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
+@PowerMockIgnore("javax.net.ssl.*")
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({DataProvider.class, AsyncTask.class, Dialog.class})
 public class DataProviderTest {
 
     private static DataProvider dataProvider;
+    private static RateFacade rateFacade;
 
     @Mock
     private static Application application;
@@ -40,7 +45,7 @@ public class DataProviderTest {
     private AsyncTask task;
 
     @Mock
-    private LoadingCache cache;
+    private Map<String, Float> rates;
 
     @Mock
     private DataProvider.DataUpdater updater;
@@ -50,14 +55,15 @@ public class DataProviderTest {
         // given
         mockStatic(DataProvider.class);
         mockStatic(Dialog.class);
-        dataProvider = spy(new DataProvider(application, AppContainer.Companion.getAppContainer().getRateFacade()));
-        doReturn(task).when(DataProvider.class, "getAsync", updater);
+        rateFacade = AppContainer.Companion.getAppContainer().getRateFacade();
+        dataProvider = spy(new DataProvider(application, rateFacade));
+        doReturn(task).when(DataProvider.class, "getAsync", updater, rateFacade);
         doNothing().when(Dialog.class, "displayToast", application, R.string.network_missing);
-        Whitebox.setInternalState(DataProvider.class, "cache", cache);
+        Whitebox.setInternalState(DataProvider.class, "rates", rates);
     }
 
     @Test
-    public void should_push_data_when_force_clean_cache_and_connection_available() throws Exception {
+    public void should_pull_data_when_force_clean_cache_and_connection_available() throws Exception {
         // given
         boolean forceCleanCache = true;
         boolean connectionAvailable = true;
@@ -68,12 +74,12 @@ public class DataProviderTest {
         dataProvider.getData(forceCleanCache, updater);
 
         // then
-        verify(cache, only()).invalidateAll();
-        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater);
+        verify(rates, only()).clear();
+        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater, rateFacade);
     }
 
     @Test
-    public void should_not_push_data_when_force_clean_cache_and_connection_not_available() throws Exception {
+    public void should_display_error_dialog_when_force_clean_cache_and_connection_not_available() throws Exception {
         // given
         boolean forceCleanCache = true;
         boolean connectionAvailable = false;
@@ -84,84 +90,42 @@ public class DataProviderTest {
         dataProvider.getData(forceCleanCache, updater);
 
         // then
-        verify(cache, times(0)).invalidateAll();
+        verify(rates, times(0)).clear();
         verifyStatic(times(1)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(DataProvider.class, times(0)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(0)).invoke("getAsync", updater, rateFacade);
     }
 
     @Test
-    public void should_not_push_data_when_do_not_clean_cache_no_data_in_cache_and_connection_not_available() throws Exception {
+    public void should_get_temporary_data_when_do_not_clean_cache_and_connection_not_available() throws Exception {
         // given
         boolean forceCleanCache = false;
-        boolean isCacheDataAvailable = false;
         boolean connectionAvailable = false;
 
         doReturn(connectionAvailable).when(dataProvider, "isConnected");
-        doReturn(isCacheDataAvailable).when(dataProvider, "isCacheDataAvailable");
 
         // when
         dataProvider.getData(forceCleanCache, updater);
 
         // then
-        verify(cache, times(0)).invalidateAll();
-        verifyStatic(times(1)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(DataProvider.class, times(0)).invoke("getAsync", updater);
-    }
-
-    @Test
-    public void should_push_data_when_do_not_clean_cache_data_in_cache_available_and_connection_not_available() throws Exception {
-        // given
-        boolean forceCleanCache = false;
-        boolean isCacheDataAvailable = true;
-        boolean connectionAvailable = false;
-
-        doReturn(connectionAvailable).when(dataProvider, "isConnected");
-        doReturn(isCacheDataAvailable).when(dataProvider, "isCacheDataAvailable");
-
-        // when
-        dataProvider.getData(forceCleanCache, updater);
-
-        // then
-        verify(cache, times(0)).invalidateAll();
+        verify(rates, times(0)).clear();
         verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater, rateFacade);
     }
 
     @Test
-    public void should_push_data_when_do_not_clean_cache_data_in_cache_available_and_connection_available() throws Exception {
+    public void should_get_temporary_data_when_do_not_clean_cache_and_connection_available() throws Exception {
         // given
         boolean forceCleanCache = false;
-        boolean isCacheDataAvailable = true;
         boolean connectionAvailable = true;
 
         doReturn(connectionAvailable).when(dataProvider, "isConnected");
-        doReturn(isCacheDataAvailable).when(dataProvider, "isCacheDataAvailable");
 
         // when
         dataProvider.getData(forceCleanCache, updater);
 
         // then
-        verify(cache, times(0)).invalidateAll();
+        verify(rates, times(0)).clear();
         verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater);
-    }
-
-    @Test
-    public void should_push_data_when_do_not_clean_cache_data_in_cache_not_available_and_connection_available() throws Exception {
-        // given
-        boolean forceCleanCache = false;
-        boolean isCacheDataAvailable = false;
-        boolean connectionAvailable = true;
-
-        doReturn(connectionAvailable).when(dataProvider, "isConnected");
-        doReturn(isCacheDataAvailable).when(dataProvider, "isCacheDataAvailable");
-
-        // when
-        dataProvider.getData(forceCleanCache, updater);
-
-        // then
-        verify(cache, times(0)).invalidateAll();
-        verifyStatic(times(0)); Dialog.displayToast(application, R.string.network_missing);
-        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater);
+        verifyPrivate(DataProvider.class, times(1)).invoke("getAsync", updater, rateFacade);
     }
 }
