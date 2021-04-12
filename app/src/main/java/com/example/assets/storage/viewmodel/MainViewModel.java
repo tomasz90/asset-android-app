@@ -26,12 +26,9 @@ public class MainViewModel extends AbstractViewModel {
 
     private LiveData<List<AssetDetails>> assetDetails;
     private MutableLiveData<Boolean> refreshTrigger = new MutableLiveData<>();
-    private Application application;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        this.application = application;
-        updateRates(false);
 
         LiveData<Quadruplet<List<Asset>, BaseCurrency, Map<String, Float>, Boolean>> quadrupleLiveData =
                 new Quadruple<>(assetRepository.getAllAssets(), assetRepository.getBaseCurrency(), rates, refreshTrigger);
@@ -48,10 +45,6 @@ public class MainViewModel extends AbstractViewModel {
 
     public LiveData<List<AssetDetails>> getAssetDetails() {
         return assetDetails;
-    }
-
-    public void updateRates(boolean withCleanCache) {
-        new DataProvider(application).getData(withCleanCache, rates::setValue);
     }
 
     public void refresh() {
