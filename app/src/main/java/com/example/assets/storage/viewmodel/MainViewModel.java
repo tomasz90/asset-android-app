@@ -9,18 +9,19 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.room.entity.BaseCurrency;
-import com.example.assets.api.DataProvider;
 import com.example.assets.util.custom_livedata.MultiLiveData.Quadruple;
 import com.example.assets.util.custom_livedata.Quadruplet;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import lombok.SneakyThrows;
 
 import static androidx.lifecycle.Transformations.map;
+import static java.util.Comparator.comparingDouble;
+import static java.util.stream.Collectors.toList;
 
 public class MainViewModel extends AbstractViewModel {
 
@@ -53,16 +54,20 @@ public class MainViewModel extends AbstractViewModel {
 
     @SneakyThrows
     private List<AssetDetails> createAssetDetails(List<Asset> assets, BaseCurrency baseCurrency, Map<String, Float> rates) {
-        List<AssetDetails> assetDetails = new ArrayList<>();
-        if (assets != null && rates != null && baseCurrency != null) {
-            for (Asset asset : assets) {
-                float baseCurrencyRate = 1 / rates.get(baseCurrency.getSymbol());
-                float rate = rates.get(asset.getSymbol()) * baseCurrencyRate;
-                assetDetails.add(new AssetDetails(asset, baseCurrency, rate));
-            }
-            assetDetails.sort(Comparator.comparingDouble(AssetDetails::getValue).reversed());
-            return assetDetails;
+        if (isAnyObjectNull(assets, rates, baseCurrency)) {
+            return null;
         }
-        return null;
+        return assets.stream()
+                .map(asset -> {
+                    float baseCurrencyRate = 1 / rates.get(baseCurrency.getSymbol());
+                    float rate = rates.get(asset.getSymbol()) * baseCurrencyRate;
+                    return new AssetDetails(asset, baseCurrency, rate);
+                })
+                .sorted(comparingDouble(AssetDetails::getValue).reversed())
+                .collect(toList());
+    }
+
+    boolean isAnyObjectNull(Object... objects) {
+        return Arrays.stream(objects).anyMatch(Objects::isNull);
     }
 }
