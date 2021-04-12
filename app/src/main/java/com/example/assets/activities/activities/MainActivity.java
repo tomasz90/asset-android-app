@@ -119,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
         for (AssetDetails assetDetails : assets) {
             value += assetDetails.getValue();
         }
-        totalValue.setText(getString(R.string.total_value_text_view, value, assets.get(0).getBaseCurrency()));
+        String baseCurrency = assets.isEmpty() ? "-" : assets.get(0).getBaseCurrency();
+        totalValue.setText(getString(R.string.total_value_text_view, value, baseCurrency));
     }
 
     @Override
