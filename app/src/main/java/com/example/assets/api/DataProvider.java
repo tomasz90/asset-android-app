@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import com.example.assets.R;
 import com.example.assets.util.Dialog;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class DataProvider {
@@ -20,7 +21,7 @@ public class DataProvider {
 
     private final Application application;
     private final RateFacade rateFacade;
-    private static Map<String, Float> rates;
+    private static Map<String, Float> rates = new HashMap<>();
 
     public interface DataUpdater {
         void update(Map<String, Float> apiRates);
@@ -29,7 +30,7 @@ public class DataProvider {
     public void getData(boolean withCleanCache, DataUpdater updater) {
         if (withCleanCache) {
             if (isConnected()) {
-                rates = null;
+                rates.clear();
             } else {
                 Dialog.displayToast(application, R.string.network_missing);
                 return;
@@ -49,7 +50,7 @@ public class DataProvider {
 
             @Override
             protected Map<String, Float> doInBackground(String... strings) {
-                if (rates == null) {
+                if (rates.isEmpty()) {
                     rates = rateFacade.getRates();
                 }
                 return rates;

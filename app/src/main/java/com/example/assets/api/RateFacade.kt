@@ -1,13 +1,11 @@
 package com.example.assets.api
 
+import android.util.Log
 import com.example.assets.api.client.CryptoProviderApiClient
 import com.example.assets.api.client.CurrencyProviderApiClient
 import com.example.assets.api.client.MetalsProviderApiClient
 import com.example.assets.api.client.RatesResponse
-import com.fasterxml.jackson.databind.*
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
 
 class RateFacade(private val currencyProviderApiClient: CurrencyProviderApiClient,
                  private val cryptoProviderApiClient: CryptoProviderApiClient,
@@ -33,10 +31,11 @@ class RateFacade(private val currencyProviderApiClient: CurrencyProviderApiClien
     }
 
     private fun Response<RatesResponse>.handle(): Map<String, Float> {
-        if (this.isSuccessful) {
-            return this.body()!!.toRates()
+        return if (this.isSuccessful) {
+            this.body()!!.toRates()
         } else {
-            throw Exception() //todo handle this
+            Log.d("MY_LOG","ERROR! Response status is: "+ this.code())
+            emptyMap()
         }
     }
 }

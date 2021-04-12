@@ -3,6 +3,7 @@ package com.example.assets.unit;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import com.example.assets.AppContainer;
 import com.example.assets.R;
 import com.example.assets.api.DataProvider;
 import com.example.assets.util.Dialog;
@@ -49,7 +50,7 @@ public class DataProviderTest {
         // given
         mockStatic(DataProvider.class);
         mockStatic(Dialog.class);
-        dataProvider = spy(new DataProvider(application));
+        dataProvider = spy(new DataProvider(application, AppContainer.Companion.getAppContainer().getRateFacade()));
         doReturn(task).when(DataProvider.class, "getAsync", updater);
         doNothing().when(Dialog.class, "displayToast", application, R.string.network_missing);
         Whitebox.setInternalState(DataProvider.class, "cache", cache);
