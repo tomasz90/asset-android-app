@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
 import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
-import com.example.assets.util.Constants;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.viewmodel.MainViewModel;
+import com.example.assets.util.Constants;
 import com.example.assets.util.Dialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         // Update rates
         totalValue.setOnClickListener(v -> {
             assetViewModel.updateRates(true);
-            System.out.println("from button ...............................................................................................");
         });
     }
 

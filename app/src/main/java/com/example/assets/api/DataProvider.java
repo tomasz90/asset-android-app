@@ -15,12 +15,14 @@ import lombok.SneakyThrows;
 
 public class DataProvider {
 
-    private final Application application;
-    private static Map<String, Float> rates;
-
-    public DataProvider(Application application) {
+    public DataProvider(Application application, RateFacade rateFacade) {
         this.application = application;
+        this.rateFacade = rateFacade;
     }
+
+    private final Application application;
+    private final RateFacade rateFacade;
+    private static Map<String, Float> rates;
 
     public interface DataUpdater {
         void update(Map<String, Float> apiRates);
@@ -35,10 +37,11 @@ public class DataProvider {
                 return;
             }
         }
-        getAsync(updater).execute();
+        getAsync(updater, rateFacade).execute();
     }
 
-    private static AsyncTask<String, Void, Map<String, Float>> getAsync(DataUpdater updater) {
+    private static AsyncTask<String, Void, Map<String, Float>> getAsync(
+            DataUpdater updater, RateFacade rateFacade) {
         return new AsyncTask<String, Void, Map<String, Float>>() {
 
             @Override
@@ -50,7 +53,7 @@ public class DataProvider {
             @Override
             protected Map<String, Float> doInBackground(String... strings) {
                 if (rates == null) {
-                    rates = new RateFacade().getRates();
+                    rates = rateFacade.getRates();
                 }
                 return rates;
             }

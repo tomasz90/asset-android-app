@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
 import com.example.assets.R;
+import com.example.assets.api.client.Currencies;
 import com.example.assets.storage.room.entity.BaseCurrency;
 import com.example.assets.storage.viewmodel.ChooseBaseCurrencyViewModel;
-import com.example.assets.api.client.Currencies;
 
 import java.util.Objects;
 

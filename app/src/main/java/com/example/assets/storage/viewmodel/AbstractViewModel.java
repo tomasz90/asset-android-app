@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.assets.AppContainer;
 import com.example.assets.api.DataProvider;
+import com.example.assets.api.RateFacade;
 import com.example.assets.storage.repository.AssetRepository;
 
 import java.util.Map;
@@ -25,6 +27,7 @@ public abstract class AbstractViewModel extends AndroidViewModel {
     }
 
     public void updateRates(boolean withCleanCache) {
-        new DataProvider(application).getData(withCleanCache, rates::setValue);
+        RateFacade rateFacade = AppContainer.Companion.getAppContainer().getRateFacade();
+        new DataProvider(application, rateFacade).getData(withCleanCache, rates::setValue);
     }
 }
