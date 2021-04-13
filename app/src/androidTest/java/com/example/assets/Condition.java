@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 
 import com.azimolabs.conditionwatcher.Instruction;
-import com.example.assets.activities.activities.MainActivity;
+import com.example.assets.activity.MainActivity;
 
 import java.util.Collection;
 import java.util.Objects;

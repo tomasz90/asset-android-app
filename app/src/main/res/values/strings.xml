@@ -23,6 +23,8 @@
     <string name="float_two_decimal">%1$.02f</string>
     <string name="float_two_decimal_currency">%1$.02f %2$s</string>
     <string name="float_one_decimal_K_currency">%1$.01fK %2$s</string>
+    <string name="float_two_decimal_K">%1$.02fK</string>
+    <string name="float_one_decimal_K">%1$.01fK</string>
     <string name="float_no_decimal_currency">%1$.0f %2$s</string>
     <string name="float_no_decimal">%1$.0f</string>
     <string name="remove_all_assets">Remove all assets</string>

@@ -1,4 +1,4 @@
-package com.example.assets.activities.list_adapters;
+package com.example.assets.activity.list_adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -1,7 +1,6 @@
-package com.example.assets.activities.list_adapters;
+package com.example.assets.activity.list_adapters;
 
 import android.content.Context;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.assets.R;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
-import com.example.assets.storage.room.entity.BaseCurrency;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +40,9 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         AssetDetails currentAsset = assetsDetails.get(position);
         holder.symbol.setText(currentAsset.getSymbol());
         holder.additionalInfo.setText(currentAsset.getInfo());
-        holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
+        holder.quantity.setText(limitTo3MeaningDigits(currentAsset.getQuantity()));
         holder.rate.setText(c.getString(R.string.float_two_decimal_currency, currentAsset.getRate(), currentAsset.getBaseCurrency()));
-        holder.value.setText(formatLargeNumber(currentAsset.getValue(), currentAsset.getBaseCurrency(), c));
+        holder.value.setText(limitTo3MeaningDigits(currentAsset.getValue()) + " " + currentAsset.getBaseCurrency());
     }
 
     @Override
@@ -71,10 +71,28 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         }
     }
 
-    String formatLargeNumber(float f, String baseCurrency, Context c) {
+    String formatLargeValue(float f, String baseCurrency, Context c) {
         if (f >= 1000) {
             return c.getString(R.string.float_one_decimal_K_currency, f / 1000, baseCurrency);
         }
         return c.getString(R.string.float_no_decimal_currency, f, baseCurrency);
+    }
+
+    private static String limitTo3MeaningDigits(float f) {
+        BigDecimal formatted;
+        String suffix = "";
+        int magnitude = (int) Math.log10(f);
+        if (magnitude >= 6) {
+            suffix = "M";
+            formatted = new BigDecimal(f / 1000000).round(new MathContext(3));
+        } else if (magnitude >= 3) {
+            suffix = "K";
+            formatted = new BigDecimal(f / 1000).round(new MathContext(3));
+        } else if (magnitude >= 0) {
+            formatted = new BigDecimal(f).round(new MathContext(3)).setScale(2 - magnitude);
+        } else {
+            formatted = new BigDecimal(f).round(new MathContext(2)).setScale(2 - magnitude);
+        }
+        return formatted.toPlainString() + suffix;
     }
 }

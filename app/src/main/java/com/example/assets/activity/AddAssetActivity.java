@@ -1,4 +1,4 @@
-package com.example.assets.activities.activities;
+package com.example.assets.activity;
 
 import android.content.Intent;
 import android.icu.text.DecimalFormatSymbols;

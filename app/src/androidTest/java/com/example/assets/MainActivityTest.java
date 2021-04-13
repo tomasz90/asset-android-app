@@ -8,8 +8,8 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
 import com.azimolabs.conditionwatcher.ConditionWatcher;
-import com.example.assets.activities.activities.MainActivity;
-import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
+import com.example.assets.activity.MainActivity;
+import com.example.assets.activity.list_adapters.AssetDetailsAdapter;
 import com.example.assets.storage.room.AssetDataBase;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.BaseCurrency;

@@ -1,6 +1,6 @@
 package com.example.assets.util;
 
-import com.example.assets.activities.activities.AssetTypeListActivity;
+import com.example.assets.activity.AssetTypeListActivity;
 import com.example.assets.api.client.Cryptos;
 import com.example.assets.api.client.Currencies;
 import com.example.assets.api.client.Metals;

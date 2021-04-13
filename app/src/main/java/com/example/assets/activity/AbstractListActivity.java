@@ -1,4 +1,4 @@
-package com.example.assets.activities.activities;
+package com.example.assets.activity;
 
 import android.view.View;
 import android.widget.TextView;
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
-import com.example.assets.activities.list_adapters.SimpleItemAdapter;
+import com.example.assets.activity.list_adapters.SimpleItemAdapter;
 
 import java.util.Arrays;
 import java.util.List;

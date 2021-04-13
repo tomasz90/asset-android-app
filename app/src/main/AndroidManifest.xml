@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.activities.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             >
@@ -23,13 +23,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.activities.AssetTypeListActivity" />
-        <activity android:name=".activities.activities.AssetListActivity" />
-        <activity android:name=".activities.activities.AddAssetActivity"
+        <activity android:name=".activity.AssetTypeListActivity" />
+        <activity android:name=".activity.AssetListActivity" />
+        <activity android:name=".activity.AddAssetActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".activities.activities.DoneActivity" />
-        <activity android:name=".activities.activities.SettingsActivity" />
-        <activity android:name=".activities.activities.ChooseBaseCurrencyActivity" />
+        <activity android:name=".activity.DoneActivity" />
+        <activity android:name=".activity.activities.SettingsActivity" />
+        <activity android:name=".activity.ChooseBaseCurrencyActivity" />
     </application>
 
 </manifest>

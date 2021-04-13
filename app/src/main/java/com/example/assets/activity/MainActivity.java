@@ -1,4 +1,4 @@
-package com.example.assets.activities.activities;
+package com.example.assets.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assets.R;
-import com.example.assets.activities.list_adapters.AssetDetailsAdapter;
+import com.example.assets.activity.list_adapters.AssetDetailsAdapter;
 import com.example.assets.storage.room.entity.Asset;
 import com.example.assets.storage.room.entity.AssetDetails;
 import com.example.assets.storage.viewmodel.MainViewModel;
