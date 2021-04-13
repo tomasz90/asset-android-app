@@ -40,22 +40,17 @@ public class MainActivityTest {
 
     private Asset testAsset = new Asset("PLN", "CURRENCIES", 150f, "info");
     private BaseCurrency baseCurrency = new BaseCurrency("USD");
-    private Condition.LoadingListItems listLoaded;
     private AssetDataBase dataBase;
 
     @Rule
     public ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    public void prepareForTest() throws Exception {
+    public void prepareForTest() {
         Application application = mainActivityTestRule.getActivity().getApplication();
         dataBase = AssetDataBase.getInstance(application);
         dataBase.assetDao().insert(testAsset);
         dataBase.baseCurrencyDao().update(baseCurrency);
-
-        RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
-        listLoaded = new Condition.LoadingListItems(recyclerView);
-        ConditionWatcher.waitForCondition(listLoaded);
     }
 
     @After
@@ -75,7 +70,7 @@ public class MainActivityTest {
 
         // then
         onView(withId(R.id.generic_list))
-        .check(matches(isDisplayed()));
+                .check(matches(isDisplayed()));
     }
 
     @Test
@@ -118,7 +113,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void should_see_asset_when_removing_it_but_not_confirming()  {
+    public void should_see_asset_when_removing_it_but_not_confirming() {
         // when
         onView(withText(testAsset.getSymbol())).perform(ViewActions.swipeRight());
         onView(withText(getString(R.string.want_to_remove_asset))).check(matches(isDisplayed()));
@@ -144,10 +139,9 @@ public class MainActivityTest {
         // then
         ConditionWatcher.waitForCondition(new Condition.LoadingMainActivity());
         RecyclerView recyclerView = mainActivityTestRule.getActivity().findViewById(R.id.asset_list);
-        ConditionWatcher.waitForCondition(listLoaded);
-        int actualQuote = (int)((AssetDetailsAdapter) recyclerView.getAdapter()).getAssetAtPosition(0).getQuantity();
+        ConditionWatcher.waitForCondition(new Condition.LoadingListItems(recyclerView));
+        int actualQuote = (int) ((AssetDetailsAdapter) recyclerView.getAdapter()).getAssetAtPosition(0).getQuantity();
         assertEquals(Integer.parseInt(expectedQuote), actualQuote);
-
     }
 
     @Test
@@ -160,8 +154,8 @@ public class MainActivityTest {
         onView(withText(getString(R.string.remove_all_assets)))
                 .perform(click())
 
-        // then
-        .check(matches(isDisplayed()));
+                // then
+                .check(matches(isDisplayed()));
     }
 
     @Test
