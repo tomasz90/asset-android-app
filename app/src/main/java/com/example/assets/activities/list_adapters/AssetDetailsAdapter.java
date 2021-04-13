@@ -42,7 +42,7 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         holder.additionalInfo.setText(currentAsset.getInfo());
         holder.quantity.setText(c.getString(R.string.float_two_decimal, currentAsset.getQuantity()));
         holder.rate.setText(c.getString(R.string.float_two_decimal_currency, currentAsset.getRate(), currentAsset.getBaseCurrency()));
-        holder.value.setText(c.getString(R.string.float_no_decimal_currency, currentAsset.getValue(), currentAsset.getBaseCurrency()));
+        holder.value.setText(formatLargeNumber(currentAsset.getValue(), currentAsset.getBaseCurrency(), c));
     }
 
     @Override
@@ -69,5 +69,12 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
             rate = itemView.findViewById(R.id.unit_price);
             value = itemView.findViewById(R.id.value);
         }
+    }
+
+    String formatLargeNumber(float f, String baseCurrency, Context c) {
+        if (f >= 1000) {
+            return c.getString(R.string.float_one_decimal_K_currency, f / 1000, baseCurrency);
+        }
+        return c.getString(R.string.float_no_decimal_currency, f, baseCurrency);
     }
 }
