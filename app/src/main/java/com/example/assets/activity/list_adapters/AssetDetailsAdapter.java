@@ -71,13 +71,6 @@ public class AssetDetailsAdapter extends RecyclerView.Adapter<AssetDetailsAdapte
         }
     }
 
-    String formatLargeValue(float f, String baseCurrency, Context c) {
-        if (f >= 1000) {
-            return c.getString(R.string.float_one_decimal_K_currency, f / 1000, baseCurrency);
-        }
-        return c.getString(R.string.float_no_decimal_currency, f, baseCurrency);
-    }
-
     private static String limitTo3MeaningDigits(float f) {
         BigDecimal formatted;
         String suffix = "";
