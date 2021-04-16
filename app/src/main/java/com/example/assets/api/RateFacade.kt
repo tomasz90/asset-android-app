@@ -5,14 +5,20 @@ import com.example.assets.api.client.CryptoProviderApiClient
 import com.example.assets.api.client.CurrencyProviderApiClient
 import com.example.assets.api.client.MetalsProviderApiClient
 import com.example.assets.api.client.RatesResponse
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 
 class RateFacade(private val currencyProviderApiClient: CurrencyProviderApiClient,
                  private val cryptoProviderApiClient: CryptoProviderApiClient,
                  private val metalsProviderApiClient: MetalsProviderApiClient) {
 
-    fun getRates(): Map<String, Float> {
-        return getCryptos() + getCurrencies() + getMetals()
+    fun getRates(): Map<String, Float> = runBlocking {
+        val cryptos = async { getCryptos() }
+        val currencies = async { getCurrencies() }
+        val metals = async { getMetals() }
+        cryptos.await() + currencies.await() + metals.await()
     }
 
     private fun getCurrencies(): Map<String, Float> {
@@ -34,7 +40,7 @@ class RateFacade(private val currencyProviderApiClient: CurrencyProviderApiClien
         return if (this.isSuccessful) {
             this.body()!!.toRates()
         } else {
-            Log.d("MY_LOG","ERROR! Response status is: "+ this.code())
+            Log.d("MY_LOG", "ERROR! Response status is: " + this.code())
             emptyMap()
         }
     }
